@@ -93,6 +93,8 @@ async function login(req, res) {
       hashTamanho,
       hashInicio,
       hashFim,
+      hashBrutoJson: JSON.stringify(hashArmazenado),
+      hashUltimoCharCode: typeof hashArmazenado === 'string' && hashArmazenado.length > 0 ? hashArmazenado.charCodeAt(hashArmazenado.length - 1) : null,
       resultadoBcrypt: senhaCorreta
     });
 
