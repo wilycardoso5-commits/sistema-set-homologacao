@@ -1,0 +1,35 @@
+{
+  "name": "sistema-set",
+  "version": "1.0.2",
+  "description": "Sistema de Vale-Transporte SET São Luís",
+  "main": "main.js",
+  "author": "SET São Luís",
+  "license": "ISC",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^43.1.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "br.com.setsaoluis.sistemavt",
+    "productName": "Sistema SET",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icone.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Sistema SET"
+    }
+  }
+}

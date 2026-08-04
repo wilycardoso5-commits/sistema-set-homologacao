@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Executar Sistema SET (Electron)",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+            "windows": {
+                "runtimeExecutable": "${workspaceFolder}/node_modules/electron/dist/electron.exe"
+            },
+            "args": [
+                "."
+            ]
+        },
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Abrir no Chrome",
+            "file": "${workspaceFolder}/login.html",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "pwa-msedge",
+            "request": "launch",
+            "name": "Abrir no Edge",
+            "file": "${workspaceFolder}/login.html",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}
