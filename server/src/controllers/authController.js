@@ -74,7 +74,27 @@ async function login(req, res) {
     }
 
     // Verificação da senha com bcrypt (resistente a timing attacks)
-    const senhaCorreta = await bcrypt.compare(senha, usuario.senha_hash);
+    const hashArmazenado = usuario.senha_hash;
+    const hashTipo = typeof hashArmazenado === 'string' ? 'string' : 'nao-string';
+    const hashTamanho = typeof hashArmazenado === 'string' ? hashArmazenado.length : 0;
+    const hashInicio = typeof hashArmazenado === 'string' ? hashArmazenado.slice(0, 7) : null;
+    const hashFim = typeof hashArmazenado === 'string' ? hashArmazenado.slice(-4) : null;
+
+    let senhaCorreta = false;
+
+    if (typeof hashArmazenado === 'string' && hashArmazenado.startsWith('$2')) {
+      senhaCorreta = await bcrypt.compare(senha, hashArmazenado);
+    }
+
+    logger.info('Debug login autenticacao', {
+      loginRecebido: loginNormalizado,
+      usuarioEncontrado: true,
+      hashTipo,
+      hashTamanho,
+      hashInicio,
+      hashFim,
+      resultadoBcrypt: senhaCorreta
+    });
 
     if (!senhaCorreta) {
       // Incrementa contador de tentativas falhas
