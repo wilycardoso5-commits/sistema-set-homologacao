@@ -4,6 +4,7 @@ module.exports = {
   port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
   frontendOrigin: process.env.FRONTEND_ORIGIN || 'http://localhost',
+  sessionSecret: process.env.SESSION_SECRET || 'set-homologacao-dev-secret-trocar-em-producao',
   meta: {
     graphApiVersion: process.env.META_GRAPH_API_VERSION || 'v25.0',
     accessToken: process.env.META_ACCESS_TOKEN || '',

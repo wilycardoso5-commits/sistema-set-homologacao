@@ -2,14 +2,31 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
 const config = require('./config');
 const routes = require('./routes');
+const { pool } = require('./config/database');
 const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 
 // Proteções de Cabeçalhos HTTP (Helmet)
-app.use(helmet());
+// Content-Security-Policy permite scripts externos e bloqueia inline
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:'],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      objectSrc: ["'none'"],
+      frameAncestors: ["'none'"]
+    }
+  }
+}));
 
 // Configuração do CORS (Restrito em produção)
 const corsOptions = {
@@ -22,6 +39,25 @@ app.use(cors(corsOptions));
 // Limite de tamanho de JSON no body (Segurança)
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
+
+// Sessão Segura com armazenamento no PostgreSQL
+app.use(session({
+  store: new pgSession({
+    pool,
+    tableName: 'session',
+    createTableIfMissing: true  // Cria a tabela 'session' no Neon automaticamente se não existir
+  }),
+  name: 'set.sid',
+  secret: config.sessionSecret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,                                      // Inacessível via JavaScript no browser
+    secure: config.nodeEnv === 'production',             // HTTPS obrigatório em produção
+    sameSite: 'strict',                                  // Previne CSRF
+    maxAge: 8 * 60 * 60 * 1000                          // 8 horas de sessão
+  }
+}));
 
 // Servir arquivos estáticos do Frontend (Caminho Absoluto)
 const frontendPath = path.join(__dirname, '../../frontend');
@@ -37,3 +73,4 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 module.exports = app;
+
