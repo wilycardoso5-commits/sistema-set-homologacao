@@ -155,11 +155,66 @@
             <pre id="json-output">Carregando status do servidor...</pre>
         </div>
 
-        <button class="btn-check" id="btn-refresh">
+        <button class="btn-check" onclick="consultarHealth()" id="btn-refresh">
             🔄 Testar Conexão Novamente
         </button>
     </div>
 
-    <script src="/app.js" defer></script>
+    <script>
+        async function consultarHealth() {
+            const output = document.getElementById('json-output');
+            const codeEl = document.getElementById('http-code');
+            const btn = document.getElementById('btn-refresh');
+            const dot = document.getElementById('dot-status');
+            const badgeText = document.getElementById('badge-text');
+            
+            btn.disabled = true;
+            output.innerText = "Consultando /api/health...";
+            
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                
+                // Substitui o texto "Carregando status do servidor..." pelos dados retornados pela API
+                output.innerText = JSON.stringify(data, null, 2);
+                codeEl.innerText = `HTTP ${response.status} OK`;
+
+                // Indicador muda para VERDE quando status === "ok" e database === "conectado"
+                if (data.status === 'ok' && data.database === 'conectado') {
+                    dot.style.backgroundColor = '#10b981';
+                    dot.style.boxShadow = '0 0 10px #10b981';
+                    codeEl.style.color = '#10b981';
+                    badgeText.innerText = 'Sistema Online & Banco Conectado';
+                } else if (data.database === 'desconectado' || data.status === 'degradado') {
+                    dot.style.backgroundColor = '#f59e0b';
+                    dot.style.boxShadow = '0 0 10px #f59e0b';
+                    codeEl.style.color = '#f59e0b';
+                    badgeText.innerText = 'Sistema Degradado (Banco Desconectado)';
+                } else {
+                    dot.style.backgroundColor = '#ef4444';
+                    dot.style.boxShadow = '0 0 10px #ef4444';
+                    codeEl.style.color = '#ef4444';
+                    badgeText.innerText = 'Status Indefinido';
+                }
+            } catch (err) {
+                codeEl.innerText = 'Falha na Conexão';
+                codeEl.style.color = '#ef4444';
+                dot.style.backgroundColor = '#ef4444';
+                dot.style.boxShadow = '0 0 10px #ef4444';
+                badgeText.innerText = 'Servidor Indisponível';
+                
+                output.innerText = JSON.stringify({
+                    status: "erro",
+                    mensagem: "Não foi possível conectar ao servidor em /api/health",
+                    detalhes: err.message
+                }, null, 2);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // Executa ao carregar a página
+        window.addEventListener('DOMContentLoaded', consultarHealth);
+    </script>
 </body>
 </html>
