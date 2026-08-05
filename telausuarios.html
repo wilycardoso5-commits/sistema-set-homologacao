@@ -18845,50 +18845,45 @@
         }
 
 
-function verificarSessaoUsuario() {
+async function verificarSessaoUsuario() {
             // Chama o backend para validar a sessão baseada em express-session (cookie `set.sid`)
             try {
-                fetch('/api/auth/me', { credentials: 'include' })
-                    .then(async (res) => {
-                        if (res.status === 401) {
-                            try { localStorage.removeItem('usuarioLogado'); } catch (e) {}
-                            window.location.href = 'login.html';
-                            return;
-                        }
+                const res = await fetch('/api/auth/me', { credentials: 'include' });
 
-                        if (res.status !== 200) {
-                            console.error('Verificação de sessão retornou status', res.status);
-                            const sessaoData = localStorage.getItem('usuarioLogado');
-                            if (sessaoData) {
-                                try { usuarioLogado = JSON.parse(sessaoData); atualizarTopoUsuario(); aplicarControleAcessoMenu(); aplicarControleAcessoBotoes(); } catch(e){}
-                            }
-                            return;
-                        }
+                if (res.status === 401) {
+                    try { localStorage.removeItem('usuarioLogado'); } catch (e) {}
+                    window.location.href = 'login.html';
+                    return;
+                }
 
-                        const dados = await res.json().catch(() => null);
-                        if (dados && dados.sucesso && dados.usuario) {
-                            usuarioLogado = dados.usuario;
-                            try { localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado)); } catch (e) {}
+                if (res.status !== 200) {
+                    console.error('Verificação de sessão retornou status', res.status);
+                    const sessaoData = localStorage.getItem('usuarioLogado');
+                    if (sessaoData) {
+                        try { usuarioLogado = JSON.parse(sessaoData); atualizarTopoUsuario(); aplicarControleAcessoMenu(); aplicarControleAcessoBotoes(); } catch (e) {}
+                    }
+                    return;
+                }
 
-                            atualizarTopoUsuario();
-                            aplicarControleAcessoMenu();
-                            aplicarControleAcessoBotoes();
-                            return;
-                        }
+                const dados = await res.json().catch(() => null);
+                if (dados && dados.sucesso && dados.usuario) {
+                    usuarioLogado = dados.usuario;
+                    try { localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado)); } catch (e) {}
 
-                        // A API respondeu 200, mas sessão não está autenticada no backend.
-                        try { localStorage.removeItem('usuarioLogado'); } catch (e) {}
-                        window.location.href = 'login.html';
-                    })
-                    .catch((err) => {
-                        console.error('Erro ao chamar /api/auth/me', err);
-                        const sessaoData = localStorage.getItem('usuarioLogado');
-                        if (sessaoData) {
-                            try { usuarioLogado = JSON.parse(sessaoData); atualizarTopoUsuario(); aplicarControleAcessoMenu(); aplicarControleAcessoBotoes(); } catch(e){}
-                        }
-                    });
-            } catch (e) {
-                console.error('Erro na verificação de sessão:', e);
+                    atualizarTopoUsuario();
+                    aplicarControleAcessoMenu();
+                    aplicarControleAcessoBotoes();
+                    return;
+                }
+
+                try { localStorage.removeItem('usuarioLogado'); } catch (e) {}
+                window.location.href = 'login.html';
+            } catch (err) {
+                console.error('Erro ao chamar /api/auth/me', err);
+                const sessaoData = localStorage.getItem('usuarioLogado');
+                if (sessaoData) {
+                    try { usuarioLogado = JSON.parse(sessaoData); atualizarTopoUsuario(); aplicarControleAcessoMenu(); aplicarControleAcessoBotoes(); } catch (e) {}
+                }
             }
         }
 

@@ -11,11 +11,7 @@ const { pool } = require('./config/database');
 const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 
 const app = express();
-
-// Se o app roda atrás de proxy (Render, Heroku, etc.), habilitar trust proxy em produção
-if (config.nodeEnv === 'production') {
-  app.set('trust proxy', 1);
-}
+app.set('trust proxy', 1);
 
 // Proteções de Cabeçalhos HTTP (Helmet)
 // CSP desativado temporariamente para permitir conexões externas e CDN.
@@ -47,6 +43,7 @@ app.use(
     secret: process.env.SESSION_SECRET || 'chave_secreta_sistema_set_2026',
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
       secure: true,
       sameSite: 'none',
