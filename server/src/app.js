@@ -18,21 +18,9 @@ if (config.nodeEnv === 'production') {
 }
 
 // Proteções de Cabeçalhos HTTP (Helmet)
-// Content-Security-Policy permite somente os recursos realmente utilizados pelo dashboard
+// CSP desativado temporariamente para permitir conexões externas e CDN.
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com', 'https://cdn.jsdelivr.net', "'unsafe-inline'"],
-      workerSrc: ["'self'", 'https://cdnjs.cloudflare.com'],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https://cdnjs.cloudflare.com', 'https://cdn.jsdelivr.net', 'https://fonts.googleapis.com'],
-      imgSrc: ["'self'", 'data:', 'https://i.pravatar.cc'],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com'],
-      objectSrc: ["'none'"],
-      frameAncestors: ["'none'"]
-    }
-  }
+  contentSecurityPolicy: false
 }));
 
 // Configuração do CORS (quando for cross-origin precisamos permitir credenciais)
