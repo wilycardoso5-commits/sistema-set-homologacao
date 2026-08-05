@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const resposta = await fetch('/api/auth/login', {
                 method: 'POST',
+                credentials: 'same-origin', // enviar cookies na mesma origem
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     login: usuarioInput.value.trim(),

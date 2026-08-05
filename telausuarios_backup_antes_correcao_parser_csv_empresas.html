@@ -18471,44 +18471,40 @@
 
 function verificarSessaoUsuario() {
             try {
-                const sessaoData = localStorage.getItem('usuarioLogado');
-                if (!sessaoData) {
-                    window.location.href = "login.html";
-                    return false;
-                }
-                usuarioLogado = JSON.parse(sessaoData);
-                if (!usuarioLogado || !usuarioLogado.login) {
-                    window.location.href = "login.html";
-                    return false;
-                }
-
-                // Sincronizar com o banco set_users_db_v4 para checar se continua Ativo
-                const users = getUsersDB();
-                const uBanco = users.find(x => x.id === usuarioLogado.id || x.login === usuarioLogado.login);
-                
-                if (!uBanco || uBanco.status !== 'Ativo') {
-                    localStorage.removeItem('usuarioLogado');
-                    window.location.href = "login.html";
-                    return false;
-                }
-
-                // Atualizar objeto de sessão com dados atualizados do banco
-                usuarioLogado = {
-                    ...uBanco,
-                    dataHoraLogin: usuarioLogado.dataHoraLogin || new Date().toISOString()
-                };
-                localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
-
-                // Atualizar interface do topo e menus
-                atualizarTopoUsuario();
-                aplicarControleAcessoMenu();
-                aplicarControleAcessoBotoes();
-
-                return true;
+                fetch('/api/auth/me', { credentials: 'same-origin' })
+                    .then(async (res) => {
+                        if (res.status === 200) {
+                            const dados = await res.json().catch(() => ({}));
+                            if (dados && dados.sucesso && dados.usuario) {
+                                usuarioLogado = dados.usuario;
+                                try { localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado)); } catch (e) {}
+                                atualizarTopoUsuario();
+                                aplicarControleAcessoMenu();
+                                aplicarControleAcessoBotoes();
+                            } else {
+                                try { localStorage.removeItem('usuarioLogado'); } catch (e) {}
+                                window.location.href = "login.html";
+                            }
+                        } else if (res.status === 401) {
+                            try { localStorage.removeItem('usuarioLogado'); } catch (e) {}
+                            window.location.href = "login.html";
+                        } else {
+                            console.error('Verificação de sessão retornou status', res.status);
+                            const sessaoData = localStorage.getItem('usuarioLogado');
+                            if (sessaoData) {
+                                try { usuarioLogado = JSON.parse(sessaoData); atualizarTopoUsuario(); aplicarControleAcessoMenu(); aplicarControleAcessoBotoes(); } catch(e){}
+                            }
+                        }
+                    })
+                    .catch((err) => {
+                        console.error('Erro ao chamar /api/auth/me', err);
+                        const sessaoData = localStorage.getItem('usuarioLogado');
+                        if (sessaoData) {
+                            try { usuarioLogado = JSON.parse(sessaoData); atualizarTopoUsuario(); aplicarControleAcessoMenu(); aplicarControleAcessoBotoes(); } catch(e){}
+                        }
+                    });
             } catch (e) {
                 console.error('Erro na verificação de sessão:', e);
-                window.location.href = "login.html";
-                return false;
             }
         }
 
@@ -18658,10 +18654,16 @@ function verificarSessaoUsuario() {
                     usuarioResponsavel: usuarioLogado
                 });
             }
-            try {
-                localStorage.removeItem('usuarioLogado');
-            } catch(e) {}
-            window.location.href = "login.html";
+            fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
+                .then(async (res) => {
+                    try { localStorage.removeItem('usuarioLogado'); } catch(e) {}
+                    window.location.href = 'login.html';
+                })
+                .catch((err) => {
+                    console.error('Erro ao chamar logout:', err);
+                    try { localStorage.removeItem('usuarioLogado'); } catch(e) {}
+                    window.location.href = 'login.html';
+                });
         }
 
         // Auto-executa verificação de sessão ao carregar a página
