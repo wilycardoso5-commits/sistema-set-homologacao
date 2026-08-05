@@ -193,4 +193,20 @@ function logout(req, res) {
   });
 }
 
-module.exports = { login, logout };
+/**
+ * GET /api/auth/me
+ * Retorna o usuário da sessão se autenticado
+ */
+function me(req, res) {
+  try {
+    if (req.session && req.session.usuario) {
+      return res.status(200).json({ sucesso: true, usuario: req.session.usuario });
+    }
+    return res.status(401).json({ sucesso: false, mensagem: 'Sessão inválida' });
+  } catch (err) {
+    logger.error('Erro ao obter sessão do usuário', { error: err.message });
+    return res.status(500).json({ sucesso: false, mensagem: 'Erro interno' });
+  }
+}
+
+module.exports = { login, logout, me };
