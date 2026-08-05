@@ -13,16 +13,17 @@ const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 const app = express();
 
 // Proteções de Cabeçalhos HTTP (Helmet)
-// Content-Security-Policy permite scripts externos e bloqueia inline
+// Content-Security-Policy permite somente os recursos realmente utilizados pelo dashboard
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", 'data:'],
+      scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com', 'https://cdn.jsdelivr.net', "'unsafe-inline'"],
+      workerSrc: ["'self'", 'https://cdnjs.cloudflare.com'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://cdnjs.cloudflare.com', 'https://cdn.jsdelivr.net', 'https://fonts.googleapis.com'],
+      imgSrc: ["'self'", 'data:', 'https://i.pravatar.cc'],
       connectSrc: ["'self'"],
-      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com'],
       objectSrc: ["'none'"],
       frameAncestors: ["'none'"]
     }
@@ -66,14 +67,8 @@ app.get('/sistema', (req, res) => {
     return res.redirect('/');
   }
 
-  const telaPath = path.join(__dirname, '../../telausuarios.html');
-  let html = fs.readFileSync(telaPath, 'utf8');
-
-  if (!html.includes('<base href="/"')) {
-    html = html.replace(/<head([^>]*)>/i, '<head$1><base href="/" />');
-  }
-
-  return res.send(html);
+  // Serve o arquivo HTML exatamente como está no repositório
+  return res.sendFile(path.join(__dirname, '../../telausuarios.html'));
 });
 
 app.get('/logo-set.png', (req, res) => {
@@ -87,6 +82,20 @@ app.get('/icone.ico', (req, res) => {
 // Servir arquivos estáticos do Frontend (Caminho Absoluto)
 const frontendPath = path.join(__dirname, '../../frontend');
 app.use(express.static(frontendPath));
+
+// Servir ativos estáticos que estejam no diretório root do projeto (imagens, fontes, css, js)
+// Restrito por extensão para evitar expor código servidor.
+app.use((req, res, next) => {
+  const allowedExt = ['.png', '.jpg', '.jpeg', '.svg', '.ico', '.css', '.js', '.woff', '.woff2', '.ttf', '.eot', '.map'];
+  const ext = path.extname(req.path).toLowerCase();
+  if (allowedExt.includes(ext)) {
+    const filePath = path.join(__dirname, '../../', req.path.replace(/^[\\/]+/, ''));
+    return res.sendFile(filePath, (err) => {
+      if (err) return next();
+    });
+  }
+  return next();
+});
 
 // Rotas da API
 app.use('/api', routes);
