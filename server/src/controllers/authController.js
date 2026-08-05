@@ -155,7 +155,7 @@ async function login(req, res) {
       sucesso: true,
       mensagem: 'Autenticação realizada com sucesso.',
       trocaSenhaObrigatoria: usuario.troca_senha_obrigatoria,
-      redirecionarPara: usuario.troca_senha_obrigatoria ? '/trocar-senha' : '/index.html'
+      redirecionarPara: usuario.troca_senha_obrigatoria ? '/trocar-senha' : '/sistema'
     });
 
   } catch (err) {

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const fs = require('fs');
 const path = require('path');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
@@ -58,6 +59,30 @@ app.use(session({
     maxAge: 8 * 60 * 60 * 1000                          // 8 horas de sessão
   }
 }));
+
+// Rota protegida para o sistema principal
+app.get('/sistema', (req, res) => {
+  if (!req.session || !req.session.usuario) {
+    return res.redirect('/');
+  }
+
+  const telaPath = path.join(__dirname, '../../telausuarios.html');
+  let html = fs.readFileSync(telaPath, 'utf8');
+
+  if (!html.includes('<base href="/"')) {
+    html = html.replace(/<head([^>]*)>/i, '<head$1><base href="/" />');
+  }
+
+  return res.send(html);
+});
+
+app.get('/logo-set.png', (req, res) => {
+  return res.sendFile(path.join(__dirname, '../../logo-set.png'));
+});
+
+app.get('/icone.ico', (req, res) => {
+  return res.sendFile(path.join(__dirname, '../../icone.ico'));
+});
 
 // Servir arquivos estáticos do Frontend (Caminho Absoluto)
 const frontendPath = path.join(__dirname, '../../frontend');
