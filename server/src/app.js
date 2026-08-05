@@ -12,6 +12,11 @@ const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 
+// Se o app roda atrás de proxy (Render, Heroku, etc.), habilitar trust proxy em produção
+if (config.nodeEnv === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Proteções de Cabeçalhos HTTP (Helmet)
 // Content-Security-Policy permite somente os recursos realmente utilizados pelo dashboard
 app.use(helmet({
@@ -30,11 +35,12 @@ app.use(helmet({
   }
 }));
 
-// Configuração do CORS (Restrito em produção)
+// Configuração do CORS (quando for cross-origin precisamos permitir credenciais)
 const corsOptions = {
-  origin: config.nodeEnv === 'production' ? config.frontendOrigin : '*',
+  origin: config.nodeEnv === 'production' ? config.frontendOrigin : true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 };
 app.use(cors(corsOptions));
 
@@ -56,7 +62,8 @@ app.use(session({
   cookie: {
     httpOnly: true,                                      // Inacessível via JavaScript no browser
     secure: config.nodeEnv === 'production',             // HTTPS obrigatório em produção
-    sameSite: 'strict',                                  // Previne CSRF
+    sameSite: 'lax',                                     // Lax para permitir navegação pós-login na mesma origem
+    path: '/',
     maxAge: 8 * 60 * 60 * 1000                          // 8 horas de sessão
   }
 }));

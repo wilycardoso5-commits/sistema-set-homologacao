@@ -151,11 +151,22 @@ async function login(req, res) {
 
     logger.info('Login bem-sucedido', { login: loginNormalizado });
 
-    return res.status(200).json({
-      sucesso: true,
-      mensagem: 'Autenticação realizada com sucesso.',
-      trocaSenhaObrigatoria: usuario.troca_senha_obrigatoria,
-      redirecionarPara: usuario.troca_senha_obrigatoria ? '/trocar-senha' : '/sistema'
+    // Garantir que a sessão foi persistida no store antes de responder
+    req.session.save((saveErr) => {
+      if (saveErr) {
+        logger.error('Falha ao salvar sessão após login', { error: saveErr.message });
+        return res.status(500).json({
+          sucesso: false,
+          mensagem: 'Erro interno do servidor. Tente novamente.'
+        });
+      }
+
+      return res.status(200).json({
+        sucesso: true,
+        mensagem: 'Autenticação realizada com sucesso.',
+        trocaSenhaObrigatoria: usuario.troca_senha_obrigatoria,
+        redirecionarPara: usuario.troca_senha_obrigatoria ? '/trocar-senha' : '/sistema'
+      });
     });
 
   } catch (err) {
