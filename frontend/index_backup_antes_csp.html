@@ -172,7 +172,7 @@
             output.innerText = "Consultando /api/health...";
             
             try {
-                const response = await fetch('/api/health');
+                const response = await fetch('/api/health', { credentials: 'include' });
                 const data = await response.json();
                 
                 // Substitui o texto "Carregando status do servidor..." pelos dados retornados pela API

@@ -17194,7 +17194,7 @@
 
 function verificarSessaoUsuario() {
             try {
-                fetch('/api/auth/me', { credentials: 'same-origin' })
+                fetch('/api/auth/me', { credentials: 'include' })
                     .then(async (res) => {
                         if (res.status === 200) {
                             const dados = await res.json().catch(() => ({}));
@@ -17377,7 +17377,7 @@ function verificarSessaoUsuario() {
                     usuarioResponsavel: usuarioLogado
                 });
             }
-            fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
+            fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
                 .then(async (res) => {
                     try { localStorage.removeItem('usuarioLogado'); } catch(e) {}
                     window.location.href = 'login.html';

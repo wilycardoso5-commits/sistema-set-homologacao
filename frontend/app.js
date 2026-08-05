@@ -9,7 +9,7 @@ async function consultarHealth() {
     if (output) output.innerText = "Consultando /api/health...";
     
     try {
-        const response = await fetch('/api/health');
+        const response = await fetch('/api/health', { credentials: 'include' });
         const data = await response.json();
         
         // Substitui o texto pelos dados retornados pela API
