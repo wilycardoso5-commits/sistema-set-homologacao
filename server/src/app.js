@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const fs = require('fs');
 const path = require('path');
 const session = require('express-session');
-const pgSession = require('connect-pg-simple')(session);
+const PgSession = require('connect-pg-simple')(session);
 const config = require('./config');
 const routes = require('./routes');
 const { pool } = require('./config/database');
@@ -37,24 +37,23 @@ app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
 // Sessão Segura com armazenamento no PostgreSQL
-app.use(session({
-  store: new pgSession({
-    pool,
-    tableName: 'session',
-    createTableIfMissing: true  // Cria a tabela 'session' no Neon automaticamente se não existir
-  }),
-  name: 'set.sid',
-  secret: config.sessionSecret,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,                                      // Inacessível via JavaScript no browser
-    secure: config.nodeEnv === 'production',             // HTTPS obrigatório em produção
-    sameSite: 'lax',                                     // Lax para permitir navegação pós-login na mesma origem
-    path: '/',
-    maxAge: 8 * 60 * 60 * 1000                          // 8 horas de sessão
-  }
-}));
+app.use(
+  session({
+    store: new PgSession({
+      conString: process.env.DATABASE_URL,
+      tableName: 'session',
+      createTableIfMissing: true,
+    }),
+    secret: process.env.SESSION_SECRET || 'chave_secreta_sistema_set_2026',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: true,
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
+);
 
 // Rota protegida para o sistema principal
 app.get('/sistema', (req, res) => {
