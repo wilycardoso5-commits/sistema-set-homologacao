@@ -18928,22 +18928,24 @@ async function verificarSessaoUsuario() {
         function aplicarControleAcessoMenu() {
             if (!usuarioLogado) return;
 
-            const isMaster = usuarioLogado.perfil === 'Master';
+            const isMaster = usuarioLogado.perfil === 'Master' || usuarioLogado.perfilNome === 'Master';
             const perms = usuarioLogado.permissoes || {};
+            const hasPermissions = Object.keys(perms).length > 0;
+            const showAllMenus = !hasPermissions;
 
             const mapeamentoMenus = [
-                { id: 'menu-dashboard', ok: isMaster || !!perms.visualizarDashboard },
-                { id: 'menu-cartoes-vt', ok: isMaster || !!perms.visualizarCartoes },
-                { id: 'menu-recibo-entrega', ok: isMaster || !!perms.gerarRecibo || !!perms.visualizarCartoes || !!perms.visualizarReciboEntrega },
-                { id: 'menu-gratuidade', ok: isMaster || !!perms.visualizarGratuidade },
-                { id: 'menu-atendimento', ok: isMaster || !!perms.visualizarAtendimentos || !!perms.registrarAtendimento || !!perms.criarSolicitacao || !!perms.editarSolicitacao || !!perms.cancelarSolicitacao || !!perms.aprovarSolicitacao },
-            { id: 'menu-whatsapp', ok: isMaster || !!perms.visualizarWhatsApp },
-                { id: 'menu-empresas', ok: isMaster || !!perms.visualizarEmpresas },
-                { id: 'menu-compras', ok: isMaster || !!perms.visualizarCompras || !!perms.criarSolicitacaoCompra || !!perms.aprovarSolicitacaoCompra || !!perms.criarSolicitacao || !!perms.aprovarSolicitacao || !!perms.visualizarCartoes },
-                { id: 'menu-funcionarios', ok: isMaster || !!perms.visualizarFuncionarios },
-                { id: 'menu-raio-x', ok: isMaster || !!perms.visualizarRaioX || !!perms.visualizarLogs || !!perms.historicoAlteracoes },
+                { id: 'menu-dashboard', ok: showAllMenus || isMaster || !!perms.visualizarDashboard },
+                { id: 'menu-cartoes-vt', ok: showAllMenus || isMaster || !!perms.visualizarCartoes },
+                { id: 'menu-recibo-entrega', ok: showAllMenus || isMaster || !!perms.gerarRecibo || !!perms.visualizarCartoes || !!perms.visualizarReciboEntrega },
+                { id: 'menu-gratuidade', ok: showAllMenus || isMaster || !!perms.visualizarGratuidade },
+                { id: 'menu-atendimento', ok: showAllMenus || isMaster || !!perms.visualizarAtendimentos || !!perms.registrarAtendimento || !!perms.criarSolicitacao || !!perms.editarSolicitacao || !!perms.cancelarSolicitacao || !!perms.aprovarSolicitacao },
+                { id: 'menu-whatsapp', ok: showAllMenus || isMaster || !!perms.visualizarWhatsApp },
+                { id: 'menu-empresas', ok: showAllMenus || isMaster || !!perms.visualizarEmpresas },
+                { id: 'menu-compras', ok: showAllMenus || isMaster || !!perms.visualizarCompras || !!perms.criarSolicitacaoCompra || !!perms.aprovarSolicitacaoCompra || !!perms.criarSolicitacao || !!perms.aprovarSolicitacao || !!perms.visualizarCartoes },
+                { id: 'menu-funcionarios', ok: showAllMenus || isMaster || !!perms.visualizarFuncionarios },
+                { id: 'menu-raio-x', ok: showAllMenus || isMaster || !!perms.visualizarRaioX || !!perms.visualizarLogs || !!perms.historicoAlteracoes },
                 { id: 'menu-saude-sistema', ok: true },
-                { id: 'menu-gerenciamento-usuarios', ok: isMaster || !!perms.gerenciarUsuarios }
+                { id: 'menu-gerenciamento-usuarios', ok: showAllMenus || isMaster || !!perms.gerenciarUsuarios }
             ];
 
             mapeamentoMenus.forEach(item => {

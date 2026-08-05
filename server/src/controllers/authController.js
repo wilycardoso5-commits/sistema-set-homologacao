@@ -143,9 +143,11 @@ async function login(req, res) {
       login: usuario.login,
       email: usuario.email,
       perfilId: usuario.perfil_id,
+      perfil: usuario.perfil_nome,
       perfilNome: usuario.perfil_nome,
       status: usuario.status,
       trocaSenhaObrigatoria: usuario.troca_senha_obrigatoria,
+      permissoes: usuario.permissoes || {},
       dataHoraLogin: new Date().toISOString()
     };
 
