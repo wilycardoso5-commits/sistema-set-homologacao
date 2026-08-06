@@ -6,6 +6,8 @@
     <title>Sistema SET — Chave de Acesso</title>
     <meta name="description" content="Acesso seguro ao Sistema SET Web de Homologação.">
     <link rel="shortcut icon" href="/icone.ico" type="image/x-icon">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0056b3">
     <style>
         /* Reset global com fontes modernas */
         * {
@@ -259,5 +261,12 @@
     </div>
 
     <script src="/login.js" defer></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js');
+        });
+      }
+    </script>
 </body>
 </html>
