@@ -70,6 +70,14 @@ app.get('/icone.ico', (req, res) => {
   return res.sendFile(path.join(__dirname, '../../icone.ico'));
 });
 
+app.get('/manifest.json', (req, res) => {
+  return res.sendFile(path.resolve(__dirname, '../../frontend', 'manifest.json'));
+});
+
+app.get(['/service-worker.js', '/sw.js'], (req, res) => {
+  return res.sendFile(path.resolve(__dirname, '../../frontend', 'service-worker.js'));
+});
+
 // Servir arquivos estáticos do Frontend (Caminho Absoluto)
 const frontendPath = path.join(__dirname, '../../frontend');
 app.use(express.static(frontendPath));
