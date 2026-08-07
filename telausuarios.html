@@ -4403,7 +4403,7 @@
 
             <section class="data-section">
                 <div class="panel-box">
-                    <h3>Comparativo do Mês</h3>
+                    <h3>Comparativo Diário</h3>
                     <div id="graficoMensalDashboard" class="chart-container"
                         style="position: relative; height: 180px; width: 100%;">
                         <!-- SVG será injetado dinamicamente via JS -->
@@ -12089,46 +12089,24 @@
             }
         }
 
-        function obterDadosGraficoMensal() {
-            const date = new Date();
-            const ano = date.getFullYear();
-            const mes = String(date.getMonth() + 1).padStart(2, '0');
-            const chaveAtualReal = `${ano}-${mes}`;
-
-            const listaMeses = [];
-            Object.keys(bancoDados).forEach(k => {
-                let realKey = k;
-                if (k === 'atual') {
-                    realKey = chaveAtualReal;
-                }
-                listaMeses.push({ key: k, realKey: realKey });
-            });
-
-            listaMeses.sort((a, b) => a.realKey.localeCompare(b.realKey));
+        function obterDadosGraficoDiario() {
+            const dadosAtual = bancoDados["atual"] || { dias: {} };
+            const diasObj = dadosAtual.dias || {};
+            const diaChaves = Object.keys(diasObj)
+                .filter(k => diasObj[k] && typeof diasObj[k] === 'object')
+                .sort((a, b) => Number(a) - Number(b));
 
             const labels = [];
             const dataPoints = [];
-            const mesesAbreviadosPT = {
-                "01": "Jan", "02": "Fev", "03": "Mar", "04": "Abr",
-                "05": "Mai", "06": "Jun", "07": "Jul", "08": "Ago",
-                "09": "Set", "10": "Out", "11": "Nov", "12": "Dez"
-            };
+            const hoje = new Date();
+            const mesAtual = String(hoje.getMonth() + 1).padStart(2, '0');
 
-            listaMeses.forEach(m => {
-                const parts = m.realKey.split('-');
-                let label = m.key;
-                if (parts.length === 2) {
-                    const anoAbrev = parts[0].slice(-2);
-                    const mesAbrev = mesesAbreviadosPT[parts[1]] || parts[1];
-                    label = `${mesAbrev}/${anoAbrev}`;
-                }
-                if (m.key === 'atual') {
-                    label += ' (Atual)';
-                }
+            diaChaves.forEach(diaKey => {
+                const diaFormatado = String(diaKey).padStart(2, '0');
+                const label = `${diaFormatado}/${mesAtual}`;
+                const diaDados = diasObj[diaKey] || { presencial: 0, telefone: 0, email: 0 };
+                const total = (diaDados.presencial || 0) + (diaDados.telefone || 0) + (diaDados.email || 0);
                 labels.push(label);
-
-                const dados = bancoDados[m.key] || { presencial: 0, telefone: 0, email: 0 };
-                const total = (dados.presencial || 0) + (dados.telefone || 0) + (dados.email || 0);
                 dataPoints.push(total);
             });
 
@@ -14234,7 +14212,7 @@
             const container = document.getElementById('graficoMensalDashboard');
             if (!container) return;
 
-            const { labels, dataPoints } = obterDadosGraficoMensal();
+            const { labels, dataPoints } = obterDadosGraficoDiario();
             if (!dataPoints || dataPoints.length === 0) {
                 container.innerHTML = `<div style="color: #64748b; text-align: center; padding-top: 80px; font-family: 'Inter', sans-serif;">Nenhum dado disponível</div>`;
                 return;
@@ -14433,7 +14411,7 @@
                         }
                     }
                 </style>
-                <svg viewBox="0 0 900 430" class="svg-grafico" role="img" aria-label="Gráfico de Atendimentos do Mês">
+                <svg viewBox="0 0 900 430" class="svg-grafico" role="img" aria-label="Gráfico de Atendimentos por Dia">
                     <defs>
                         <linearGradient id="gradienteAreaDynamic" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stop-color="#00d2ff" stop-opacity="0.45"/>
