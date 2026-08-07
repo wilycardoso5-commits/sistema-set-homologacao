@@ -20,14 +20,14 @@ CREATE TABLE IF NOT EXISTS perfis (
     atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------I
 -- 2. TABELA: permissoes (Catálogo de Permissões Granulares por Módulo)
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS permissoes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),I
     codigo VARCHAR(100) NOT NULL UNIQUE,
     nome VARCHAR(100) NOT NULL,
-    descricao TEXT,
+    descricao TEXT,O
     modulo VARCHAR(50) NOT NULL,
     ativo BOOLEAN NOT NULL DEFAULT true,
     criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
