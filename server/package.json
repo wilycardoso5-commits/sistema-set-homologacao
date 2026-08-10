@@ -25,9 +25,11 @@
     "express": "^4.19.2",
     "express-session": "^1.19.0",
     "helmet": "^7.1.0",
-    "pg": "^8.11.5"
+    "pg": "^8.11.5",
+    "sqlite3": "^6.0.1"
   },
   "allowScripts": {
-    "bcrypt@6.0.0": true
+    "bcrypt@6.0.0": true,
+    "sqlite3@6.0.1": true
   }
 }

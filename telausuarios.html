@@ -12105,11 +12105,60 @@
             localStorage.setItem('set_total_entradas', totalEntradas.toString());
             localStorage.setItem('set_solicitacoes_vt', JSON.stringify(solicitacoesCartoesVT));
             // Histórico de solicitações concluídas
-            // historicoSolicitacoesVT is a global variable defined earlier
+            localStorage.setItem('set_historico_vt', JSON.stringify(historicoSolicitacoesVT));
             localStorage.setItem('set_vt_lotes', JSON.stringify(historicoSolicitacoesLotesVT));
             localStorage.setItem('set_atendimentos_db', JSON.stringify(bancoDados));
             localStorage.setItem('set_lote_arquivos', JSON.stringify(loteArquivosHistorico));
+            
+            sincronizarParaServidor(); // Chama a sincronização assíncrona
         }
+
+        async function sincronizarParaServidor() {
+            try {
+                const data = {
+                    set_cartoes_vt: cartoesVT,
+                    set_solicitacoes_vt: solicitacoesCartoesVT,
+                    set_historico_vt: historicoSolicitacoesVT
+                };
+                await fetch('/api/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+            } catch(e) {
+                console.error("Erro ao enviar sync para servidor:", e);
+            }
+        }
+
+        async function carregarSincronizacaoDoServidor() {
+            try {
+                const response = await fetch('/api/sync');
+                const result = await response.json();
+                if (result.success && result.data) {
+                    if (result.data.set_cartoes_vt) {
+                        localStorage.setItem('set_cartoes_vt', JSON.stringify(result.data.set_cartoes_vt));
+                        cartoesVT = result.data.set_cartoes_vt;
+                    }
+                    if (result.data.set_solicitacoes_vt) {
+                        localStorage.setItem('set_solicitacoes_vt', JSON.stringify(result.data.set_solicitacoes_vt));
+                        solicitacoesCartoesVT = result.data.set_solicitacoes_vt;
+                    }
+                    if (result.data.set_historico_vt) {
+                        localStorage.setItem('set_historico_vt', JSON.stringify(result.data.set_historico_vt));
+                        historicoSolicitacoesVT = result.data.set_historico_vt;
+                    }
+                    
+                    // Re-renderiza a tela após puxar do servidor
+                    if (typeof renderSolicitacoesPendentesVT === 'function') renderSolicitacoesPendentesVT();
+                    if (typeof renderizarTabelaHistoricoVT === 'function') renderizarTabelaHistoricoVT();
+                }
+            } catch (err) {
+                console.error("Erro ao sincronizar do servidor:", err);
+            }
+        }
+        
+        // Puxa do servidor assim que abrir a tela
+        document.addEventListener('DOMContentLoaded', carregarSincronizacaoDoServidor);
 
         function popularFiltroSetor() {
             const selectPend = document.getElementById('filtroSetorPendentes');
