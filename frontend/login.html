@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema SET — Chave de Acesso</title>
     <meta name="description" content="Acesso seguro ao Sistema SET Web de Homologação.">
-    <link rel="shortcut icon" href="/icone.ico" type="image/x-icon">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="shortcut icon" href="../icone.ico" type="image/x-icon">
+    <script>
+        if (window.location.protocol !== 'file:') {
+            const manifestLink = document.createElement('link');
+            manifestLink.rel = 'manifest';
+            manifestLink.href = './manifest.json';
+            document.head.appendChild(manifestLink);
+        }
+    </script>
     <meta name="theme-color" content="#0056b3">
     <style>
         /* Reset global com fontes modernas */
@@ -19,9 +27,17 @@
 
         /* ANIMAÇÃO DO FUNDO: Pulsação e transição do Azul Neon Elétrico */
         @keyframes movimentoNeon {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         /* Fundo Azul Neon super vivo */
@@ -45,8 +61,8 @@
             border-radius: 24px;
             border: 1px solid rgba(255, 255, 255, 0.8);
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5),
-                        0 0 60px rgba(0, 210, 255, 0.3),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+                0 0 60px rgba(0, 210, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
             overflow: hidden;
         }
 
@@ -173,12 +189,14 @@
             stroke: #00d2ff;
         }
 
-        .toggle-senha:focus { outline: none; }
+        .toggle-senha:focus {
+            outline: none;
+        }
 
         .input-group input:focus {
             border-color: #00d2ff;
             box-shadow: 0 0 15px rgba(0, 210, 255, 0.6),
-                        inset 0 1px 2px rgba(0, 0, 0, 0.05);
+                inset 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         /* Container de Ações */
@@ -221,6 +239,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="window-app">
@@ -237,15 +256,18 @@
             <form id="loginForm" novalidate>
                 <div class="input-group">
                     <label for="usuario">Usuário</label>
-                    <input type="text" id="usuario" name="usuario" placeholder="Nome de usuário ou e-mail" autocomplete="username" required>
+                    <input type="text" id="usuario" name="usuario" placeholder="Nome de usuário ou e-mail"
+                        autocomplete="username" required>
                 </div>
 
                 <div class="input-group password-group">
                     <label for="senha">Senha</label>
                     <div class="password-field">
-                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required>
+                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha"
+                            autocomplete="current-password" required>
                         <button type="button" id="toggleSenha" class="toggle-senha" aria-label="Mostrar senha">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                 <circle cx="12" cy="12" r="3" />
                             </svg>
@@ -262,11 +284,12 @@
 
     <script src="/login.js" defer></script>
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js');
-        });
-      }
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
     </script>
 </body>
+
 </html>

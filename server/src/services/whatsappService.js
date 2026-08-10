@@ -1,4 +1,5 @@
 const config = require('../config');
+const axios = require('axios');
 
 function checkIntegrationStatus() {
   const hasToken = !!config.meta.accessToken;
@@ -16,6 +17,67 @@ function checkIntegrationStatus() {
   };
 }
 
+async function sendTextMessage(to, text) {
+  if (!config.meta.accessToken || !config.meta.phoneNumberId) {
+    throw new Error('Credenciais da Meta não configuradas');
+  }
+
+  const url = `https://graph.facebook.com/${config.meta.graphApiVersion}/${config.meta.phoneNumberId}/messages`;
+  
+  const payload = {
+    messaging_product: 'whatsapp',
+    recipient_type: 'individual',
+    to: to,
+    type: 'text',
+    text: {
+      preview_url: false,
+      body: text
+    }
+  };
+
+  const response = await axios.post(url, payload, {
+    headers: {
+      'Authorization': `Bearer ${config.meta.accessToken}`,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  return response.data;
+}
+
+async function sendTemplateMessage(to, templateName, languageCode = 'pt_BR', components = []) {
+  if (!config.meta.accessToken || !config.meta.phoneNumberId) {
+    throw new Error('Credenciais da Meta não configuradas');
+  }
+
+  const url = `https://graph.facebook.com/${config.meta.graphApiVersion}/${config.meta.phoneNumberId}/messages`;
+  
+  const payload = {
+    messaging_product: 'whatsapp',
+    recipient_type: 'individual',
+    to: to,
+    type: 'template',
+    template: {
+      name: templateName,
+      language: {
+        code: languageCode
+      },
+      components: components
+    }
+  };
+
+  const response = await axios.post(url, payload, {
+    headers: {
+      'Authorization': `Bearer ${config.meta.accessToken}`,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  return response.data;
+}
+
 module.exports = {
-  checkIntegrationStatus
+  checkIntegrationStatus,
+  sendTextMessage,
+  sendTemplateMessage
 };
