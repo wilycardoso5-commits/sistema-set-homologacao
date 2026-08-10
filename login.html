@@ -665,10 +665,53 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
+          let refreshing = false;
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+              refreshing = true;
+              window.location.reload();
+            }
+          });
+
           navigator.serviceWorker.register('/service-worker.js')
-            .then(reg => console.log('PWA ativo:', reg))
+            .then(reg => {
+              console.log('PWA ativo:', reg);
+              
+              reg.addEventListener('updatefound', () => {
+                const newWorker = reg.installing;
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    mostrarAvisoNovaVersao(newWorker);
+                  }
+                });
+              });
+            })
             .catch(err => console.error('Erro PWA:', err));
         });
+      }
+
+      function mostrarAvisoNovaVersao(worker) {
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            title: '🚀 Nova versão disponível!',
+            text: 'O sistema foi atualizado com melhorias. Clique em Atualizar para recarregar.',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#00d2ff',
+            cancelButtonColor: '#334155',
+            confirmButtonText: 'Atualizar Agora',
+            cancelButtonText: 'Mais tarde',
+            allowOutsideClick: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+              worker.postMessage('SKIP_WAITING');
+            }
+          });
+        } else {
+          if (confirm("🚀 Nova versão do sistema disponível! Deseja atualizar agora?")) {
+            worker.postMessage('SKIP_WAITING');
+          }
+        }
       }
     </script>
 </body>

@@ -4459,7 +4459,7 @@
                     <input type="file" id="avatarFileInput" accept="image/*" style="display: none;"
                         onchange="handleAvatarUpload(event)">
                     <!-- Sino de Notificações ao lado direito da bola -->
-                    <div class="notif-bell-wrapper" id="notifBellWrapper" onclick="toggleNotifPanel()"
+                    <div class="notif-bell-wrapper" id="notifBellWrapper" onclick="toggleNotifPanel(event)"
                         title="Notificações"
                         style="margin-right:0; margin-left:8px; margin-top:-10px; align-self:center;">
                         <i class="fa-solid fa-bell" id="notifBellIcon"></i>
@@ -13747,7 +13747,10 @@
             atualizarTelaEmpresas();
         }
 
-        function toggleNotifPanel() {
+        function toggleNotifPanel(event) {
+            if (event) {
+                event.stopPropagation(); // Impede que o clique vaze para o user-profile e abra a modal de senha
+            }
             const panel = document.getElementById('notifPanel');
             if (!panel) return;
             if (panel.style.display === 'none') {
@@ -25917,10 +25920,56 @@
                     console.warn('PWA: Service Worker não é suportado no protocolo file://');
                     return;
                 }
+
+                let refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (!refreshing) {
+                        refreshing = true;
+                        window.location.reload();
+                    }
+                });
+
                 navigator.serviceWorker.register('/service-worker.js')
-                    .then(reg => console.log('PWA ativo:', reg))
+                    .then(reg => {
+                        console.log('PWA ativo:', reg);
+
+                        // Detecta nova versão
+                        reg.addEventListener('updatefound', () => {
+                            const newWorker = reg.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                // Se instalou um novo worker E já existia um antigo controlando a página
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    mostrarAvisoNovaVersao(newWorker);
+                                }
+                            });
+                        });
+                    })
                     .catch(err => console.error('Erro PWA:', err));
             });
+        }
+
+        function mostrarAvisoNovaVersao(worker) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: '🚀 Nova versão disponível!',
+                    text: 'O sistema foi atualizado com melhorias. Clique em Atualizar para recarregar.',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#00d2ff',
+                    cancelButtonColor: '#334155',
+                    confirmButtonText: 'Atualizar Agora',
+                    cancelButtonText: 'Mais tarde',
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        worker.postMessage('SKIP_WAITING');
+                    }
+                });
+            } else {
+                if (confirm("🚀 Nova versão do sistema disponível! Deseja atualizar agora?")) {
+                    worker.postMessage('SKIP_WAITING');
+                }
+            }
         }
     </script>
 </body>

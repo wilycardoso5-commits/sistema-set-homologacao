@@ -15,7 +15,14 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => cache.addAll(ASSETS_TO_CACHE))
   );
-  self.skipWaiting();
+  // Removido self.skipWaiting() automático para permitir notificação na UI
+});
+
+// Listener para forçar ativação quando a UI pedir
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('activate', (event) => {
