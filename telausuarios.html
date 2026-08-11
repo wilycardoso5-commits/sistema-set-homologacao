@@ -26416,6 +26416,14 @@
                         <input type="password" id="inputConfirmarSenha" placeholder="Repita a nova senha">
                     </div>
                     <button class="btn-salvar-senha" onclick="salvarNovaSenhaConfig()">Salvar Nova Senha</button>
+
+                    <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(239, 68, 68, 0.2);">
+                        <h3 style="color: #ef4444; font-size: 14px; margin-bottom: 12px;"><i class="fa-solid fa-triangle-exclamation"></i> Zona de Risco</h3>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Operações irreversíveis que afetam o banco de dados do sistema.</p>
+                        <button onclick="abrirModalResetDb()" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px 16px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
+                            <i class="fa-solid fa-trash-can"></i> Zerar Dados de Teste (Reset Geral)
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -26612,6 +26620,93 @@
                 checkAppVersion();
             });
         })();
+
+        // ======= MODAL RESET DATABASE =======
+        function abrirModalResetDb() {
+            fecharModalConfiguracoes();
+            const modalHtml = `
+            <div id="modal-reset-db-container" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(6, 11, 19, 0.9); backdrop-filter:blur(8px); z-index:10020; display:flex; justify-content:center; align-items:center; padding:20px; animation: fadeIn 0.3s ease;">
+                <div style="background:#0e1726; border:2px solid #ef4444; border-radius:16px; width:100%; max-width:460px; box-shadow:0 20px 60px rgba(239,68,68,0.2); overflow:hidden; animation: slideInUp 0.3s ease;">
+                    <div style="padding:20px 24px; border-bottom:1px solid #1e293b; display:flex; justify-content:space-between; align-items:center; background: rgba(239, 68, 68, 0.05);">
+                        <h3 style="color:#ef4444; font-size:16px; font-weight:800; display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-triangle-exclamation fa-beat"></i> AÇÃO IRREVERSÍVEL
+                        </h3>
+                        <button type="button" onclick="fecharModalResetDb()" style="background:transparent; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div style="padding:24px;">
+                        <p style="color:#cbd5e1; font-size:13px; line-height:1.5; margin-bottom:20px;">
+                            <strong>Atenção:</strong> Esta ação irá apagar permanentemente todos os <strong>Atendimentos, Cartões VT, Empresas e Funcionários</strong> do banco de dados.<br><br>
+                            Apenas os Usuários, Permissões e o módulo WhatsApp serão preservados. As métricas e contadores retornarão a zero.
+                        </p>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block; color:#94a3b8; font-size:11px; font-weight:700; text-transform:uppercase; margin-bottom:6px;">Senha do Administrador *</label>
+                            <input type="password" id="reset-senha-admin" placeholder="Digite sua senha para autorizar" style="width:100%; background:#060b13; border:1px solid #1e293b; border-radius:8px; padding:12px 14px; color:#fff; font-size:13px; outline:none;">
+                        </div>
+                        <div style="margin-bottom:24px;">
+                            <label style="display:block; color:#ef4444; font-size:11px; font-weight:700; text-transform:uppercase; margin-bottom:6px;">Digite "CONFIRMAR" para prosseguir *</label>
+                            <input type="text" id="reset-confirmacao" placeholder="CONFIRMAR" style="width:100%; background:#060b13; border:1px solid rgba(239, 68, 68, 0.3); border-radius:8px; padding:12px 14px; color:#ef4444; font-size:13px; outline:none; text-transform:uppercase;">
+                        </div>
+                        <div style="display:flex; gap:12px; justify-content:flex-end;">
+                            <button onclick="fecharModalResetDb()" style="padding:10px 16px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; cursor:pointer; font-size:13px;">Cancelar</button>
+                            <button id="btn-executar-reset" onclick="executarResetDb()" style="padding:10px 20px; border-radius:8px; border:none; background:#ef4444; color:#fff; font-weight:600; cursor:pointer; font-size:13px; transition: background 0.2s;">Zerar Dados Agora</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        function fecharModalResetDb() {
+            const el = document.getElementById('modal-reset-db-container');
+            if (el) el.remove();
+        }
+
+        async function executarResetDb() {
+            const senha = document.getElementById('reset-senha-admin').value;
+            const confirmacao = document.getElementById('reset-confirmacao').value;
+
+            if (!senha) return Swal.fire('Erro', 'A senha é obrigatória.', 'error');
+            if (confirmacao.toUpperCase() !== 'CONFIRMAR') return Swal.fire('Atenção', 'Digite a palavra CONFIRMAR corretamente.', 'warning');
+
+            const btn = document.getElementById('btn-executar-reset');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Excluindo...';
+
+            try {
+                const response = await fetch('/api/auth/reset-database', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Sucesso!',
+                        text: 'O banco de dados foi limpo. A tela será recarregada.',
+                        icon: 'success',
+                        allowOutsideClick: false
+                    }).then(() => {
+                        localStorage.clear();
+                        sessionStorage.clear();
+                        window.location.reload(true);
+                    });
+                } else {
+                    Swal.fire('Erro', data.mensagem || 'Não foi possível limpar o banco.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Erro', 'Falha na conexão com o servidor.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
     </script>
 </body>
 </html>

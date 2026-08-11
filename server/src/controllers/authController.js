@@ -274,5 +274,44 @@ async function changePassword(req, res) {
     return res.status(500).json({ sucesso: false, mensagem: 'Erro interno ao alterar a senha.' });
   }
 }
+async function resetDatabase(req, res) {
+  if (!req.session || !req.session.usuario) {
+    return res.status(401).json({ success: false, mensagem: 'Não autorizado.' });
+  }
 
-module.exports = { login, logout, me, changePassword };
+  const { senha } = req.body;
+  if (!senha) {
+    return res.status(400).json({ success: false, mensagem: 'A senha é obrigatória.' });
+  }
+
+  try {
+    const userQuery = await db.query('SELECT senha_hash FROM usuarios WHERE id = $1', [req.session.usuario.id]);
+    if (userQuery.rows.length === 0) {
+       return res.status(401).json({ success: false, mensagem: 'Usuário não encontrado.' });
+    }
+
+    const { senha_hash } = userQuery.rows[0];
+    const isValid = await bcrypt.compare(senha, senha_hash);
+    
+    if (!isValid) {
+      return res.status(401).json({ success: false, mensagem: 'Senha incorreta.' });
+    }
+
+    const chavesParaDeletar = [
+      'set_cartoes_vt', 'set_solicitacoes_vt', 'set_historico_vt',
+      'set_empresas_db', 'set_funcionarios', 'set_atendimentos_db',
+      'set_gratuidade_db_v1', 'set_atendimentos_gratuidade_v1',
+      'set_vt_lotes', 'set_lote_arquivos', 'set_estoque',
+      'set_saldo_disponivel_manual', 'set_total_ribbons'
+    ];
+
+    await db.query('DELETE FROM sync_store WHERE key = ANY($1)', [chavesParaDeletar]);
+    return res.status(200).json({ success: true, mensagem: 'Dados de teste removidos com sucesso!' });
+
+  } catch (error) {
+    console.error('Erro no resetDatabase:', error);
+    return res.status(500).json({ success: false, mensagem: 'Erro interno no servidor.' });
+  }
+}
+
+module.exports = { login, logout, me, changePassword, resetDatabase };
