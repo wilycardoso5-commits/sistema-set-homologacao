@@ -1,4 +1,4 @@
-const { dbAsync } = require('../config/sqlite');
+const db = require('../config/database');
 
 async function getSyncData(req, res) {
     try {
@@ -10,9 +10,9 @@ async function getSyncData(req, res) {
 
         const data = {};
         for (const key of keysToSync) {
-            const value = await dbAsync.get(key);
-            if (value) {
-                data[key] = JSON.parse(value);
+            const result = await db.query('SELECT value FROM sync_store WHERE key = $1', [key]);
+            if (result && result.rows && result.rows.length > 0) {
+                data[key] = JSON.parse(result.rows[0].value);
             }
         }
 
@@ -39,7 +39,12 @@ async function postSyncData(req, res) {
         for (const key of keysToSync) {
             if (syncData[key] !== undefined) {
                 const valueString = JSON.stringify(syncData[key]);
-                await dbAsync.set(key, valueString);
+                await db.query(`
+                    INSERT INTO sync_store (key, value) 
+                    VALUES ($1, $2) 
+                    ON CONFLICT(key) 
+                    DO UPDATE SET value = EXCLUDED.value, atualizado_em = CURRENT_TIMESTAMP
+                `, [key, valueString]);
             }
         }
 
