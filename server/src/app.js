@@ -15,9 +15,10 @@ app.set('trust proxy', 1);
 
 // Timestamp global para versionamento e auto-update no frontend
 const APP_BUILD_VERSION = Date.now().toString();
+const SEM_VER = require('../../package.json').version || "1.0.0";
 
 app.get('/api/version', (req, res) => {
-  return res.json({ version: APP_BUILD_VERSION });
+  return res.json({ version: APP_BUILD_VERSION, semVer: SEM_VER });
 });
 
 // Proteções de Cabeçalhos HTTP (Helmet)

@@ -4602,7 +4602,10 @@
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span class="nav-text">Sair</span>
             </a>
-            <div class="signature">Desenvolvida por wily 2.3</div>
+            <div class="signature">
+                Desenvolvida por wily 2.3
+                <span id="app-version-display" style="opacity:0.7; font-size:9px; display:block; margin-top:2px;"></span>
+            </div>
         </div>
     </aside>
 
@@ -26508,7 +26511,7 @@
             const toastHtml = `
                 <div id="update-toast" style="display: none; position: fixed; bottom: 24px; right: 24px; background: var(--bg-card, #1E293B); color: var(--text-main, #F8FAFC); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 99999; border-left: 5px solid #2563EB; font-family: 'Inter', sans-serif; transition: all 0.3s ease; align-items: center; justify-content: space-between; gap: 20px; max-width: 400px;">
                     <div>
-                        <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 600; letter-spacing: 0.3px;">🚀 Nova versão disponível!</h4>
+                        <h4 id="update-toast-title" style="margin: 0 0 6px 0; font-size: 15px; font-weight: 600; letter-spacing: 0.3px;">🚀 Nova versão disponível!</h4>
                         <p style="margin: 0; font-size: 13px; color: var(--text-muted, #94A3B8);">O sistema recebeu melhorias no servidor. Atualize para sincronizar.</p>
                     </div>
                     <button onclick="applyAutoUpdate()" style="background: #2563EB; color: #FFF; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap; font-size: 13px;" onmouseover="this.style.background='#1D4ED8'" onmouseout="this.style.background='#2563EB'">Atualizar Agora</button>
@@ -26545,13 +26548,26 @@
                     
                     if (!currentVersion) {
                         localStorage.setItem('app_version', data.version);
+                        if (data.semVer) {
+                            localStorage.setItem('app_semver', data.semVer);
+                        }
                     } else if (currentVersion !== data.version) {
                         serverVersion = data.version;
                         const toast = document.getElementById('update-toast');
+                        const toastTitle = document.getElementById('update-toast-title');
+                        if (toastTitle && data.semVer) {
+                            toastTitle.innerHTML = `🚀 Nova versão disponível (v${data.semVer})!`;
+                        }
                         if (toast) {
                             toast.style.display = 'flex';
                             toast.style.animation = 'slideInUp 0.5s ease';
                         }
+                    }
+                    
+                    // Atualiza o rodapé com a versão (sempre que carregar com sucesso)
+                    const versionDisplay = document.getElementById('app-version-display');
+                    if (versionDisplay && data.semVer) {
+                        versionDisplay.innerText = `Versão ${data.semVer}`;
                     }
                 } catch(e) {
                     // Falha silenciosa caso o backend esteja off
