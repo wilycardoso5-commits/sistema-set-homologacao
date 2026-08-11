@@ -31,5 +31,8 @@
       "createStartMenuShortcut": true,
       "shortcutName": "Sistema SET"
     }
+  },
+  "dependencies": {
+    "socket.io": "^4.8.3"
   }
 }

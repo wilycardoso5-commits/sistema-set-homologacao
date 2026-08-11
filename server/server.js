@@ -1,3 +1,5 @@
+const http = require('http');
+const { Server } = require('socket.io');
 const app = require('./src/app');
 const config = require('./src/config');
 const logger = require('./src/utils/logger');
@@ -5,7 +7,29 @@ const { closePool } = require('./src/config/database');
 
 const PORT = config.port;
 
-const server = app.listen(PORT, () => {
+// 1. Criar o servidor HTTP e integrar com Socket.IO
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Permite conexões do frontend/PWA
+    methods: ["GET", "POST"]
+  }
+});
+
+// 2. Torna o Socket.IO acessível dentro de todas as rotas do Express (req.io)
+app.set('io', io);
+
+// 3. Escuta conexões ativas do Socket
+io.on('connection', (socket) => {
+  logger.info(`Novo cliente conectado via WebSocket: ${socket.id}`);
+
+  socket.on('disconnect', () => {
+    logger.info(`Cliente desconectado: ${socket.id}`);
+  });
+});
+
+// 4. Iniciar o servidor
+server.listen(PORT, () => {
   logger.info(`Servidor Backend central rodando na porta ${PORT}`);
   logger.info(`Ambiente: ${config.nodeEnv}`);
 });
