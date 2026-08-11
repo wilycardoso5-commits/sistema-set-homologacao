@@ -12109,7 +12109,7 @@
             localStorage.setItem('set_vt_lotes', JSON.stringify(historicoSolicitacoesLotesVT));
             localStorage.setItem('set_atendimentos_db', JSON.stringify(bancoDados));
             localStorage.setItem('set_lote_arquivos', JSON.stringify(loteArquivosHistorico));
-            
+
             sincronizarParaServidor(); // Chama a sincronização assíncrona
         }
 
@@ -12125,7 +12125,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-            } catch(e) {
+            } catch (e) {
                 console.error("Erro ao enviar sync para servidor:", e);
             }
         }
@@ -12147,7 +12147,7 @@
                         localStorage.setItem('set_historico_vt', JSON.stringify(result.data.set_historico_vt));
                         historicoSolicitacoesVT = result.data.set_historico_vt;
                     }
-                    
+
                     // Re-renderiza a tela após puxar do servidor
                     if (typeof renderSolicitacoesPendentesVT === 'function') renderSolicitacoesPendentesVT();
                     if (typeof renderizarTabelaHistoricoVT === 'function') renderizarTabelaHistoricoVT();
@@ -12156,7 +12156,7 @@
                 console.error("Erro ao sincronizar do servidor:", err);
             }
         }
-        
+
         // Puxa do servidor assim que abrir a tela
         document.addEventListener('DOMContentLoaded', carregarSincronizacaoDoServidor);
 

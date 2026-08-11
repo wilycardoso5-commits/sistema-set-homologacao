@@ -1,8 +1,13 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const logger = require('../utils/logger');
+require('dotenv').config();
 
-const dbPath = path.resolve(__dirname, '../../database.sqlite');
+let dbPath = path.resolve(__dirname, '../../database.sqlite');
+if (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('sqlite://')) {
+    const rawPath = process.env.DATABASE_URL.replace('sqlite://', '');
+    dbPath = path.resolve(__dirname, '../../', rawPath);
+}
 
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
