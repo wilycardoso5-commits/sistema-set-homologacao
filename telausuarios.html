@@ -24923,6 +24923,7 @@
                     <em>Se precisar de outro filtro, basta perguntar!</em>`;
                 }
 
+
                 if (queryNorm.includes('hoje') || queryNorm.includes('dia')) {
                     let totalPDF = (window.bancoPDF && window.bancoPDF.funcionarios) ? window.bancoPDF.funcionarios.length : 0;
                     return `🕒 <strong>Levantamento de Atendimentos do Dia de Hoje:</strong><br><br>
@@ -26021,6 +26022,16 @@
             }
         }
     </script>
-</body>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script>
+        const socket = io('https://sistema-set-homologacao.onrender.com');
 
+        socket.on('dados_atualizados', () => {
+            console.log('Sinal de atualização recebido do servidor!');
+            
+            if (typeof carregarSolicitacoes === 'function') carregarSolicitacoes();
+            if (typeof carregarSincronizacaoDoServidor === 'function') carregarSincronizacaoDoServidor();
+        });
+    </script>
+</body>
 </html>

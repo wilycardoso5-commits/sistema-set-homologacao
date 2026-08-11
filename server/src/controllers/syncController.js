@@ -51,9 +51,8 @@ async function postSyncData(req, res) {
         // =========================================================
         // 👉 AQUI ENTRA O SOCKET.IO PARA DISPARAR EM TEMPO REAL 👈
         // =========================================================
-        const io = req.app.get('io');
-        if (io) {
-            io.emit('dados_atualizados', syncData);
+        if (req.io) {
+            req.io.emit('dados_atualizados', { mensagem: 'Dados sincronizados' });
         }
         // =========================================================
 

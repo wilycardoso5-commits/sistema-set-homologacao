@@ -17,7 +17,10 @@ const io = new Server(server, {
 });
 
 // 2. Torna o Socket.IO acessível dentro de todas as rotas do Express (req.io)
-app.set('io', io);
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 // 3. Escuta conexões ativas do Socket
 io.on('connection', (socket) => {
