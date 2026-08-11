@@ -26509,12 +26509,18 @@
         // ======= AUTO-UPDATE SYSTEM =======
         (function initAutoUpdate() {
             const toastHtml = `
-                <div id="update-toast" style="display: none; position: fixed; bottom: 24px; right: 24px; background: var(--bg-card, #1E293B); color: var(--text-main, #F8FAFC); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 99999; border-left: 5px solid #2563EB; font-family: 'Inter', sans-serif; transition: all 0.3s ease; align-items: center; justify-content: space-between; gap: 20px; max-width: 400px;">
-                    <div>
-                        <h4 id="update-toast-title" style="margin: 0 0 6px 0; font-size: 15px; font-weight: 600; letter-spacing: 0.3px;">🚀 Nova versão disponível!</h4>
-                        <p style="margin: 0; font-size: 13px; color: var(--text-muted, #94A3B8);">O sistema recebeu melhorias no servidor. Atualize para sincronizar.</p>
+                <div id="update-toast" style="display: none; position: fixed; bottom: 24px; right: 24px; background: var(--bg-card, #1E293B); color: var(--text-main, #F8FAFC); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 99999; border-left: 5px solid #2563EB; font-family: 'Inter', sans-serif; transition: all 0.3s ease; overflow: hidden; max-width: 400px; flex-direction: column;">
+                    <!-- Barra superior animada -->
+                    <div id="update-progress-container" style="width: 100%; height: 3px; background: rgba(255,255,255,0.1); position: absolute; top: 0; left: 0; display: none;">
+                        <div id="update-progress-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #3B82F6, #60A5FA, #93C5FD); box-shadow: 0 0 10px rgba(96, 165, 250, 0.8); transition: width 0.8s ease-in-out;"></div>
                     </div>
-                    <button onclick="applyAutoUpdate()" style="background: #2563EB; color: #FFF; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap; font-size: 13px;" onmouseover="this.style.background='#1D4ED8'" onmouseout="this.style.background='#2563EB'">Atualizar Agora</button>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 20px;">
+                        <div>
+                            <h4 id="update-toast-title" style="margin: 0 0 6px 0; font-size: 15px; font-weight: 600; letter-spacing: 0.3px;">🚀 Nova versão disponível!</h4>
+                            <p style="margin: 0; font-size: 13px; color: var(--text-muted, #94A3B8);">O sistema recebeu melhorias no servidor. Atualize para sincronizar.</p>
+                        </div>
+                        <button id="btn-update-now" onclick="applyAutoUpdate()" style="background: #2563EB; color: #FFF; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap; font-size: 13px;" onmouseover="this.style.background='#1D4ED8'" onmouseout="this.style.background='#2563EB'">Atualizar Agora</button>
+                    </div>
                 </div>
             `;
             // Espera o DOM estar pronto
@@ -26525,16 +26531,39 @@
             let serverVersion = null;
 
             window.applyAutoUpdate = function() {
+                // Modifica o estado do botão
+                const btn = document.getElementById('btn-update-now');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.style.cursor = 'not-allowed';
+                    btn.style.background = '#1E3A8A';
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="margin-right: 6px;"></i>Atualizando...';
+                }
+
+                // Inicia a animação da barra
+                const progressContainer = document.getElementById('update-progress-container');
+                const progressBar = document.getElementById('update-progress-bar');
+                if (progressContainer && progressBar) {
+                    progressContainer.style.display = 'block';
+                    // Um leve timeout para forçar o reflow antes de animar
+                    setTimeout(() => {
+                        progressBar.style.width = '100%';
+                    }, 50);
+                }
+
                 if(serverVersion) {
                     localStorage.setItem('app_version', serverVersion);
                 }
-                // Limpa caches e recarrega
-                if ('caches' in window) {
-                    caches.keys().then(names => {
-                        for (let name of names) caches.delete(name);
-                    });
-                }
-                window.location.reload(true);
+                
+                // Aguarda a animação visual (aprox. 850ms) antes de limpar e recarregar
+                setTimeout(() => {
+                    if ('caches' in window) {
+                        caches.keys().then(names => {
+                            for (let name of names) caches.delete(name);
+                        });
+                    }
+                    window.location.reload(true);
+                }, 900);
             };
 
             async function checkAppVersion() {
