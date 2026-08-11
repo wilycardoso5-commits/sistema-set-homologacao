@@ -26667,8 +26667,8 @@
             const senha = document.getElementById('reset-senha-admin').value;
             const confirmacao = document.getElementById('reset-confirmacao').value;
 
-            if (!senha) return Swal.fire('Erro', 'A senha é obrigatória.', 'error');
-            if (confirmacao.toUpperCase() !== 'CONFIRMAR') return Swal.fire('Atenção', 'Digite a palavra CONFIRMAR corretamente.', 'warning');
+            if (!senha) return alert('ERRO: A senha é obrigatória.');
+            if (confirmacao.toUpperCase() !== 'CONFIRMAR') return alert('ATENÇÃO: Digite a palavra CONFIRMAR corretamente.');
 
             const btn = document.getElementById('btn-executar-reset');
             const originalText = btn.innerHTML;
@@ -26685,24 +26685,17 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    Swal.fire({
-                        title: 'Sucesso!',
-                        text: 'O banco de dados foi limpo. A tela será recarregada.',
-                        icon: 'success',
-                        allowOutsideClick: false
-                    }).then(() => {
-                        localStorage.clear();
-                        sessionStorage.clear();
-                        window.location.reload(true);
-                    });
+                    alert('SUCESSO! O banco de dados foi limpo.\nA tela será recarregada.');
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.reload(true);
                 } else {
-                    Swal.fire('Erro', data.mensagem || 'Não foi possível limpar o banco.', 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = originalText;
+                    alert('ERRO: ' + (data.mensagem || 'Não foi possível limpar o banco.'));
                 }
             } catch (error) {
                 console.error(error);
-                Swal.fire('Erro', 'Falha na conexão com o servidor.', 'error');
+                alert('ERRO: Falha na conexão com o servidor.');
+            } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalText;
             }
