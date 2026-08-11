@@ -9,6 +9,6 @@ const syncRoutes = require('./syncRoutes');
 router.use('/', healthRoutes);
 router.use('/', whatsappRoutes);
 router.use('/', authRoutes);
-router.use('/api', syncRoutes);
+router.use('/', syncRoutes);
 
 module.exports = router;
