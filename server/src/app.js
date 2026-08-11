@@ -13,6 +13,13 @@ const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 const app = express();
 app.set('trust proxy', 1);
 
+// Timestamp global para versionamento e auto-update no frontend
+const APP_BUILD_VERSION = Date.now().toString();
+
+app.get('/api/version', (req, res) => {
+  return res.json({ version: APP_BUILD_VERSION });
+});
+
 // Proteções de Cabeçalhos HTTP (Helmet)
 // CSP desativado temporariamente para permitir conexões externas e CDN.
 app.use(helmet({

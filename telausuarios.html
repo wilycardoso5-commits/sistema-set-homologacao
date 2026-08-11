@@ -4257,6 +4257,187 @@
             animation: healthCpuWave 3s linear infinite;
             filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.8));
         }
+        /* ================= THEMES (ACESSIBILIDADE) ================= */
+        :root {
+            /* Fallback/Padrão Escuro */
+            --bg-body: #060b13;
+            --bg-sidebar: #0b1320;
+            --bg-card: #0b1320;
+            --bg-modal: #0b1320;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --border-color: rgba(0, 210, 255, 0.1);
+            --border-card: rgba(255, 255, 255, 0.05);
+            --bg-table-header: rgba(0, 210, 255, 0.05);
+            --bg-table-row: transparent;
+            --bg-table-row-hover: rgba(0, 210, 255, 0.05);
+            --bg-input: rgba(15, 23, 42, 0.6);
+        }
+
+        [data-theme="claro"] {
+            --bg-body: #F8FAFC;
+            --bg-sidebar: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --bg-modal: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --border-card: #E2E8F0;
+            --bg-table-header: #F1F5F9;
+            --bg-table-row: #FFFFFF;
+            --bg-table-row-hover: #F8FAFC;
+            --bg-input: #FFFFFF;
+        }
+
+        [data-theme="azul"] {
+            --bg-body: #0F172A;
+            --bg-sidebar: #1E293B;
+            --bg-card: #1E293B;
+            --bg-modal: #1E293B;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --border-card: #334155;
+            --bg-table-header: #0F172A;
+            --bg-table-row: #1E293B;
+            --bg-table-row-hover: #334155;
+            --bg-input: #0F172A;
+        }
+
+        [data-theme="cinza"] {
+            --bg-body: #1E293B;
+            --bg-sidebar: #334155;
+            --bg-card: #334155;
+            --bg-modal: #334155;
+            --text-main: #FFFFFF;
+            --text-muted: #CBD5E1;
+            --border-color: #475569;
+            --border-card: #475569;
+            --bg-table-header: #1E293B;
+            --bg-table-row: #334155;
+            --bg-table-row-hover: #475569;
+            --bg-input: #1E293B;
+        }
+
+        /* Aplicação das Variáveis com alta especificidade */
+        [data-theme] body,
+        [data-theme] .main-content {
+            background-color: var(--bg-body) !important;
+            color: var(--text-main) !important;
+        }
+        
+        [data-theme] .sidebar, 
+        [data-theme] .notif-panel,
+        [data-theme] .modal-content,
+        [data-theme] .custom-modal,
+        [data-theme] .wa-sidebar {
+            background-color: var(--bg-sidebar) !important;
+            border-color: var(--border-color) !important;
+        }
+        
+        [data-theme] .card, 
+        [data-theme] .metric-card,
+        [data-theme] .filter-section,
+        [data-theme] .table-container,
+        [data-theme] .action-bar,
+        [data-theme] .wa-dashboard-card,
+        [data-theme] .wa-chat-container,
+        [data-theme] .wa-header,
+        [data-theme] .wa-panel,
+        [data-theme] .wa-metric-card,
+        [data-theme] .relatorio-card,
+        [data-theme] .dashboard-card,
+        [data-theme] .chart-container,
+        [data-theme] .grafico-container,
+        [data-theme] .form-container,
+        [data-theme] .form-box,
+        [data-theme] .novo-recibo-card,
+        [data-theme] .cartoes-container,
+        [data-theme] .grafico-box,
+        [data-theme] .wa-board,
+        [data-theme] .wa-column,
+        [data-theme] .card-formulario-atend,
+        [data-theme] .card-grafico,
+        [data-theme] .card-indicador-atend,
+        [data-theme] .card-resumo-operacional,
+        [data-theme] .health-check-card,
+        [data-theme] .health-check-card-left,
+        [data-theme] .health-eficiencia-card,
+        [data-theme] .health-panel,
+        [data-theme] .health-score-card,
+        [data-theme] .health-security-card,
+        [data-theme] .health-security-causes-box,
+        [data-theme] .health-service-card,
+        [data-theme] .health-stat-box,
+        [data-theme] .import-box,
+        [data-theme] .metric-card-compra,
+        [data-theme] .nr-card-box,
+        [data-theme] .nr-company-card,
+        [data-theme] .panel-box,
+        [data-theme] .panel-compras,
+        [data-theme] .usuarios-card-item,
+        [data-theme] .usuarios-filter-card,
+        [data-theme] .usuarios-header-card,
+        [data-theme] .usuarios-table-container-card,
+        [data-theme] .wa-chart-card,
+        [data-theme] .wa-header-card {
+            background-color: var(--bg-card) !important;
+            border-color: var(--border-card) !important;
+        }
+        
+        [data-theme] table th,
+        [data-theme] .tabela-moderna th {
+            background-color: var(--bg-table-header) !important;
+            color: var(--text-main) !important;
+            border-bottom-color: var(--border-color) !important;
+        }
+        
+        [data-theme] table td,
+        [data-theme] .tabela-moderna td {
+            background-color: var(--bg-table-row) !important;
+            color: var(--text-main) !important;
+            border-bottom-color: var(--border-color) !important;
+        }
+        
+        [data-theme] table tbody tr:hover td,
+        [data-theme] .tabela-moderna tbody tr:hover td {
+            background-color: var(--bg-table-row-hover) !important;
+        }
+        
+        [data-theme] input, 
+        [data-theme] select, 
+        [data-theme] textarea {
+            background-color: var(--bg-input) !important;
+            color: var(--text-main) !important;
+            border-color: var(--border-color) !important;
+        }
+        
+        [data-theme] .nav-text, 
+        [data-theme] h1, [data-theme] h2, [data-theme] h3, [data-theme] h4, [data-theme] h5,
+        [data-theme] span:not(.badge):not(.status-badge), 
+        [data-theme] p,
+        [data-theme] label,
+        [data-theme] .wa-subitem span,
+        [data-theme] .chart-title,
+        [data-theme] .card-title,
+        [data-theme] .form-group label,
+        [data-theme] .card-value,
+        [data-theme] .metric-value,
+        [data-theme] .wa-metric-value,
+        [data-theme] div.name,
+        [data-theme] div.role,
+        [data-theme] .grafico-info div,
+        [data-theme] .total-value,
+        [data-theme] .info-value,
+        [data-theme] .texto-destaque {
+            color: var(--text-main) !important;
+        }
+
+        [data-theme] .text-muted, 
+        [data-theme] .card-header-info span,
+        [data-theme] .notif-time {
+            color: var(--text-muted) !important;
+        }
     </style>
 </head>
 
@@ -4447,23 +4628,29 @@
                     </ul>
                 </div>
 
-                <div class="user-profile" onclick="abrirModalAlterarMinhaSenha()" title="Clique para alterar sua senha"
-                    style="cursor:pointer;">
-                    <div class="user-details">
+                <div class="user-profile">
+                    <div class="user-details" onclick="abrirModalAlterarMinhaSenha()" title="Clique para alterar sua senha" style="cursor:pointer;">
                         <div class="name">Wily</div>
                         <div class="role">Administrador</div>
                     </div>
-                    <div class="avatar" id="userAvatarBtn" onclick="triggerAvatarUpload()"
+                    <div class="avatar" id="userAvatarBtn" onclick="triggerAvatarUpload(event)"
                         style="cursor: pointer; overflow: hidden; background-size: cover; background-position: center; transition: all 0.2s; margin-left: 8px;"
                         title="Clique para alterar a foto do perfil">W</div>
                     <input type="file" id="avatarFileInput" accept="image/*" style="display: none;"
                         onchange="handleAvatarUpload(event)">
-                    <!-- Sino de Notificações ao lado direito da bola -->
+                    <!-- Sino de Notificacoes ao lado direito da bola -->
                     <div class="notif-bell-wrapper" id="notifBellWrapper" onclick="toggleNotifPanel(event)"
                         title="Notificações"
                         style="margin-right:0; margin-left:8px; margin-top:-10px; align-self:center;">
                         <i class="fa-solid fa-bell" id="notifBellIcon"></i>
                         <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+                    </div>
+
+                    <!-- Configurações do Usuário (Engrenagem) -->
+                    <div class="config-bell-wrapper" id="configBellWrapper" onclick="abrirModalConfiguracoes(event)"
+                        title="Configurações do Usuário"
+                        style="margin-right:0; margin-left:12px; margin-top:-10px; align-self:center; cursor:pointer;">
+                        <i class="fa-solid fa-cog" style="font-size: 1.2rem; color: var(--text-muted); transition: color 0.2s;" onmouseover="this.style.color='var(--text-main)'" onmouseout="this.style.color='var(--text-muted)'"></i>
                     </div>
                 </div>
             </div>
@@ -15371,7 +15558,11 @@
         }
 
         // Funções para upload de foto de perfil no avatar
-        function triggerAvatarUpload() {
+        function triggerAvatarUpload(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             const input = document.getElementById('avatarFileInput');
             if (input) input.click();
         }
@@ -26011,6 +26202,371 @@
             if (typeof carregarSolicitacoes === 'function') carregarSolicitacoes();
             if (typeof carregarSincronizacaoDoServidor === 'function') carregarSincronizacaoDoServidor();
         });
+    </script>
+    <!-- MODAL DE CONFIGURAÇÕES DO USUÁRIO -->
+    <style>
+        .modal-config-container {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-config-content {
+            background-color: var(--bg-modal);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-config-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-config-header h2 {
+            font-size: 1.25rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+        }
+        .modal-config-header .btn-close-modal {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .modal-config-header .btn-close-modal:hover {
+            color: var(--text-main);
+        }
+        .modal-config-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .modal-config-tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            background: rgba(0,0,0,0.1);
+            color: var(--text-muted);
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .modal-config-tab.active {
+            background: transparent;
+            color: var(--text-main);
+            border-bottom-color: #00d2ff;
+        }
+        .modal-config-body {
+            padding: 24px;
+        }
+        .config-section {
+            display: none;
+        }
+        .config-section.active {
+            display: block;
+            animation: fadeInConfig 0.3s ease;
+        }
+        @keyframes fadeInConfig {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .config-form-group {
+            margin-bottom: 16px;
+        }
+        .config-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .config-form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .config-form-group input:focus {
+            border-color: #00d2ff;
+        }
+        .btn-salvar-senha {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+        .btn-salvar-senha:hover {
+            opacity: 0.9;
+        }
+        
+        /* Theming Grid */
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .theme-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            background: var(--bg-card);
+        }
+        .theme-card:hover {
+            border-color: #00d2ff;
+            transform: translateY(-2px);
+        }
+        .theme-card.active {
+            border-color: #00d2ff;
+            box-shadow: 0 0 0 1px #00d2ff;
+        }
+        .theme-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .theme-card span {
+            font-weight: 500;
+            color: var(--text-main);
+        }
+    </style>
+
+    <div class="modal-config-container" id="modal-configuracoes-usuario">
+        <div class="modal-config-content">
+            <div class="modal-config-header">
+                <h2><i class="fa-solid fa-cog"></i> Configurações</h2>
+                <button class="btn-close-modal" onclick="fecharModalConfiguracoes()">&times;</button>
+            </div>
+            
+            <div class="modal-config-tabs">
+                <button class="modal-config-tab active" onclick="switchConfigTab('aparencia', event)"><i class="fa-solid fa-palette"></i> Aparência</button>
+                <button class="modal-config-tab" onclick="switchConfigTab('seguranca', event)"><i class="fa-solid fa-lock"></i> Segurança</button>
+            </div>
+
+            <div class="modal-config-body">
+                <!-- SEÇÃO APARÊNCIA -->
+                <div class="config-section active" id="config-aparencia">
+                    <p style="margin-bottom:16px; color:var(--text-muted);">Selecione um tema visual focado em conforto e acessibilidade:</p>
+                    <div class="themes-grid">
+                        <div class="theme-card" data-theme-id="escuro" onclick="selecionarTema('escuro')">
+                            <div class="theme-circle" style="background: #060b13;"></div>
+                            <span>Escuro Padrão</span>
+                        </div>
+                        <div class="theme-card" data-theme-id="claro" onclick="selecionarTema('claro')">
+                            <div class="theme-circle" style="background: #F8FAFC; border-color: #CBD5E1;"></div>
+                            <span style="color: #1E293B;">Branco / Claro</span>
+                        </div>
+                        <div class="theme-card" data-theme-id="azul" onclick="selecionarTema('azul')">
+                            <div class="theme-circle" style="background: #0F172A;"></div>
+                            <span>Azul Profissional</span>
+                        </div>
+                        <div class="theme-card" data-theme-id="cinza" onclick="selecionarTema('cinza')">
+                            <div class="theme-circle" style="background: #1E293B;"></div>
+                            <span>Cinza Alto Contraste</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO SEGURANÇA -->
+                <div class="config-section" id="config-seguranca">
+                    <p style="margin-bottom:16px; color:var(--text-muted);">Altere sua senha de acesso ao sistema:</p>
+                    <div class="config-form-group">
+                        <label>Senha Atual</label>
+                        <input type="password" id="inputSenhaAtual" placeholder="Digite sua senha atual">
+                    </div>
+                    <div class="config-form-group">
+                        <label>Nova Senha</label>
+                        <input type="password" id="inputNovaSenha" placeholder="Digite a nova senha (min. 6 caracteres)">
+                    </div>
+                    <div class="config-form-group">
+                        <label>Confirmar Nova Senha</label>
+                        <input type="password" id="inputConfirmarSenha" placeholder="Repita a nova senha">
+                    </div>
+                    <button class="btn-salvar-senha" onclick="salvarNovaSenhaConfig()">Salvar Nova Senha</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // LOGICA DE THEMES E CONFIGURAÇÕES
+        function abrirModalConfiguracoes(event) {
+            if (event) event.stopPropagation();
+            document.getElementById('modal-configuracoes-usuario').style.display = 'flex';
+            const temaAtual = localStorage.getItem('tema_usuario') || 'escuro';
+            atualizarUISelecaoTema(temaAtual);
+        }
+
+        function fecharModalConfiguracoes() {
+            document.getElementById('modal-configuracoes-usuario').style.display = 'none';
+        }
+
+        function switchConfigTab(tabId, event) {
+            document.querySelectorAll('.modal-config-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.config-section').forEach(s => s.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById('config-' + tabId).classList.add('active');
+        }
+
+        function selecionarTema(temaId) {
+            localStorage.setItem('tema_usuario', temaId);
+            
+            if (temaId === 'escuro') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', temaId);
+            }
+            
+            atualizarUISelecaoTema(temaId);
+        }
+
+        function atualizarUISelecaoTema(temaId) {
+            document.querySelectorAll('.theme-card').forEach(card => card.classList.remove('active'));
+            const selectedCard = document.querySelector(`.theme-card[data-theme-id="${temaId}"]`);
+            if(selectedCard) selectedCard.classList.add('active');
+        }
+
+        // INIT THEME NO CARREGAMENTO
+        document.addEventListener('DOMContentLoaded', () => {
+            const temaSalvo = localStorage.getItem('tema_usuario');
+            if (temaSalvo && temaSalvo !== 'escuro') {
+                document.body.setAttribute('data-theme', temaSalvo);
+            }
+        });
+
+        async function salvarNovaSenhaConfig() {
+            const atual = document.getElementById('inputSenhaAtual').value;
+            const nova = document.getElementById('inputNovaSenha').value;
+            const confirmar = document.getElementById('inputConfirmarSenha').value;
+
+            if (!atual || !nova || !confirmar) {
+                return Swal.fire('Atenção', 'Preencha todos os campos.', 'warning');
+            }
+            if (nova !== confirmar) {
+                return Swal.fire('Atenção', 'A nova senha e a confirmação não conferem.', 'warning');
+            }
+            if (nova.length < 6) {
+                return Swal.fire('Atenção', 'A nova senha deve ter no mínimo 6 caracteres.', 'warning');
+            }
+
+            try {
+                const response = await fetch('/api/auth/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senhaAtual: atual, novaSenha: nova })
+                });
+
+                const data = await response.json();
+                if (data.sucesso) {
+                    Swal.fire('Sucesso', 'Sua senha foi alterada com sucesso.', 'success');
+                    fecharModalConfiguracoes();
+                    document.getElementById('inputSenhaAtual').value = '';
+                    document.getElementById('inputNovaSenha').value = '';
+                    document.getElementById('inputConfirmarSenha').value = '';
+                } else {
+                    Swal.fire('Erro', data.mensagem || 'Erro ao alterar a senha.', 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Erro', 'Ocorreu um problema ao conectar com o servidor.', 'error');
+            }
+        }
+
+        // ======= AUTO-UPDATE SYSTEM =======
+        (function initAutoUpdate() {
+            const toastHtml = `
+                <div id="update-toast" style="display: none; position: fixed; bottom: 24px; right: 24px; background: var(--bg-card, #1E293B); color: var(--text-main, #F8FAFC); padding: 16px 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 99999; border-left: 5px solid #2563EB; font-family: 'Inter', sans-serif; transition: all 0.3s ease; align-items: center; justify-content: space-between; gap: 20px; max-width: 400px;">
+                    <div>
+                        <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 600; letter-spacing: 0.3px;">🚀 Nova versão disponível!</h4>
+                        <p style="margin: 0; font-size: 13px; color: var(--text-muted, #94A3B8);">O sistema recebeu melhorias no servidor. Atualize para sincronizar.</p>
+                    </div>
+                    <button onclick="applyAutoUpdate()" style="background: #2563EB; color: #FFF; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap; font-size: 13px;" onmouseover="this.style.background='#1D4ED8'" onmouseout="this.style.background='#2563EB'">Atualizar Agora</button>
+                </div>
+            `;
+            // Espera o DOM estar pronto
+            window.addEventListener('DOMContentLoaded', () => {
+                document.body.insertAdjacentHTML('beforeend', toastHtml);
+            });
+
+            let serverVersion = null;
+
+            window.applyAutoUpdate = function() {
+                if(serverVersion) {
+                    localStorage.setItem('app_version', serverVersion);
+                }
+                // Limpa caches e recarrega
+                if ('caches' in window) {
+                    caches.keys().then(names => {
+                        for (let name of names) caches.delete(name);
+                    });
+                }
+                window.location.reload(true);
+            };
+
+            async function checkAppVersion() {
+                try {
+                    const res = await fetch('/api/version');
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    if (!data || !data.version) return;
+                    
+                    const currentVersion = localStorage.getItem('app_version');
+                    
+                    if (!currentVersion) {
+                        localStorage.setItem('app_version', data.version);
+                    } else if (currentVersion !== data.version) {
+                        serverVersion = data.version;
+                        const toast = document.getElementById('update-toast');
+                        if (toast) {
+                            toast.style.display = 'flex';
+                            toast.style.animation = 'slideInUp 0.5s ease';
+                        }
+                    }
+                } catch(e) {
+                    // Falha silenciosa caso o backend esteja off
+                }
+            }
+
+            // Checar após 5s e depois a cada 3 minutos
+            setTimeout(checkAppVersion, 5000);
+            setInterval(checkAppVersion, 180000);
+            
+            // Checar ao focar a aba
+            window.addEventListener('focus', () => {
+                checkAppVersion();
+            });
+        })();
     </script>
 </body>
 </html>

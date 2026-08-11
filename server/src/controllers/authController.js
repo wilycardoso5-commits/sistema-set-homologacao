@@ -211,4 +211,68 @@ function me(req, res) {
   }
 }
 
-module.exports = { login, logout, me };
+/**
+ * POST /api/auth/change-password
+ * Permite ao usuário logado alterar a própria senha.
+ */
+async function changePassword(req, res) {
+  try {
+    if (!req.session || !req.session.usuario) {
+      return res.status(401).json({ sucesso: false, mensagem: 'Sessão inválida ou não autenticada.' });
+    }
+
+    const { senhaAtual, novaSenha } = req.body;
+    
+    if (!senhaAtual || !novaSenha || typeof senhaAtual !== 'string' || typeof novaSenha !== 'string') {
+      return res.status(400).json({ sucesso: false, mensagem: 'Senha atual e nova senha são obrigatórias.' });
+    }
+
+    if (novaSenha.length < 6) {
+      return res.status(400).json({ sucesso: false, mensagem: 'A nova senha deve ter no mínimo 6 caracteres.' });
+    }
+
+    const usuarioId = req.session.usuario.id;
+
+    const resultado = await db.query(
+      `SELECT senha_hash FROM usuarios WHERE id = $1 LIMIT 1`,
+      [usuarioId]
+    );
+
+    const usuario = resultado.rows[0];
+    if (!usuario) {
+      return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado no banco de dados.' });
+    }
+
+    const hashArmazenado = usuario.senha_hash;
+    let senhaCorreta = false;
+    
+    if (typeof hashArmazenado === 'string' && hashArmazenado.startsWith('$2')) {
+      senhaCorreta = await bcrypt.compare(senhaAtual, hashArmazenado);
+    }
+
+    if (!senhaCorreta) {
+      return res.status(401).json({ sucesso: false, mensagem: 'A senha atual está incorreta.' });
+    }
+
+    const saltRounds = 10;
+    const novoHash = await bcrypt.hash(novaSenha, saltRounds);
+
+    await db.query(
+      `UPDATE usuarios SET senha_hash = $1, troca_senha_obrigatoria = false WHERE id = $2`,
+      [novoHash, usuarioId]
+    );
+
+    req.session.usuario.trocaSenhaObrigatoria = false;
+    req.session.save((err) => {
+        if(err) logger.error('Erro ao salvar sessão após troca de senha', {error: err.message});
+    });
+
+    logger.info('Senha alterada com sucesso', { usuarioId });
+    return res.status(200).json({ sucesso: true, mensagem: 'Senha alterada com sucesso.' });
+  } catch (err) {
+    logger.error('Erro ao alterar senha', { error: err.message });
+    return res.status(500).json({ sucesso: false, mensagem: 'Erro interno ao alterar a senha.' });
+  }
+}
+
+module.exports = { login, logout, me, changePassword };
