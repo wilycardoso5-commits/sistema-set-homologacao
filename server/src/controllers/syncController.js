@@ -5,7 +5,18 @@ async function getSyncData(req, res) {
         const keysToSync = [
             'set_cartoes_vt',
             'set_solicitacoes_vt',
-            'set_historico_vt'
+            'set_historico_vt',
+            'set_empresas_db',
+            'set_funcionarios',
+            'set_users_db_v4',
+            'set_atendimentos_db',
+            'set_gratuidade_db_v1',
+            'set_atendimentos_gratuidade_v1',
+            'set_estoque',
+            'set_saldo_disponivel_manual',
+            'set_vt_lotes',
+            'set_lote_arquivos',
+            'set_total_ribbons'
         ];
 
         const data = {};
@@ -33,7 +44,18 @@ async function postSyncData(req, res) {
         const keysToSync = [
             'set_cartoes_vt',
             'set_solicitacoes_vt',
-            'set_historico_vt'
+            'set_historico_vt',
+            'set_empresas_db',
+            'set_funcionarios',
+            'set_users_db_v4',
+            'set_atendimentos_db',
+            'set_gratuidade_db_v1',
+            'set_atendimentos_gratuidade_v1',
+            'set_estoque',
+            'set_saldo_disponivel_manual',
+            'set_vt_lotes',
+            'set_lote_arquivos',
+            'set_total_ribbons'
         ];
 
         for (const key of keysToSync) {
