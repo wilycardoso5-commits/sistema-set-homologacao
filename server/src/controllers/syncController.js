@@ -48,6 +48,15 @@ async function postSyncData(req, res) {
             }
         }
 
+        // =========================================================
+        // 👉 AQUI ENTRA O SOCKET.IO PARA DISPARAR EM TEMPO REAL 👈
+        // =========================================================
+        const io = req.app.get('io');
+        if (io) {
+            io.emit('dados_atualizados', syncData);
+        }
+        // =========================================================
+
         res.status(200).json({ success: true, message: 'Dados sincronizados com sucesso' });
     } catch (error) {
         console.error('Erro ao salvar dados de sincronização:', error);
