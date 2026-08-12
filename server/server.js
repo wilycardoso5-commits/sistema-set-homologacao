@@ -26,6 +26,10 @@ app.use((req, res, next) => {
 io.on('connection', (socket) => {
   logger.info(`Novo cliente conectado via WebSocket: ${socket.id}`);
 
+  socket.on('funcionarios_atualizados', () => {
+    io.emit('dados_atualizados', { tipo: 'funcionarios' });
+  });
+
   socket.on('disconnect', () => {
     logger.info(`Cliente desconectado: ${socket.id}`);
   });

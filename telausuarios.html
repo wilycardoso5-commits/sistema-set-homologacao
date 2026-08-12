@@ -12325,13 +12325,28 @@
                     }
                 }
 
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 20000);
+
                 await fetch('/api/sync', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(data),
+                    signal: controller.signal
                 });
+
+                clearTimeout(timeoutId);
+
+                // Emite o evento ao concluir o upload com sucesso
+                if (typeof socket !== 'undefined' && socket) {
+                    socket.emit('funcionarios_atualizados');
+                }
             } catch (e) {
-                console.error("Erro ao enviar sync para servidor:", e);
+                if (e.name === 'AbortError') {
+                    console.warn("A requisição de sincronização demorou muito e foi cancelada (Timeout). A tela não foi travada.");
+                } else {
+                    console.error("Erro ao enviar sync para servidor:", e);
+                }
             }
         }
 
@@ -26196,9 +26211,13 @@
         }
     </script>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-    <script>
-        const socket = io('https://sistema-set-homologacao.onrender.com');
-
+    <script>        const socket = io('https://sistema-set-homologacao.onrender.com', {
+            transports: ['websocket', 'polling'],
+            reconnection: true,
+            reconnectionAttempts: 10,
+            reconnectionDelay: 2000,
+            timeout: 20000
+        });
         socket.on('dados_atualizados', () => {
             console.log('Sinal de atualização recebido do servidor!');
             
