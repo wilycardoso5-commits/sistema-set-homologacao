@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto Alfa 2.0 - Chave de Acesso</title>
     <link rel="shortcut icon" href="icone.ico" type="image/x-icon">
-    <link rel="manifest" href="/manifest.json">
+    <script>
+        if (window.location.protocol !== 'file:') {
+            const manifestLink = document.createElement('link');
+            manifestLink.rel = 'manifest';
+            manifestLink.href = './manifest.json';
+            document.head.appendChild(manifestLink);
+        }
+    </script>
     <meta name="theme-color" content="#0056b3">
     <style>
         /* Reset global com fontes modernas */
@@ -228,9 +235,81 @@
         .btn-entrar:active {
             transform: translateY(0);
         }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: 1; /* Restaurado para a cor original */
+            pointer-events: none;
+        }
+
+        /* O container principal fica oculto no começo */
+        .window-app {
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.5s ease, visibility 1.5s;
+        }
+        
+        .window-app.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* Botão Play Transparente */
+        .btn-play-transparente {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 50;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-play-transparente:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .btn-play-transparente svg {
+            width: 30px;
+            height: 30px;
+            fill: rgba(255, 255, 255, 0.8);
+            margin-left: 5px; /* Ajuste visual do ícone de play */
+        }
     </style>
 </head>
 <body>
+
+    <!-- Botão Play Transparente -->
+    <div id="playButton" class="btn-play-transparente">
+        <svg viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+        </svg>
+    </div>
+
+    <!-- Vídeo sem autoplay para tocar com som quando clicar no botão -->
+    <video id="bgVideo" class="video-background" playsinline>
+        <source src="frontend/bg-login.mp4" type="video/mp4">
+        Seu navegador não suporta vídeos.
+    </video>
 
     <div class="window-app">
         
@@ -673,20 +752,23 @@
             }
           });
 
+        // === VERIFICAÇÃO PWA COM SUPORTE LOCAL ===
+        if (window.location.protocol !== 'file:') {
           navigator.serviceWorker.register('/service-worker.js')
             .then(reg => {
-              console.log('PWA ativo:', reg);
-              
-              reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                newWorker.addEventListener('statechange', () => {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    mostrarAvisoNovaVersao(newWorker);
-                  }
-                });
-              });
+               console.log('PWA ativo:', reg);
+               
+               reg.addEventListener('updatefound', () => {
+                 const newWorker = reg.installing;
+                 newWorker.addEventListener('statechange', () => {
+                   if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                     mostrarAvisoNovaVersao(newWorker);
+                   }
+                 });
+               });
             })
             .catch(err => console.error('Erro PWA:', err));
+        }
         });
       }
 
@@ -713,6 +795,30 @@
           }
         }
       }
+
+      // LÓGICA DO VÍDEO DE INTRODUÇÃO
+      document.addEventListener("DOMContentLoaded", () => {
+          const video = document.getElementById("bgVideo");
+          const playBtn = document.getElementById("playButton");
+          const appWindow = document.querySelector(".window-app");
+
+          if (video) {
+              // Quando o vídeo acabar, mostra a caixa de login
+              video.addEventListener("ended", () => {
+                  if (appWindow) appWindow.classList.add("show");
+              });
+          }
+
+          if (playBtn && video) {
+              playBtn.addEventListener("click", () => {
+                  if (video.paused) {
+                      video.play().catch(e => console.error(e));
+                      playBtn.style.opacity = '0';
+                      setTimeout(() => { playBtn.style.display = 'none'; }, 300);
+                  }
+              });
+          }
+      });
     </script>
 </body>
 </html>

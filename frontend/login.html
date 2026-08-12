@@ -238,9 +238,38 @@
             transform: none;
         }
     </style>
+    <style>
+        /* CSS do Vídeo de Fundo */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: 0.6; /* Deixa o vídeo mais suave no fundo neon */
+            pointer-events: none; /* Para não atrapalhar os cliques */
+        }
+        
+        /* O container principal precisa ficar na frente do vídeo */
+        .window-app {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- 
+      COMO ADICIONAR SEU VÍDEO:
+      1. Coloque o arquivo de vídeo (ex: meuvideo.mp4) na pasta 'frontend' (a mesma onde está este arquivo login.html)
+      2. Mude o "src" abaixo para o nome do seu vídeo: src="meuvideo.mp4"
+    -->
+    <video class="video-background" autoplay loop muted playsinline>
+        <source src="bg-login.mp4" type="video/mp4">
+        Seu navegador não suporta vídeos.
+    </video>
 
     <div class="window-app">
         <div class="content-area">
