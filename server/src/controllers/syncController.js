@@ -85,7 +85,67 @@ async function postSyncData(req, res) {
     }
 }
 
-module.exports = {
-    getSyncData,
-    postSyncData
-};
+async function getProviderById(req, res) {
+    try {
+        const providerId = req.params.id;
+        const providerNorm = String(providerId || '').replace(/^0+/, '') || providerId;
+
+        if (!providerId) {
+            return res.status(400).json({ success: false, error: 'Provider ID não fornecido' });
+        }
+
+        // Busca em set_empresas_db
+        let result = await db.query('SELECT value FROM sync_store WHERE key = $1', ['set_empresas_db']);
+        if (result && result.rows && result.rows.length > 0) {
+            const empresas = JSON.parse(result.rows[0].value);
+            if (Array.isArray(empresas)) {
+                const emp = empresas.find(e => {
+                    if (!e) return false;
+                    const id = String(e.providerId ?? e.provider ?? e.id ?? e.ticketeira ?? '').trim();
+                    return id === providerId || id.replace(/^0+/, '') === providerNorm;
+                });
+                if (emp) {
+                    return res.status(200).json({ success: true, empresa: emp, funcionarios: [] });
+                }
+            }
+        }
+
+        // Busca em set_users_db_v4 (bancoPDF)
+        result = await db.query('SELECT value FROM sync_store WHERE key = $1', ['set_users_db_v4']);
+        if (result && result.rows && result.rows.length > 0) {
+            const bancoPDF = JSON.parse(result.rows[0].value);
+            for (const [k, val] of Object.entries(bancoPDF)) {
+                if (k === providerId || k.replace(/^0+/, '') === providerNorm) {
+                    return res.status(200).json({
+                        success: true,
+                        empresa: { razaoSocial: val.empresa, cnpj: val.cnpj || '' },
+                        funcionarios: val.funcionarios || []
+                    });
+                }
+            }
+        }
+
+        // Busca em set_base_providers
+        result = await db.query('SELECT value FROM sync_store WHERE key = $1', ['set_base_providers']);
+        if (result && result.rows && result.rows.length > 0) {
+            const baseProv = JSON.parse(result.rows[0].value);
+            if (Array.isArray(baseProv)) {
+                const p = baseProv.find(e => String(e.id).trim() === providerId || String(e.id).trim().replace(/^0+/, '') === providerNorm);
+                if (p) {
+                    return res.status(200).json({
+                        success: true,
+                        empresa: { razaoSocial: p.empresa, cnpj: p.cnpj || '' },
+                        funcionarios: p.funcionarios || []
+                    });
+                }
+            }
+        }
+
+        res.status(404).json({ success: false, error: 'Provider não localizado no banco.' });
+    } catch (error) {
+        console.error('Erro ao buscar provider por ID:', error);
+        res.status(500).json({ success: false, error: 'Erro interno no servidor' });
+    }
+}
+
+module.exports = { getSyncData, postSyncData, getProviderById };

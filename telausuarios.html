@@ -17722,7 +17722,7 @@
             return results;
         }
 
-        function buscarProvedorNaBase(idBuscado, cartaoBuscado = null) {
+        async function buscarProvedorNaBase(idBuscado, cartaoBuscado = null) {
             const providerAtual = String(idBuscado || '').trim();
             const providerNorm = providerAtual.replace(/^0+/, '') || providerAtual;
 
@@ -17817,13 +17817,40 @@
                 }
             } catch (e) { }
 
-            // Se não encontrou em NENHUMA das fontes
+            // Se não encontrou em NENHUMA das fontes locais, ativa o Fallback via API (Backend)
             if (!empresaEncontrada && !dadosBancoPDF && !dadosLocalStorage) {
                 const valAtual = campoProvider ? campoProvider.value : providerAtual;
-                limparFormulario();
-                if (campoProvider) campoProvider.value = valAtual;
-                if (campoCnpj) campoCnpj.placeholder = 'CNPJ não localizado para este Provider.';
-                return;
+                try {
+                    if (campoProvider) campoProvider.disabled = true;
+                    if (campoEmpresa) campoEmpresa.value = 'Buscando no servidor...';
+                    
+                    const response = await fetch(`/api/empresas/provider/${providerAtual}`);
+                    const data = await response.json();
+                    
+                    if (campoProvider) campoProvider.disabled = false;
+                    
+                    if (data.success && data.empresa) {
+                        if (!window.bancoPDF) window.bancoPDF = {};
+                        window.bancoPDF[providerAtual] = {
+                            empresa: data.empresa.razaoSocial || data.empresa.nome || '',
+                            cnpj: data.empresa.cnpj || '',
+                            funcionarios: data.funcionarios || []
+                        };
+                        dadosBancoPDF = window.bancoPDF[providerAtual]; // Popula a variável para prosseguir na lógica
+                    } else {
+                        limparFormulario();
+                        if (campoProvider) campoProvider.value = valAtual;
+                        if (campoCnpj) campoCnpj.placeholder = 'CNPJ não localizado para este Provider.';
+                        return;
+                    }
+                } catch (err) {
+                    console.error("Falha ao buscar Provider no backend:", err);
+                    if (campoProvider) campoProvider.disabled = false;
+                    limparFormulario();
+                    if (campoProvider) campoProvider.value = valAtual;
+                    if (campoCnpj) campoCnpj.placeholder = 'Erro de conexão com o banco.';
+                    return;
+                }
             }
 
             // 1. Busca do CNPJ exclusivamente na base do módulo Empresas (ou fallback do PDF de cartões)
