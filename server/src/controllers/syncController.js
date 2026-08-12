@@ -87,8 +87,8 @@ async function postSyncData(req, res) {
 
 async function getProviderById(req, res) {
     try {
-        const providerId = req.params.id;
-        const providerNorm = String(providerId || '').replace(/^0+/, '') || providerId;
+        const providerId = String(req.params.id || '').split(':')[0].trim();
+        const providerNorm = providerId.replace(/^0+/, '') || providerId;
 
         if (!providerId) {
             return res.status(400).json({ success: false, error: 'Provider ID não fornecido' });
@@ -110,8 +110,8 @@ async function getProviderById(req, res) {
             }
         }
 
-        // Busca em set_users_db_v4 (bancoPDF)
-        result = await db.query('SELECT value FROM sync_store WHERE key = $1', ['set_users_db_v4']);
+        // Busca em set_banco_pdf_v1 (bancoPDF)
+        result = await db.query('SELECT value FROM sync_store WHERE key = $1', ['set_banco_pdf_v1']);
         if (result && result.rows && result.rows.length > 0) {
             const bancoPDF = JSON.parse(result.rows[0].value);
             for (const [k, val] of Object.entries(bancoPDF)) {

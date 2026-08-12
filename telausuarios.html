@@ -12307,7 +12307,7 @@
             try {
                 const keys = [
                     'set_cartoes_vt', 'set_solicitacoes_vt', 'set_historico_vt',
-                    'set_empresas_db', 'set_funcionarios', 'set_users_db_v4',
+                    'set_empresas_db', 'set_funcionarios', 'set_users_db_v4', 'set_banco_pdf_v1',
                     'set_atendimentos_db', 'set_gratuidade_db_v1', 'set_atendimentos_gratuidade_v1',
                     'set_estoque', 'set_saldo_disponivel_manual', 'set_vt_lotes',
                     'set_lote_arquivos', 'set_total_ribbons', 'set_historico_pedidos', 'set_total_entradas'
@@ -12315,6 +12315,13 @@
                 
                 const data = {};
                 for (let k of keys) {
+                    if (k === 'set_banco_pdf_v1') {
+                        if (typeof window !== 'undefined' && window.bancoPDF && Object.keys(window.bancoPDF).length > 0) {
+                            data[k] = window.bancoPDF;
+                        }
+                        continue;
+                    }
+                    
                     const localData = localStorage.getItem(k);
                     if (localData !== null) {
                         try {
@@ -12357,6 +12364,14 @@
                 if (result.success && result.data) {
                     for (const key in result.data) {
                         const val = result.data[key];
+                        if (key === 'set_banco_pdf_v1') {
+                            if (typeof window !== 'undefined') {
+                                window.bancoPDF = val;
+                                if (typeof saveToDB === 'function') saveToDB(window.bancoPDF);
+                            }
+                            continue; // Não salva no localStorage
+                        }
+                        
                         localStorage.setItem(key, typeof val === 'object' ? JSON.stringify(val) : val);
                         
                         // Atualizar variaveis globais mapeadas
@@ -12365,7 +12380,6 @@
                         if (key === 'set_historico_vt') historicoSolicitacoesVT = val;
                         if (key === 'set_empresas_db') empresasBase = val;
                         if (key === 'set_funcionarios') funcionarios = val;
-                        if (key === 'set_users_db_v4') { if (typeof window !== 'undefined') window.bancoPDF = val; }
                         if (key === 'set_atendimentos_db') bancoDados = val;
                         if (key === 'set_gratuidade_db_v1') { if (typeof window !== 'undefined') window.beneficiariosGratuidadeDB = val; }
                         if (key === 'set_atendimentos_gratuidade_v1') { if (typeof window !== 'undefined') window.atendimentosGratuidadeDB = val; }
@@ -17824,7 +17838,8 @@
                     if (campoProvider) campoProvider.disabled = true;
                     if (campoEmpresa) campoEmpresa.value = 'Buscando no servidor...';
                     
-                    const response = await fetch(`/api/empresas/provider/${providerAtual}`);
+                    const providerLimpo = String(providerAtual).split(':')[0].trim();
+                    const response = await fetch(`/api/empresas/provider/${providerLimpo}`);
                     const data = await response.json();
                     
                     if (campoProvider) campoProvider.disabled = false;
