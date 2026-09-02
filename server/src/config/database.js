@@ -28,6 +28,25 @@ async function query(text, params) {
 }
 
 /**
+ * Garante que a tabela sync_store exista no banco
+ */
+async function initializeDatabase() {
+  if (!connectionString) return;
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS sync_store (
+        key VARCHAR(255) PRIMARY KEY,
+        value TEXT,
+        atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    logger.info('Tabela sync_store verificada/criada com sucesso.');
+  } catch (err) {
+    logger.error('Erro ao criar tabela sync_store', { error: err.message });
+  }
+}
+
+/**
  * Testa a conexão com o PostgreSQL executando SELECT 1
  * Retorna true se conectado e false se desconectado ou não configurado
  */
@@ -38,7 +57,11 @@ async function checkConnection() {
 
   try {
     const res = await pool.query('SELECT 1 AS alive');
-    return Boolean(res && res.rows && res.rows.length > 0 && res.rows[0].alive === 1);
+    if (res && res.rows && res.rows.length > 0 && res.rows[0].alive === 1) {
+      await initializeDatabase();
+      return true;
+    }
+    return false;
   } catch (err) {
     // Sanitização rigorosa: loga apenas o tipo do erro sem expor senhas/tokens da URL
     logger.warn('Falha ao verificar conexão com PostgreSQL', {

@@ -64,17 +64,32 @@ async function postSyncData(req, res) {
             'set_total_entradas'
         ];
 
+        const keysRecebidas = Object.keys(syncData).filter(k => keysToSync.includes(k) && syncData[k] !== undefined);
+        console.log(`[SYNC] Iniciando sincronização. Chaves recebidas para atualizar: ${keysRecebidas.length}`);
+
+        let chavesGravadas = 0;
         for (const key of keysToSync) {
             if (syncData[key] !== undefined) {
-                const valueString = JSON.stringify(syncData[key]);
-                await db.query(`
-                    INSERT INTO sync_store (key, value) 
-                    VALUES ($1, $2) 
-                    ON CONFLICT(key) 
-                    DO UPDATE SET value = EXCLUDED.value, atualizado_em = CURRENT_TIMESTAMP
-                `, [key, valueString]);
+                try {
+                    const valueString = JSON.stringify(syncData[key]);
+                    await db.query(`
+                        INSERT INTO sync_store (key, value) 
+                        VALUES ($1, $2) 
+                        ON CONFLICT(key) 
+                        DO UPDATE SET value = EXCLUDED.value, atualizado_em = CURRENT_TIMESTAMP
+                    `, [key, valueString]);
+                    
+                    chavesGravadas++;
+                    console.log(`[SYNC] Chave gravada com sucesso no PostgreSQL: ${key} (Tamanho: ${valueString.length} bytes)`);
+                } catch (dbErr) {
+                    console.error(`[SYNC - ERRO CRÍTICO] Falha ao gravar a chave '${key}' no PostgreSQL:`, dbErr.message);
+                    console.error(dbErr);
+                    throw dbErr; // Repassa para o catch principal
+                }
             }
         }
+
+        console.log(`[SYNC] Resumo: ${chavesGravadas} chaves gravadas com sucesso no banco.`);
 
         // =========================================================
         // 👉 AQUI ENTRA O SOCKET.IO PARA DISPARAR EM TEMPO REAL 👈
@@ -86,8 +101,8 @@ async function postSyncData(req, res) {
 
         res.status(200).json({ success: true, message: 'Dados sincronizados com sucesso' });
     } catch (error) {
-        console.error('Erro ao salvar dados de sincronização:', error);
-        res.status(500).json({ success: false, error: 'Erro interno no servidor' });
+        console.error('Erro ao salvar dados de sincronização (Catch Principal):', error);
+        res.status(500).json({ success: false, error: 'Erro interno no servidor: ' + error.message });
     }
 }
 
