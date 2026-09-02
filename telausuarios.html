@@ -12921,6 +12921,13 @@
             if (telaDesejada === 'gratuidade') { inicializarPainelGratuidade(); }
             if (typeof aplicarControleAcessoBotoes === 'function') { aplicarControleAcessoBotoes(); }
 
+            // Garante sincronização em tempo real (Puxa as últimas atualizações do Neon ao abrir a tela)
+            if (['recibo-entrega', 'atendimento', 'cartoes-vt', 'dashboard', 'empresas', 'funcionarios'].includes(telaDesejada)) {
+                if (typeof carregarSincronizacaoDoServidor === 'function') {
+                    carregarSincronizacaoDoServidor();
+                }
+            }
+
             if (telaDesejada === 'dashboard') {
                 requestAnimationFrame(() => {
                     setTimeout(() => {
