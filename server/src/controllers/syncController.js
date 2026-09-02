@@ -16,7 +16,10 @@ async function getSyncData(req, res) {
             'set_saldo_disponivel_manual',
             'set_vt_lotes',
             'set_lote_arquivos',
-            'set_total_ribbons'
+            'set_total_ribbons',
+            'set_banco_pdf_v1',
+            'set_historico_pedidos',
+            'set_total_entradas'
         ];
 
         const data = {};
@@ -55,7 +58,10 @@ async function postSyncData(req, res) {
             'set_saldo_disponivel_manual',
             'set_vt_lotes',
             'set_lote_arquivos',
-            'set_total_ribbons'
+            'set_total_ribbons',
+            'set_banco_pdf_v1',
+            'set_historico_pedidos',
+            'set_total_entradas'
         ];
 
         for (const key of keysToSync) {
