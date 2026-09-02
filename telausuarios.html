@@ -12286,7 +12286,7 @@
             "atual": { presencial: 0, telefone: 0, email: 0, dias: {} }
         });
 
-        function salvarNoLocalStorage() {
+        async function salvarNoLocalStorage() {
             localStorage.setItem('set_empresas_db', JSON.stringify(empresasBase));
             localStorage.setItem('set_funcionarios', JSON.stringify(funcionarios));
             localStorage.setItem('set_cartoes_vt', JSON.stringify(cartoesVT));
@@ -12300,7 +12300,7 @@
             localStorage.setItem('set_atendimentos_db', JSON.stringify(bancoDados));
             localStorage.setItem('set_lote_arquivos', JSON.stringify(loteArquivosHistorico));
 
-            sincronizarParaServidor(); // Chama a sincronização assíncrona
+            return await sincronizarParaServidor(); // Chama a sincronização assíncrona e retorna
         }
 
         async function sincronizarParaServidor() {
@@ -12335,7 +12335,7 @@
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 20000);
 
-                await fetch('/api/sync', {
+                const response = await fetch('/api/sync', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
@@ -12344,16 +12344,18 @@
 
                 clearTimeout(timeoutId);
 
-                // Emite o evento ao concluir o upload com sucesso
                 if (typeof socket !== 'undefined' && socket) {
                     socket.emit('funcionarios_atualizados');
                 }
+                
+                return response.ok;
             } catch (e) {
                 if (e.name === 'AbortError') {
-                    console.warn("A requisição de sincronização demorou muito e foi cancelada (Timeout). A tela não foi travada.");
+                    console.warn("A requisição de sincronização demorou muito e foi cancelada (Timeout).");
                 } else {
                     console.error("Erro ao enviar sync para servidor:", e);
                 }
+                return false;
             }
         }
 
@@ -13894,7 +13896,12 @@
                             }
                         }
 
-                        salvarNoLocalStorage();
+                        atualizarProgressoImportacao(95, "Enviando dados para o servidor...");
+                        const syncOk = await salvarNoLocalStorage();
+
+                        if (!syncOk) {
+                            throw new Error("Falha ao sincronizar as empresas com o banco de dados principal.");
+                        }
 
                         // 7. Resumo Final
                         const resumoTexto = `Importação Concluída com Sucesso!\n\n` +
@@ -13944,7 +13951,7 @@
             leitor.readAsText(arquivo);
         }
 
-        function processarTextoExtraidoPDF(texto) {
+        async function processarTextoExtraidoPDF(texto) {
             try {
                 empresasBase = [];
                 const textoLimpo = String(texto || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
@@ -14037,7 +14044,13 @@
                     }
                 });
 
-                salvarNoLocalStorage();
+                atualizarProgressoImportacao(95, "Enviando dados para o servidor...");
+                const syncOk = await salvarNoLocalStorage();
+                
+                if (!syncOk) {
+                    throw new Error("Falha ao sincronizar as empresas com o banco de dados principal.");
+                }
+                
                 finalizarImportacaoComSucesso(`Sucesso! ${novasEmpresas} empresas importadas da base.`);
             } catch (err) {
                 console.error(err);
@@ -17167,11 +17180,16 @@
 
                             // Os dados foram salvos no banco de dados IndexedDB e no Raio-X.
                             // A empresa e cartões só devem ser exibidos na tela quando o usuário chamar/digitar o Provider.
-                            const dataAtual = new Date().toLocaleString('pt-BR');
-                            localStorage.setItem('set_ultima_importacao_empresas', dataAtual);
+                            // Dispara a sincronização imediatamente e aguarda o resultado
+                            atualizarProgressoModalImportacao(95, "Enviando dados para o servidor...");
+                            let syncOk = true;
+                            if (typeof sincronizarParaServidor === 'function') {
+                                syncOk = await sincronizarParaServidor();
+                            }
 
-                            // Dispara a sincronização imediatamente após o processamento local
-                            if (typeof sincronizarParaServidor === 'function') sincronizarParaServidor();
+                            if (!syncOk) {
+                                throw new Error("Falha ao sincronizar com o banco de dados principal.");
+                            }
 
                             // 7. Só então mostra 100% e conclusão
                             atualizarProgressoModalImportacao(100, "Importação Concluída com Sucesso!");
