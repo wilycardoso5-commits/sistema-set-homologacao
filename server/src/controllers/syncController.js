@@ -147,7 +147,7 @@ async function getProviderById(req, res) {
             }
         }
 
-        res.status(404).json({ success: false, error: 'Provider não localizado no banco.' });
+        res.status(200).json({ success: false, empresa: null, funcionarios: [], error: 'Provider não localizado no banco.' });
     } catch (error) {
         console.error('Erro ao buscar provider por ID:', error);
         res.status(500).json({ success: false, error: 'Erro interno no servidor' });
