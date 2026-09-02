@@ -17163,6 +17163,9 @@
                             const dataAtual = new Date().toLocaleString('pt-BR');
                             localStorage.setItem('set_ultima_importacao_empresas', dataAtual);
 
+                            // Dispara a sincronização imediatamente após o processamento local
+                            if (typeof sincronizarParaServidor === 'function') sincronizarParaServidor();
+
                             // 7. Só então mostra 100% e conclusão
                             atualizarProgressoModalImportacao(100, "Importação Concluída com Sucesso!");
                             await new Promise(r => setTimeout(r, 450));
