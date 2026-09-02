@@ -5932,13 +5932,18 @@
 
                         <div
                             style="grid-column: span 1; display: grid; grid-template-columns: 105px 1fr; align-items: center; gap: 8px;">
-                            <label id="lbl-provedor" class="nr-label" style="margin-bottom: 0; white-space: nowrap;"><i
-                                    class="fa-solid fa-magnifying-glass"
-                                    style="margin-right: 4px; color: #3b82f6;"></i>Provider / ID:</label>
-                            <input type="text" id="input-provedor" value="" class="nr-input nr-input-mono"
-                                style="height: 38px; box-sizing: border-box; padding-left: 0px;"
-                                oninput="buscarProvedorNaBase(this.value)" onchange="buscarProvedorNaBase(this.value)"
-                                onpaste="setTimeout(() => buscarProvedorNaBase(this.value), 0)">
+                            <label id="lbl-provedor" class="nr-label" style="margin-bottom: 0; white-space: nowrap;">Provider / ID:</label>
+                            <div style="display: flex; gap: 4px;">
+                                <input type="text" id="input-provedor" value="" class="nr-input nr-input-mono"
+                                    style="height: 38px; box-sizing: border-box; padding-left: 8px; flex: 1;"
+                                    onkeydown="if(event.key === 'Enter') { event.preventDefault(); buscarProvedorNaBase(this.value); }">
+                                <button type="button" class="nr-btn-primary" 
+                                    style="height: 38px; width: 42px; padding: 0; display: flex; justify-content: center; align-items: center; border-radius: 6px; flex-shrink: 0;"
+                                    onclick="buscarProvedorNaBase(document.getElementById('input-provedor').value)"
+                                    title="Buscar Empresa">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Row 4: Lote e Nome do Representante -->
