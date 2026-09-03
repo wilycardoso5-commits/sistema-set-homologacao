@@ -16757,8 +16757,13 @@
                 style="position: absolute; top: 18px; right: 18px; background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; transition: color 0.2s;">&times;</button>
 
             <h2
-                style="color: #ffffff; margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 800;">
-                <i class="fa-solid fa-file-import" style="color: #0284c7;"></i> Importação de Dados do Sistema
+                style="color: #ffffff; margin-top: 0; display: flex; align-items: center; justify-content: space-between; font-size: 1.25rem; font-weight: 800;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-file-import" style="color: #0284c7;"></i> Importação de Dados do Sistema
+                </div>
+                <button onclick="limparBaseImportadaCompleta()" style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                    <i class="fas fa-trash"></i> Limpar Base
+                </button>
             </h2>
             <p style="color: #94a3b8; font-size: 0.88rem; margin-bottom: 22px; line-height: 1.5;">
                 Selecione ou arraste o arquivo (<strong style="color:#38bdf8;">PDF, XLSX, XLS, CSV ou XML</strong>) para
@@ -16840,6 +16845,17 @@
                 abrirModalImportacao();
             } else {
                 alert('Acesso negado! Usuário ou senha incorretos.');
+            }
+        }
+
+        async function limparBaseImportadaCompleta() {
+            if (confirm("Tem certeza que deseja APAGAR COMPLETAMENTE a base de importação de arquivos? Isso não pode ser desfeito.")) {
+                window.bancoPDF = {};
+                if (typeof saveToDB === 'function') {
+                    await saveToDB({});
+                }
+                alert("Base de importação limpa com sucesso!");
+                fecharModalImportacao();
             }
         }
 
