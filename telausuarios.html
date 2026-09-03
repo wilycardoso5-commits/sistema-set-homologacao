@@ -17000,6 +17000,17 @@
                 ...Object.keys(novoBancoParsed || {})
             ]);
 
+            // Mapeia TODOS os cartões do novo arquivo, de qualquer provider
+            const todosCartoesNovos = new Set();
+            for (const [pId, pDados] of Object.entries(novoBancoParsed || {})) {
+                if (pDados && pDados.funcionarios) {
+                    pDados.funcionarios.forEach(f => {
+                        const cartaoNorm = normalizarCartao(f.cartao);
+                        if (cartaoNorm) todosCartoesNovos.add(cartaoNorm);
+                    });
+                }
+            }
+
             todosProviders.forEach(providerId => {
                 const providerKey = normalizarProvider(providerId);
                 const dadosExistente = (bancoExistente && bancoExistente[providerId]) ? bancoExistente[providerId] : { empresa: '', funcionarios: [] };
@@ -17096,30 +17107,33 @@
                     }
                 });
 
-                // Trata registros que não vieram no novo arquivo
+                // Trata registros que não vieram no novo arquivo (PARA ESTE PROVIDER)
                 funcionariosExistentesUnicos.forEach(fExistente => {
                     const cartaoNorm = normalizarCartao(fExistente.cartao);
                     if (!cartoesProcessados.has(cartaoNorm)) {
-                        if (fExistente.entregue) {
-                            // Preserva histórico de entregues (pelo sistema ou ao titular)
-                            funcionariosMesclados.push(fExistente);
-                            entregues++;
-                        } else {
-                            // Sumiu do PDF sem ter sido entregue pelo sistema:
-                            // significa que o titular compareceu presencialmente e retirou
-                            // no sistema de origem. Marcamos automaticamente.
-                            const agora = new Date();
-                            const dataHoraStr = agora.toLocaleDateString('pt-BR') + ' às ' +
-                                agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                            funcionariosMesclados.push({
-                                ...fExistente,
-                                entregue: true,
-                                entregueAoTitular: true,
-                                dataHoraEntrega: dataHoraStr,
-                                representante: 'Primeira via do cartão VT entregue ao titular',
-                                observacao: 'Cartão retirado diretamente pelo titular no sistema de origem. Identificado automaticamente na sincronização entre importações.'
-                            });
-                            entreguesAoTitular++;
+                        // Se o cartão sumiu deste provider, mas ESTÁ no arquivo novo (em outro provider),
+                        // não fazemos nada (ele foi apenas movido para outro provider).
+                        if (!todosCartoesNovos.has(cartaoNorm)) {
+                            if (fExistente.entregue) {
+                                // Preserva histórico de entregues (pelo sistema ou ao titular)
+                                funcionariosMesclados.push(fExistente);
+                                entregues++;
+                            } else {
+                                // Sumiu de TODO o PDF novo sem ter sido entregue pelo sistema:
+                                // significa que o titular compareceu presencialmente e retirou.
+                                const agora = new Date();
+                                const dataHoraStr = agora.toLocaleDateString('pt-BR') + ' às ' +
+                                    agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                                funcionariosMesclados.push({
+                                    ...fExistente,
+                                    entregue: true,
+                                    entregueAoTitular: true,
+                                    dataHoraEntrega: dataHoraStr,
+                                    representante: 'Primeira via do cartão VT entregue ao titular',
+                                    observacao: 'Cartão retirado diretamente pelo titular no sistema de origem. Identificado automaticamente na sincronização.'
+                                });
+                                entreguesAoTitular++;
+                            }
                         }
                     }
                 });
