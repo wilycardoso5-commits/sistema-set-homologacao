@@ -12320,21 +12320,29 @@
                 
                 const data = {};
                 for (let k of keys) {
+                    let valToSync;
                     if (k === 'set_banco_pdf_v1') {
                         if (typeof window !== 'undefined' && window.bancoPDF && Object.keys(window.bancoPDF).length > 0) {
-                            data[k] = window.bancoPDF;
+                            valToSync = window.bancoPDF;
                         }
-                        continue;
+                    } else {
+                        const localData = localStorage.getItem(k);
+                        if (localData !== null) {
+                            try { valToSync = JSON.parse(localData); } catch(e) { valToSync = localData; }
+                        }
                     }
                     
-                    const localData = localStorage.getItem(k);
-                    if (localData !== null) {
-                        try {
-                            data[k] = JSON.parse(localData);
-                        } catch(e) {
-                            data[k] = localData; 
+                    if (valToSync !== undefined) {
+                        const jsonStr = JSON.stringify(valToSync);
+                        if (window._lastSyncPayloadHashes[k] !== jsonStr) {
+                            data[k] = valToSync;
+                            window._lastSyncPayloadHashes[k] = jsonStr; // Atualiza hash
                         }
                     }
+                }
+
+                if (Object.keys(data).length === 0) {
+                    return true; // Nada de novo para sincronizar
                 }
 
                 const controller = new AbortController();
@@ -12364,13 +12372,32 @@
             }
         }
 
+        window._lastSyncTimestamp = null;
+        window._lastSyncPayloadHashes = {};
+        
         async function carregarSincronizacaoDoServidor() {
             try {
+                // 1. Verifica se houve alteração no servidor (Cache Check)
+                const checkRes = await fetch('/api/sync/check-update');
+                const checkData = await checkRes.json();
+                
+                if (checkData.success && checkData.lastUpdate) {
+                    const serverTimestamp = new Date(checkData.lastUpdate).getTime();
+                    if (window._lastSyncTimestamp && serverTimestamp <= window._lastSyncTimestamp) {
+                        // Dados locais em memória estão atualizados, evita baixar payload completo
+                        return;
+                    }
+                    window._lastSyncTimestamp = serverTimestamp;
+                }
+
+                // 2. Baixa payload completo se tiver update
                 const response = await fetch('/api/sync');
                 const result = await response.json();
                 if (result.success && result.data) {
                     for (const key in result.data) {
                         const val = result.data[key];
+                        window._lastSyncPayloadHashes[key] = JSON.stringify(val); // Registra cache do payload baixado
+                        
                         if (key === 'set_banco_pdf_v1') {
                             if (typeof window !== 'undefined') {
                                 window.bancoPDF = val;

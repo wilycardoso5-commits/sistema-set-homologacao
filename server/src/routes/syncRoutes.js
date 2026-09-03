@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const syncController = require('../controllers/syncController');
 
+router.get('/sync/check-update', syncController.checkUpdate);
 router.get('/sync', syncController.getSyncData);
 router.post('/sync', syncController.postSyncData);
 router.get('/empresas/provider/:id', syncController.getProviderById);

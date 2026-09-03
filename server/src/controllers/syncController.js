@@ -169,4 +169,15 @@ async function getProviderById(req, res) {
     }
 }
 
-module.exports = { getSyncData, postSyncData, getProviderById };
+async function checkUpdate(req, res) {
+    try {
+        const result = await db.query('SELECT MAX(atualizado_em) as last_update FROM sync_store');
+        const lastUpdate = result.rows[0].last_update;
+        res.status(200).json({ success: true, lastUpdate: lastUpdate });
+    } catch (error) {
+        console.error('Erro ao verificar atualizações:', error);
+        res.status(500).json({ success: false, error: 'Erro interno no servidor' });
+    }
+}
+
+module.exports = { getSyncData, postSyncData, getProviderById, checkUpdate };

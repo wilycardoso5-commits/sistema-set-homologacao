@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const session = require('express-session');
 const PgSession = require('connect-pg-simple')(session);
+const compression = require('compression');
 const config = require('./config');
 const routes = require('./routes');
 const { pool } = require('./config/database');
@@ -12,6 +13,9 @@ const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 app.set('trust proxy', 1);
+
+// Habilita compressão (gzip) para respostas HTTP
+app.use(compression());
 
 // Timestamp global para versionamento e auto-update no frontend
 const APP_BUILD_VERSION = Date.now().toString();
