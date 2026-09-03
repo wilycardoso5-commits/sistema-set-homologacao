@@ -154,7 +154,7 @@
             color: #475569;
             padding: 0;
             cursor: pointer;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.12s ease;
@@ -671,16 +671,6 @@
             // visible = senha visível (type === 'text') -> mostrar ícone eye-off (para esconder)
             toggleSenha.innerHTML = visible ? iconEyeOff : iconEyeOpen;
         }
-
-        senhaInput.addEventListener('input', function() {
-            if (senhaInput.value.length > 0) {
-                toggleSenha.style.display = 'flex';
-            } else {
-                toggleSenha.style.display = 'none';
-                senhaInput.type = 'password';
-                setIconForVisibility(false);
-            }
-        });
 
         toggleSenha.addEventListener('click', function() {
             const isPassword = senhaInput.type === 'password';
