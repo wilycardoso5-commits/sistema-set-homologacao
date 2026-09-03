@@ -16593,7 +16593,8 @@
                                 listaItens.push({
                                     id,
                                     empresa: emp.empresa,
-                                    funcionario: f
+                                    funcionario: f,
+                                    nomeLimpo: nomeFunc
                                 });
                             }
                         });
@@ -16610,12 +16611,12 @@
                 return;
             }
 
-            // Ordena os entregues em Ordem Alfabética (A-Z) pelo nome do funcionário
-            listaItens.sort((a, b) => (a.funcionario.nome || '').localeCompare(b.funcionario.nome || '', 'pt-BR'));
+            // Ordena os entregues em Ordem Alfabética (A-Z) pelo nome do funcionário limpo
+            listaItens.sort((a, b) => (a.nomeLimpo || '').localeCompare(b.nomeLimpo || '', 'pt-BR'));
 
             let html = '';
             listaItens.forEach(item => {
-                const { id, empresa, funcionario: f } = item;
+                const { id, empresa, funcionario: f, nomeLimpo } = item;
                 const badgeTipo = f.entregueAoTitular
                     ? `<span style="background:#7c2d12;color:#fdba74;padding:2px 8px;border-radius:99px;font-size:0.68rem;font-weight:700;white-space:nowrap;">🟠 Titular</span>`
                     : `<span style="background:#14532d;color:#86efac;padding:2px 8px;border-radius:99px;font-size:0.68rem;font-weight:700;white-space:nowrap;">✅ Equipe</span>`;
@@ -16625,7 +16626,7 @@
                         <div style="font-weight: bold; line-height: 1.4; white-space: normal; word-break: break-word; min-width: 0;">
                              ${empresa} - <span style="font-weight: normal; font-size: 0.8rem; color: #94a3b8; white-space: nowrap;">ID: ${id}</span>
                          </div>
-                        <div>${f.nome}<br>${badgeTipo}</div>
+                        <div>${nomeLimpo}<br>${badgeTipo}</div>
                         <div style="font-size:0.85rem;color:${f.entregueAoTitular ? '#fdba74' : '#f8fafc'}">${f.representante || 'Não Informado'}</div>
                         <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start; min-width: 0;">
                              <div style="font-weight: bold;">${f.cartao}</div>
