@@ -12506,9 +12506,15 @@
             <td style="text-align: center;">${item.setor ?? item.solicitante ?? ''}</td>
             <td style="text-align:center; vertical-align:middle;"><div class="status-container"><span class="status-badge ${item.status === 'Aprovado' ? 'aguardando' : item.status.toLowerCase()}">${item.status}</span></div></td>
             ${(() => {
-                        const foiEditado = !!(item.editado || item.alteradoPor || item.autorizadoPor || item.dataUltimaAlteracao || (item.observacao && item.observacao.trim() !== '' && item.observacao !== '-'));
-                        const iconeAlerta = foiEditado ? `<i class="fa-solid fa-triangle-exclamation" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#f59e0b; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Clique para ver os detalhes da alteração"></i>` : '';
-                        return `<td style="text-align: center; vertical-align: middle;">${iconeAlerta}</td>`;
+                        const foiEditadoReal = !!(item.editado || item.alteradoPor || item.autorizadoPor || item.dataUltimaAlteracao);
+                        const temObs = !!(item.observacao && item.observacao.trim() !== '' && item.observacao !== '-');
+                        let icone = '';
+                        if (foiEditadoReal) {
+                            icone = `<i class="fa-solid fa-triangle-exclamation" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#f59e0b; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Clique para ver os detalhes da alteração"></i>`;
+                        } else if (temObs) {
+                            icone = `<i class="fa-solid fa-comment-dots" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#38bdf8; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Ver observação"></i>`;
+                        }
+                        return `<td style="text-align: center; vertical-align: middle;">${icone}</td>`;
                     })()}
             <td style="text-align: center;">
                 <div class="action-group" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
@@ -12693,7 +12699,7 @@
 
                 const bateuStatus = !statusFiltro || (item.status && item.status.toLowerCase() === statusFiltro.toLowerCase());
 
-                const foiEditado = !!(item.editado || item.alteradoPor || item.autorizadoPor || item.dataUltimaAlteracao || (item.observacao && item.observacao.trim() !== '' && item.observacao !== '-'));
+                const foiEditado = !!(item.editado || item.alteradoPor || item.autorizadoPor || item.dataUltimaAlteracao);
                 const bateuEditado = !apenasEditados || foiEditado;
 
                 return bateuData && bateuSetor && bateuStatus && bateuEditado;
@@ -12722,9 +12728,15 @@
             <td style="text-align: center;">${item.setor ?? item.solicitante ?? ''}</td>
             <td style="text-align:center; vertical-align:middle;"><div class="status-container"><span class="status-badge ${item.status === 'Concluído' || item.status === 'Aprovado' ? 'concluido' : item.status.toLowerCase()}">${item.status}</span></div></td>
             ${(() => {
-                        const foiEditado = !!(item.editado || item.alteradoPor || item.autorizadoPor || item.dataUltimaAlteracao || (item.observacao && item.observacao.trim() !== '' && item.observacao !== '-'));
-                        const iconeAlerta = foiEditado ? `<i class="fa-solid fa-triangle-exclamation" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#f59e0b; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Clique para ver os detalhes da alteração"></i>` : '';
-                        return `<td style="text-align: center; vertical-align: middle;">${iconeAlerta}</td>`;
+                        const foiEditadoReal = !!(item.editado || item.alteradoPor || item.autorizadoPor || item.dataUltimaAlteracao);
+                        const temObs = !!(item.observacao && item.observacao.trim() !== '' && item.observacao !== '-');
+                        let icone = '';
+                        if (foiEditadoReal) {
+                            icone = `<i class="fa-solid fa-triangle-exclamation" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#f59e0b; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Clique para ver os detalhes da alteração"></i>`;
+                        } else if (temObs) {
+                            icone = `<i class="fa-solid fa-comment-dots" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#38bdf8; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Ver observação"></i>`;
+                        }
+                        return `<td style="text-align: center; vertical-align: middle;">${icone}</td>`;
                     })()}
             <td style="text-align: center;">
                 <button class="btn-excluir" title="Excluir" onclick="excluirHistoricoVT('${item.id}')" style="background:transparent;border:none;cursor:pointer;">
