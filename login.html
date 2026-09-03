@@ -298,20 +298,7 @@
 </head>
 <body>
 
-    <!-- Botão Play Transparente -->
-    <div id="playButton" class="btn-play-transparente">
-        <svg viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
-        </svg>
-    </div>
-
-    <!-- Vídeo sem autoplay para tocar com som quando clicar no botão -->
-    <video id="bgVideo" class="video-background" playsinline>
-        <source src="frontend/bg-login.mp4" type="video/mp4">
-        Seu navegador não suporta vídeos.
-    </video>
-
-    <div class="window-app">
+    <div class="window-app show">
         
         <div class="content-area">
             <div class="header-title">
@@ -796,27 +783,11 @@
         }
       }
 
-      // LÓGICA DO VÍDEO DE INTRODUÇÃO
+      // LÓGICA DO VÍDEO DE INTRODUÇÃO (REMOVIDO)
       document.addEventListener("DOMContentLoaded", () => {
-          const video = document.getElementById("bgVideo");
-          const playBtn = document.getElementById("playButton");
           const appWindow = document.querySelector(".window-app");
-
-          if (video) {
-              // Quando o vídeo acabar, mostra a caixa de login
-              video.addEventListener("ended", () => {
-                  if (appWindow) appWindow.classList.add("show");
-              });
-          }
-
-          if (playBtn && video) {
-              playBtn.addEventListener("click", () => {
-                  if (video.paused) {
-                      video.play().catch(e => console.error(e));
-                      playBtn.style.opacity = '0';
-                      setTimeout(() => { playBtn.style.display = 'none'; }, 300);
-                  }
-              });
+          if (appWindow) {
+              appWindow.classList.add("show");
           }
       });
     </script>
