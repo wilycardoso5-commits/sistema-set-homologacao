@@ -16748,6 +16748,44 @@
         </div>
     </div>
 
+    <!-- Modal de Resumo de Importação -->
+    <div id="modal-resumo-importacao" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: #0f172a; width: 450px; max-width: 90%; border-radius: 14px; padding: 28px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); border: 1px solid #1e293b; text-align: center;">
+            <div style="width: 60px; height: 60px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+                <i class="fas fa-check-circle" style="color: #10b981; font-size: 2.2rem;"></i>
+            </div>
+            <h2 style="color: white; margin-top: 0; margin-bottom: 20px; font-size: 1.3rem;">Resumo da Importação</h2>
+            
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid #334155; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;">
+                    <span>Novos cartões inseridos:</span>
+                    <span id="resumo-novos" style="color: #38bdf8; font-weight: bold;">0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;">
+                    <span>Cartões atualizados:</span>
+                    <span id="resumo-atualizados" style="color: #3b82f6; font-weight: bold;">0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;">
+                    <span>Duplicados (ignorados):</span>
+                    <span id="resumo-duplicados" style="color: #64748b; font-weight: bold;">0</span>
+                </div>
+                <div style="height: 1px; background: #334155; margin: 12px 0;"></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;" title="Cartões que já haviam sido entregues no histórico anterior">
+                    <span>Cartões já entregues (Histórico):</span>
+                    <span id="resumo-entregues" style="color: #f59e0b; font-weight: bold;">0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #94a3b8;" title="Novas baixas automáticas identificadas nesta importação e enviadas ao relatório">
+                    <span>Baixas automáticas (Entregues ao titular):</span>
+                    <span id="resumo-novas-baixas" style="color: #ef4444; font-weight: bold;">0</span>
+                </div>
+            </div>
+
+            <button onclick="document.getElementById('modal-resumo-importacao').style.display = 'none'" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.2s;">
+                Entendi
+            </button>
+        </div>
+    </div>
+
     <!-- Modal de Importação de Arquivos / Planilhas -->
     <div id="modal-importacao-pdf" class="modal"
         style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; align-items: center; justify-content: center;">
@@ -16846,6 +16884,15 @@
             } else {
                 alert('Acesso negado! Usuário ou senha incorretos.');
             }
+        }
+
+        function mostrarModalResumoImportacao(resumo) {
+            document.getElementById('resumo-novos').innerText = resumo.novos || 0;
+            document.getElementById('resumo-atualizados').innerText = resumo.atualizados || 0;
+            document.getElementById('resumo-duplicados').innerText = resumo.duplicados || 0;
+            document.getElementById('resumo-entregues').innerText = resumo.entregues || 0;
+            document.getElementById('resumo-novas-baixas').innerText = resumo.entreguesAoTitular || 0;
+            document.getElementById('modal-resumo-importacao').style.display = 'flex';
         }
 
         async function limparBaseImportadaCompleta() {
@@ -17295,12 +17342,7 @@
                             await new Promise(r => setTimeout(r, 450));
 
                             // Mostra o resumo
-                            const resumoTexto = `📊 Resumo da Importação PDF:\n\n` +
-                                `• Novos cartões inseridos: ${resumo.novos || 0}\n` +
-                                `• Cartões atualizados: ${resumo.atualizados || 0}\n` +
-                                `• Cartões duplicados (ignorados): ${resumo.duplicados || 0}\n` +
-                                `• Baixas automáticas (entregues ao titular): ${resumo.entreguesAoTitular || 0}`;
-                            alert(resumoTexto);
+                            mostrarModalResumoImportacao(resumo);
 
                             // 8. Fechar o modal de carregamento após a atualização da interface
                             fecharModalImportacao();
@@ -17450,12 +17492,7 @@
                         atualizarProgressoModalImportacao(100, "Importação Concluída com Sucesso!");
                         await new Promise(r => setTimeout(r, 300));
 
-                        const resumoTexto = `📊 Resumo da Importação CSV:\n\n` +
-                            `• Linhas processadas: ${registrosProcessados}\n` +
-                            `• Cartões/Funcionários importados: ${registrosImportados}\n` +
-                            `• Linhas descartadas (cabeçalhos/rodapés): ${registrosIgnorados}`;
-
-                        alert(resumoTexto);
+                        mostrarModalResumoImportacao(resumo);
                         fecharModalImportacao();
                     };
 
