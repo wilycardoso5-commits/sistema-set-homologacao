@@ -12476,10 +12476,6 @@
                 let list = JSON.parse(localStorage.getItem('set_solicitacoes_vt')) || [];
                 let mudou = false;
                 list.forEach(item => {
-                    if (item.observacao && /^\d+$/.test(item.observacao.trim())) {
-                        item.observacao = '';
-                        mudou = true;
-                    }
                     if (item.quantidade && (item.quantidade.includes('cartão VT') || item.quantidade.includes('cartões VT'))) {
                         item.quantidade = item.quantidade.replace(/\s*cartõ?es?\s*VT/gi, ' VT');
                         mudou = true;
@@ -15226,7 +15222,7 @@
 
             // Se a quantidade e o recebedor forem informados, registra o pedido
             if (!isNaN(quantidade) && quantidade > 0 && recebedor) {
-                const id = solicitacoesCartoesVT.length > 0 ? Math.max(...solicitacoesCartoesVT.map(item => item.id)) + 1 : 1;
+                const id = Date.now() + Math.floor(Math.random() * 1000);
                 solicitacoesCartoesVT.push({
                     id: id,
                     data: new Date().toLocaleDateString('pt-BR'),
@@ -15264,7 +15260,7 @@
             if (!quantidade || quantidade < 1) { alert('Informe a quantidade de ribbons.'); return; }
             if (!recebedor) { alert('Informe o nome de quem vai receber a solicitação.'); return; }
 
-            const id = solicitacoesCartoesVT.length > 0 ? Math.max(...solicitacoesCartoesVT.map(item => item.id)) + 1 : 1;
+            const id = Date.now() + Math.floor(Math.random() * 1000);
 
             solicitacoesCartoesVT.push({
                 id: id,
