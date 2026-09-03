@@ -16526,12 +16526,17 @@
 
         function renderizarRelatorioEntregas() {
             const container = document.getElementById('relatorio-lista');
-            const filtroInput = document.getElementById('filtro-relatorio-id');
-            const query = filtroInput ? filtroInput.value.trim().toLowerCase() : '';
-            const queryRaw = query.replace(/\D/g, '');
+            if (!container) return;
 
-            const listaItens = [];
-            const cartoesProcessadosRelatorio = new Set();
+            container.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;"><i class="fas fa-circle-notch fa-spin fa-2x"></i><br><br>Carregando informações...</div>';
+
+            setTimeout(() => {
+                const filtroInput = document.getElementById('filtro-relatorio-id');
+                const query = filtroInput ? filtroInput.value.trim().toLowerCase() : '';
+                const queryRaw = query.replace(/\D/g, '');
+
+                const listaItens = [];
+                const cartoesProcessadosRelatorio = new Set();
 
             if (window.bancoPDF) {
                 for (let id in window.bancoPDF) {
@@ -16640,6 +16645,7 @@
             });
 
             container.innerHTML = html;
+            }, 10);
         }
 
         async function desfazerEntrega(id, cartao) {
@@ -16677,11 +16683,13 @@
                     <i class="fas fa-file-alt" style="color: #3b82f6;"></i>
                     <span>Relatório de Entregas</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-right: 40px;">
-                    <i class="fas fa-search" style="color: #94a3b8; font-size: 0.9rem;"></i>
+                <div style="display: flex; align-items: center; gap: 8px; margin-right: 40px;">
                     <input type="text" id="filtro-relatorio-id" placeholder="Filtrar por Nome, ID ou Cartão..."
                         style="background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; width: 260px; outline: none; transition: border-color 0.2s;"
-                        oninput="renderizarRelatorioEntregas()">
+                        onkeypress="if(event.key === 'Enter') renderizarRelatorioEntregas()">
+                    <button onclick="renderizarRelatorioEntregas()" style="background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: bold;">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
                 </div>
             </h2>
             <!-- Wrapper com rolagem horizontal e largura mínima de 950px -->
