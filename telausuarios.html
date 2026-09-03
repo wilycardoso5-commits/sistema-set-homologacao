@@ -16531,6 +16531,7 @@
             const queryRaw = query.replace(/\D/g, '');
 
             const listaItens = [];
+            const cartoesProcessadosRelatorio = new Set();
 
             if (window.bancoPDF) {
                 for (let id in window.bancoPDF) {
@@ -16552,13 +16553,24 @@
                                     return;
                                 }
 
+                                // Evita exibir o mesmo cartão entregue duplicado caso esteja em duas empresas
+                                if (cartoesProcessadosRelatorio.has(cartaoClean)) {
+                                    return;
+                                }
+                                cartoesProcessadosRelatorio.add(cartaoClean);
+
                                 // Limpeza de sujeira residual do PDF no nome do funcionário
                                 let nomeFunc = f.nome || '';
                                 if (nomeFunc.includes('--- PÁGINA') || nomeFunc.includes('Emissão:') || nomeFunc.length > 80) {
-                                    nomeFunc = nomeFunc.replace(/--- PÁGINA[\s\S]*?(Provider:[^\n]*)?/ig, '');
-                                    nomeFunc = nomeFunc.replace(/Página \d+ de \d+.*?(Provider:[^\n]*)?/ig, '');
-                                    nomeFunc = nomeFunc.replace(/Cartões Pendentes.*?Provider:[^\n]*/ig, '');
-                                    nomeFunc = nomeFunc.trim();
+                                    // Pega apenas o que vem DEPOIS de "Provider:"
+                                    if (/Provider:/i.test(nomeFunc)) {
+                                        nomeFunc = nomeFunc.split(/Provider:/i).pop().trim();
+                                    } else {
+                                        nomeFunc = nomeFunc.replace(/--- PÁGINA[\s\S]*?/ig, '');
+                                        nomeFunc = nomeFunc.replace(/Página \d+ de \d+.*?/ig, '');
+                                        nomeFunc = nomeFunc.replace(/Cartões Pendentes.*?/ig, '');
+                                        nomeFunc = nomeFunc.trim();
+                                    }
                                     if (nomeFunc.length === 0 || nomeFunc.length > 60) {
                                         nomeFunc = "NOME DESCONHECIDO (ERRO DE LEITURA)";
                                     }
