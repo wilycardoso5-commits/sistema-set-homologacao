@@ -12309,6 +12309,7 @@
         }
 
         async function sincronizarParaServidor() {
+            if (window.location.protocol === 'file:') return true;
             try {
                 const keys = [
                     'set_cartoes_vt', 'set_solicitacoes_vt', 'set_historico_vt',
@@ -12376,6 +12377,7 @@
         window._lastSyncPayloadHashes = {};
         
         async function carregarSincronizacaoDoServidor() {
+            if (window.location.protocol === 'file:') return;
             try {
                 // 1. Verifica se houve alteração no servidor (Cache Check)
                 const checkRes = await fetch('/api/sync/check-update');
@@ -12507,12 +12509,9 @@
             <td style="text-align:center; vertical-align:middle;"><div class="status-container"><span class="status-badge ${item.status === 'Aprovado' ? 'aguardando' : item.status.toLowerCase()}">${item.status}</span></div></td>
             ${(() => {
                         const foiEditadoReal = !!(item.editado || item.alteradoPor || item.autorizadoPor || item.dataUltimaAlteracao);
-                        const temObs = !!(item.observacao && item.observacao.trim() !== '' && item.observacao !== '-');
                         let icone = '';
                         if (foiEditadoReal) {
                             icone = `<i class="fa-solid fa-triangle-exclamation" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#f59e0b; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Clique para ver os detalhes da alteração"></i>`;
-                        } else if (temObs) {
-                            icone = `<i class="fa-solid fa-comment-dots" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#38bdf8; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Ver observação"></i>`;
                         }
                         return `<td style="text-align: center; vertical-align: middle;">${icone}</td>`;
                     })()}
@@ -12729,12 +12728,9 @@
             <td style="text-align:center; vertical-align:middle;"><div class="status-container"><span class="status-badge ${item.status === 'Concluído' || item.status === 'Aprovado' ? 'concluido' : item.status.toLowerCase()}">${item.status}</span></div></td>
             ${(() => {
                         const foiEditadoReal = !!(item.editado || item.alteradoPor || item.autorizadoPor || item.dataUltimaAlteracao);
-                        const temObs = !!(item.observacao && item.observacao.trim() !== '' && item.observacao !== '-');
                         let icone = '';
                         if (foiEditadoReal) {
                             icone = `<i class="fa-solid fa-triangle-exclamation" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#f59e0b; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Clique para ver os detalhes da alteração"></i>`;
-                        } else if (temObs) {
-                            icone = `<i class="fa-solid fa-comment-dots" onclick="verDetalhesEdicaoVT('${item.id}')" style="color:#38bdf8; font-size:16px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="Ver observação"></i>`;
                         }
                         return `<td style="text-align: center; vertical-align: middle;">${icone}</td>`;
                     })()}
@@ -26324,7 +26320,7 @@
         });
     </script>
     <script>
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
             navigator.serviceWorker.getRegistrations().then(registrations => {
                 for (let registration of registrations) {
                     registration.unregister();
@@ -26716,6 +26712,7 @@
             };
 
             async function checkAppVersion() {
+                if (window.location.protocol === 'file:') return;
                 try {
                     const res = await fetch('/api/version');
                     if (!res.ok) return;
