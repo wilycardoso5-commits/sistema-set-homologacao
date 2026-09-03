@@ -13204,24 +13204,6 @@
                 } catch (e2) { }
             }
 
-            // Sincroniza diretamente com window.bancoPDF e IndexedDB
-            if (!window.bancoPDF) window.bancoPDF = {};
-            providersList.forEach(p => {
-                const pId = String(p.id).trim();
-                if (!window.bancoPDF[pId]) {
-                    window.bancoPDF[pId] = { empresa: p.empresa, funcionarios: p.funcionarios || [] };
-                } else {
-                    if (p.empresa && p.empresa !== '---') window.bancoPDF[pId].empresa = p.empresa;
-                    (p.funcionarios || []).forEach(f => {
-                        if (!window.bancoPDF[pId].funcionarios.some(ef => ef.cartao === f.cartao)) {
-                            window.bancoPDF[pId].funcionarios.push(f);
-                        }
-                    });
-                }
-            });
-            if (typeof saveToDB === 'function') {
-                saveToDB(window.bancoPDF);
-            }
         }
 
         function obterDadosGraficoDiario() {
