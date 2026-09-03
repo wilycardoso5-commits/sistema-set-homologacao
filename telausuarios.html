@@ -16901,7 +16901,8 @@
                 if (typeof saveToDB === 'function') {
                     await saveToDB({});
                 }
-                alert("Base de importação limpa com sucesso!");
+                localStorage.removeItem('set_ultima_importacao_empresas');
+                alert("Base de importação limpa com sucesso! O sistema está zerado para os testes.");
                 fecharModalImportacao();
             }
         }
@@ -17071,6 +17072,9 @@
                 ...Object.keys(novoBancoParsed || {})
             ]);
 
+            // Conjunto global para rastrear cartões já processados e identificar duplicados reais
+            const todosCartoesVistosGlobais = new Set();
+
             // Mapeia TODOS os cartões do novo arquivo, de qualquer provider
             const todosCartoesNovos = new Set();
             for (const [pId, pDados] of Object.entries(novoBancoParsed || {})) {
@@ -17135,7 +17139,10 @@
                             cartoesVistosNovos.add(cartaoNorm);
                             funcionariosNovosUnicos.push(f);
                         } else {
-                            duplicados++;
+                            // Duplicado dentro do próprio provider
+                            if (!todosCartoesVistosGlobais.has(cartaoNorm)) {
+                                duplicados++;
+                            }
                         }
                     });
                 }
@@ -17169,13 +17176,18 @@
                         }
                     } else {
                         // Novo registro pendente
-                        funcionariosMesclados.push({
-                            nome: fNovo.nome,
-                            cartao: fNovo.cartao,
-                            entregue: false
-                        });
-                        novos++;
+                        if (!todosCartoesVistosGlobais.has(cartaoNorm)) {
+                            funcionariosMesclados.push({
+                                nome: fNovo.nome,
+                                cartao: fNovo.cartao,
+                                entregue: false
+                            });
+                            novos++;
+                        } else {
+                            duplicados++;
+                        }
                     }
+                    todosCartoesVistosGlobais.add(cartaoNorm);
                 });
 
                 // Trata registros que não vieram no novo arquivo (PARA ESTE PROVIDER)
