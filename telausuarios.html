@@ -17243,6 +17243,14 @@
                             atualizarProgressoModalImportacao(100, "Importação Concluída com Sucesso!");
                             await new Promise(r => setTimeout(r, 450));
 
+                            // Mostra o resumo
+                            const resumoTexto = `📊 Resumo da Importação PDF:\n\n` +
+                                `• Novos cartões inseridos: ${resumo.novos || 0}\n` +
+                                `• Cartões atualizados: ${resumo.atualizados || 0}\n` +
+                                `• Cartões duplicados (ignorados): ${resumo.duplicados || 0}\n` +
+                                `• Baixas automáticas (entregues ao titular): ${resumo.entreguesAoTitular || 0}`;
+                            alert(resumoTexto);
+
                             // 8. Fechar o modal de carregamento após a atualização da interface
                             fecharModalImportacao();
                         } catch (err) {
