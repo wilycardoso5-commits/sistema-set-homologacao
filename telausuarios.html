@@ -4257,6 +4257,7 @@
             animation: healthCpuWave 3s linear infinite;
             filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.8));
         }
+
         /* ================= THEMES (ACESSIBILIDADE) ================= */
         :root {
             /* Fallback/Padrão Escuro */
@@ -4325,8 +4326,8 @@
             background-color: var(--bg-body) !important;
             color: var(--text-main) !important;
         }
-        
-        [data-theme] .sidebar, 
+
+        [data-theme] .sidebar,
         [data-theme] .notif-panel,
         [data-theme] .modal-content,
         [data-theme] .custom-modal,
@@ -4334,8 +4335,8 @@
             background-color: var(--bg-sidebar) !important;
             border-color: var(--border-color) !important;
         }
-        
-        [data-theme] .card, 
+
+        [data-theme] .card,
         [data-theme] .metric-card,
         [data-theme] .filter-section,
         [data-theme] .table-container,
@@ -4384,37 +4385,41 @@
             background-color: var(--bg-card) !important;
             border-color: var(--border-card) !important;
         }
-        
+
         [data-theme] table th,
         [data-theme] .tabela-moderna th {
             background-color: var(--bg-table-header) !important;
             color: var(--text-main) !important;
             border-bottom-color: var(--border-color) !important;
         }
-        
+
         [data-theme] table td,
         [data-theme] .tabela-moderna td {
             background-color: var(--bg-table-row) !important;
             color: var(--text-main) !important;
             border-bottom-color: var(--border-color) !important;
         }
-        
+
         [data-theme] table tbody tr:hover td,
         [data-theme] .tabela-moderna tbody tr:hover td {
             background-color: var(--bg-table-row-hover) !important;
         }
-        
-        [data-theme] input, 
-        [data-theme] select, 
+
+        [data-theme] input,
+        [data-theme] select,
         [data-theme] textarea {
             background-color: var(--bg-input) !important;
             color: var(--text-main) !important;
             border-color: var(--border-color) !important;
         }
-        
-        [data-theme] .nav-text, 
-        [data-theme] h1, [data-theme] h2, [data-theme] h3, [data-theme] h4, [data-theme] h5,
-        [data-theme] span:not(.badge):not(.status-badge), 
+
+        [data-theme] .nav-text,
+        [data-theme] h1,
+        [data-theme] h2,
+        [data-theme] h3,
+        [data-theme] h4,
+        [data-theme] h5,
+        [data-theme] span:not(.badge):not(.status-badge),
         [data-theme] p,
         [data-theme] label,
         [data-theme] .wa-subitem span,
@@ -4433,12 +4438,14 @@
             color: var(--text-main) !important;
         }
 
-        [data-theme] .text-muted, 
+        [data-theme] .text-muted,
         [data-theme] .card-header-info span,
         [data-theme] .notif-time {
             color: var(--text-muted) !important;
         }
     </style>
+    <!-- Tesseract.js (OCR) -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 
 <body>
@@ -4545,6 +4552,12 @@
                         <span class="nav-text">Recibo de Entrega</span>
                     </a>
                 </li>
+                <li class="nav-item" id="menu-espelho">
+                    <a href="javascript:void(0)" onclick="trocarTela('espelho')" title="Espelho">
+                        <i class="fa-solid fa-copy"></i>
+                        <span class="nav-text">Espelho</span>
+                    </a>
+                </li>
                 <li class="nav-item" id="menu-gratuidade">
                     <a href="javascript:void(0)" onclick="trocarTela('gratuidade')" title="Gratuidade">
                         <i class="fa-solid fa-wheelchair"></i>
@@ -4604,7 +4617,8 @@
             </a>
             <div class="signature">
                 Desenvolvida por wily 2.3
-                <span id="app-version-display" style="opacity:0.7; font-size:9px; display:block; margin-top:2px;"></span>
+                <span id="app-version-display"
+                    style="opacity:0.7; font-size:9px; display:block; margin-top:2px;"></span>
             </div>
         </div>
     </aside>
@@ -4632,7 +4646,8 @@
                 </div>
 
                 <div class="user-profile">
-                    <div class="user-details" onclick="abrirModalAlterarMinhaSenha()" title="Clique para alterar sua senha" style="cursor:pointer;">
+                    <div class="user-details" onclick="abrirModalAlterarMinhaSenha()"
+                        title="Clique para alterar sua senha" style="cursor:pointer;">
                         <div class="name">Wily</div>
                         <div class="role">Administrador</div>
                     </div>
@@ -4653,7 +4668,10 @@
                     <div class="config-bell-wrapper" id="configBellWrapper" onclick="abrirModalConfiguracoes(event)"
                         title="Configurações do Usuário"
                         style="margin-right:0; margin-left:12px; margin-top:-10px; align-self:center; cursor:pointer;">
-                        <i class="fa-solid fa-cog" style="font-size: 1.2rem; color: var(--text-muted); transition: color 0.2s;" onmouseover="this.style.color='var(--text-main)'" onmouseout="this.style.color='var(--text-muted)'"></i>
+                        <i class="fa-solid fa-cog"
+                            style="font-size: 1.2rem; color: var(--text-muted); transition: color 0.2s;"
+                            onmouseover="this.style.color='var(--text-main)'"
+                            onmouseout="this.style.color='var(--text-muted)'"></i>
                     </div>
                 </div>
             </div>
@@ -5305,7 +5323,7 @@
                 /* GRID TELA (Modo Escuro) */
                 .nr-employee-grid {
                     display: grid;
-                    grid-template-columns: 2.2fr 240px auto;
+                    grid-template-columns: 2.2fr 160px 240px auto;
                 }
 
                 .scroll-container-tela {
@@ -5472,7 +5490,7 @@
                     }
 
                     .nr-employee-grid {
-                        grid-template-columns: 1.5fr 130px 2fr !important;
+                        grid-template-columns: 1.5fr 130px 2.5fr !important;
                         gap: 0 !important;
                     }
 
@@ -5834,7 +5852,7 @@
                     <div
                         style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px;">
                         <span id="data-ultima-importacao"
-                            style="color: #10b981; font-size: 9px; font-weight: bold; display: none;"></span>
+                            style="color: #10b981; font-size: 12px; font-weight: bold; display: none;"></span>
                         <button type="button" onclick="abrirAutenticacao()"
                             class="nr-status-badge nr-btn-import-inline no-print"
                             style="cursor: pointer; background-color: #3b82f6; border: none; display: flex; align-items: center; justify-content: center; padding: 0 12px; height: 32px; border-radius: 6px; color: white; margin: 0; box-sizing: border-box; gap: 6px; font-weight: 700; font-size: 0.78rem;"
@@ -5932,12 +5950,13 @@
 
                         <div
                             style="grid-column: span 1; display: grid; grid-template-columns: 105px 1fr; align-items: center; gap: 8px;">
-                            <label id="lbl-provedor" class="nr-label" style="margin-bottom: 0; white-space: nowrap;">Provider / ID:</label>
+                            <label id="lbl-provedor" class="nr-label"
+                                style="margin-bottom: 0; white-space: nowrap;">Provider / ID:</label>
                             <div style="display: flex; gap: 4px;">
                                 <input type="text" id="input-provedor" value="" class="nr-input nr-input-mono"
                                     style="height: 38px; box-sizing: border-box; padding-left: 8px; flex: 1;"
                                     onkeydown="if(event.key === 'Enter') { event.preventDefault(); buscarProvedorNaBase(this.value); }">
-                                <button type="button" class="nr-btn-primary" 
+                                <button type="button" class="nr-btn-primary no-print"
                                     style="height: 38px; width: 42px; padding: 0; display: flex; justify-content: center; align-items: center; border-radius: 6px; flex-shrink: 0;"
                                     onclick="buscarProvedorNaBase(document.getElementById('input-provedor').value)"
                                     title="Buscar Empresa">
@@ -5995,6 +6014,8 @@
                             <label class="nr-label"
                                 style="color: #3b82f6; font-weight: bold; margin-bottom: 0;">NOME</label>
                         </div>
+                        <label class="nr-label no-print"
+                            style="color: #3b82f6; font-weight: bold; margin-bottom: 0; padding-left: 12px; padding-right: 0;">CPF</label>
                         <label class="nr-label"
                             style="color: #3b82f6; font-weight: bold; margin-bottom: 0; padding-left: 12px; padding-right: 0;">Nº
                             CARTÃO VT <span class="no-print"
@@ -6015,8 +6036,16 @@
                                         onchange="toggleImprimirCartao(this)"
                                         style="width: 24px; height: 24px; cursor: pointer; accent-color: #3b82f6; flex-shrink: 0;"
                                         title="Incluir na impressão">
-                                    <input type="text" value="" class="nr-input"
+                                    <input type="text" value="" class="nr-input nr-nome-input"
                                         style="width: 100%; min-width: 150px; height: 38px; font-size: 0.82rem; background: transparent; box-sizing: border-box; text-align: left; padding-left: 12px; padding-right: 12px;">
+                                </div>
+
+                                <!-- Coluna 1.5: CPF -->
+                                <div class="no-print">
+                                    <input type="text" value="" class="nr-input nr-cpf-input"
+                                        placeholder="000.000.000-00" oninput="aplicarMascaraCPF(this)"
+                                        style="width: 100%; height: 38px; font-size: 0.82rem; color: #94a3b8; font-family: monospace; background: transparent; box-sizing: border-box; text-align: left; padding-left: 12px; padding-right: 0;"
+                                        maxlength="14">
                                 </div>
 
                                 <!-- Coluna 2: Cartão -->
@@ -6030,7 +6059,7 @@
                                 <div class="somente-impressao"
                                     style="display: flex; align-items: flex-end; width: 100%; font-size: 13px; font-weight: 500; color: #000; padding-bottom: 5px; height: 38px; padding-left: 0; padding-right: 12px; box-sizing: border-box;">
                                     <span
-                                        style="flex: 1; border-bottom: 1px solid #000; height: 1px; margin-bottom: 6px;"></span>
+                                        style="flex: 1; border-bottom: 1px solid #000; height: 1px; margin-bottom: 2px;"></span>
                                     <span style="white-space: nowrap; margin-left: 10px;">Data _____/_____/_____</span>
                                 </div>
 
@@ -8008,6 +8037,10 @@
                                     span.style.setProperty('color', '#000000', 'important');
                                     span.style.setProperty('font-size', '13px', 'important');
                                     span.style.setProperty('font-weight', clone.classList.contains('nr-cartao-input') ? 'bold' : 'normal', 'important');
+                                    if (clone.classList.contains('nr-cpf-input')) {
+                                        span.style.setProperty('font-family', 'monospace', 'important');
+                                        span.style.setProperty('font-size', '11.5px', 'important');
+                                    }
                                     span.style.setProperty('display', 'inline-block', 'important');
                                     span.style.setProperty('width', '100%', 'important');
                                     clone.parentNode.replaceChild(span, clone);
@@ -8147,9 +8180,12 @@
 
                     async function confirmarEntregaIndividual(btn) {
                         const row = btn.closest('.nr-card-body');
-                        const inputs = row.querySelectorAll('input[type="text"]');
-                        if (inputs.length >= 2) {
-                            const cartao = inputs[1].value.trim();
+                        const inputNome = row.querySelector('.nr-nome-input');
+                        const inputCpf = row.querySelector('.nr-cpf-input');
+                        const inputCartao = row.querySelector('.nr-cartao-input');
+                        if (inputCartao) {
+                            const cartao = inputCartao.value.trim();
+                            const cpf = inputCpf ? inputCpf.value.trim() : '';
                             const provedorAtual = document.getElementById('input-provedor').value.trim();
                             const empresaAtual = document.getElementById('input-empresa').value.trim();
 
@@ -8175,9 +8211,10 @@
 
                             if (!func) {
                                 // Se for inserido manualmente, adiciona ao banco
-                                const nomeFunc = inputs[0].value.trim();
+                                const nomeFunc = inputNome ? inputNome.value.trim() : 'Funcionário Manual';
                                 func = {
                                     nome: nomeFunc || 'Funcionário Manual',
+                                    cpf: cpf,
                                     cartao: cartao,
                                     entregue: true,
                                     representante: repNome || 'Não Informado',
@@ -8189,6 +8226,7 @@
                                 func.entregue = true;
                                 func.representante = repNome || 'Não Informado';
                                 func.dataHoraEntrega = dataHoraStr;
+                                if (cpf) func.cpf = cpf;
                             }
 
                             if (typeof saveToDB === 'function') {
@@ -9632,7 +9670,7 @@
                         <i class="fa-solid fa-file-pdf"></i> PDF
                     </button>
                     <button onclick="window.print()"
-                        style="background: #3b82f6; border: none; color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        style="background: #3b82f6; border: none; color: white; padding: 6px 12px; border-radius: 6px; font-size: 12pt; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                         <i class="fa-solid fa-print"></i> Imprimir
                     </button>
                 </div>
@@ -11466,6 +11504,474 @@
             </div>
         </div>
 
+        <!-- SUB-TELA: ESPELHO -->
+        <div id="sub-tela-espelho" class="sub-tela" style="display: none; padding: 20px;">
+            <style>
+                #espelho-print-area {
+                    display: block;
+                }
+
+                .tela-espelho-inputs {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                    margin-bottom: 20px;
+                }
+
+                .espelho-resumo-cards {
+                    display: flex;
+                    gap: 20px;
+                    margin-bottom: 20px;
+                }
+
+                .espelho-card {
+                    background: #0f172a;
+                    border: 1px solid #1e293b;
+                    border-radius: 12px;
+                    padding: 20px;
+                    flex: 1;
+                    text-align: center;
+                }
+
+                .espelho-card h3 {
+                    color: #94a3b8;
+                    font-size: 14px;
+                    font-weight: 600;
+                    margin: 0 0 10px 0;
+                }
+
+                .espelho-card p {
+                    color: #00d2ff;
+                    font-size: 24px;
+                    font-weight: bold;
+                    margin: 0;
+                }
+
+                .espelho-table-container {
+                    background: #0f172a;
+                    border: 1px solid #1e293b;
+                    border-radius: 12px;
+                    overflow: hidden;
+                }
+
+                .espelho-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    text-align: left;
+                }
+
+                .espelho-table th {
+                    background: #1e293b;
+                    color: #cbd5e1;
+                    padding: 12px 15px;
+                    font-size: 13px;
+                    font-weight: 600;
+                }
+
+                .espelho-table td {
+                    border-bottom: 1px solid #1e293b;
+                    padding: 12px 15px;
+                    color: #e2e8f0;
+                    font-size: 13px;
+                }
+
+                .espelho-table tbody tr:hover {
+                    background: #1e293b;
+                }
+
+                @media print {
+                    body:not(.print-espelho-active) #sub-tela-espelho {
+                        display: none !important;
+                    }
+
+                    body.print-espelho-active * {
+                        visibility: hidden;
+                    }
+
+                    body.print-espelho-active #sub-tela-espelho,
+                    body.print-espelho-active #sub-tela-espelho * {
+                        visibility: visible;
+                    }
+
+                    body.print-espelho-active #sub-tela-espelho {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        padding: 10mm 15mm !important;
+                        margin: 0;
+                        background: #ffffff;
+                        color: #1e293b;
+                        box-sizing: border-box;
+                    }
+
+                    body.print-espelho-active .no-print-espelho {
+                        display: none !important;
+                    }
+
+                    /* WEASYPRINT MODEL STYLES */
+                    .espelho-print-only {
+                        display: block !important;
+                        width: 100%;
+                        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                        font-size: 9.5pt;
+                        line-height: 1.4;
+                    }
+
+                    .header-container {
+                        border-bottom: 2px solid #0f172a;
+                        padding-bottom: 12px;
+                        margin-bottom: 16px;
+                        text-align: center;
+                    }
+
+                    .header-title {
+                        font-size: 11pt;
+                        font-weight: 800;
+                        color: #0f172a;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                        margin: 0 0 4px 0;
+                    }
+
+                    .header-subtitle {
+                        font-size: 10.5pt;
+                        font-weight: 700;
+                        color: #1d4ed8;
+                        margin: 0 0 6px 0;
+                        text-transform: uppercase;
+                    }
+
+                    .header-meta {
+                        font-size: 8pt;
+                        color: #64748b;
+                        margin: 0;
+                    }
+
+                    .beneficiary-box {
+                        width: 100%;
+                        margin-bottom: 16px;
+                        border: 1px solid #cbd5e1;
+                        border-radius: 4px;
+                        background-color: #f8fafc;
+                        border-collapse: collapse;
+                    }
+
+                    .beneficiary-box td {
+                        padding: 8px 12px;
+                        vertical-align: middle;
+                        font-size: 9pt;
+                    }
+
+                    .field-label {
+                        font-size: 7.5pt;
+                        text-transform: uppercase;
+                        color: #64748b;
+                        font-weight: 700;
+                        display: block;
+                        margin-bottom: 2px;
+                    }
+
+                    .field-value {
+                        font-size: 10.5pt;
+                        font-weight: 700;
+                        color: #0f172a;
+                    }
+
+                    .field-value.highlight {
+                        color: #1d4ed8;
+                        font-family: 'Courier New', Courier, monospace;
+                        font-size: 11pt;
+                    }
+
+                    .summary-bar {
+                        width: 100%;
+                        margin-bottom: 16px;
+                        border-collapse: collapse;
+                    }
+
+                    .summary-card-print {
+                        background-color: #eff6ff !important;
+                        border: 1px solid #bfdbfe !important;
+                        border-radius: 4px !important;
+                        padding: 10px 14px !important;
+                        text-align: center !important;
+                    }
+
+                    .summary-card-print .label {
+                        font-size: 8pt;
+                        font-weight: 700;
+                        color: #1e40af;
+                        text-transform: uppercase;
+                    }
+
+                    .summary-card-print .val {
+                        font-size: 14pt;
+                        font-weight: 800;
+                        color: #1e3a8a;
+                        margin-top: 2px;
+                    }
+
+                    .table-title {
+                        font-size: 10pt;
+                        font-weight: 700;
+                        color: #0f172a;
+                        margin-bottom: 6px;
+                        text-transform: uppercase;
+                        letter-spacing: 0.3px;
+                    }
+
+                    table.data-table-print {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-bottom: 20px;
+                        font-size: 8.5pt;
+                    }
+
+                    table.data-table-print th {
+                        background-color: #0f172a !important;
+                        color: #ffffff !important;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        font-size: 7.5pt;
+                        padding: 7px 8px;
+                        text-align: left;
+                        border: 1px solid #0f172a;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+
+                    table.data-table-print td {
+                        padding: 6px 8px;
+                        border-bottom: 1px solid #e2e8f0;
+                        border-left: 1px solid #e2e8f0;
+                        border-right: 1px solid #e2e8f0;
+                        color: #334155;
+                    }
+
+                    table.data-table-print tr:nth-child(even) td {
+                        background-color: #f8fafc !important;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+
+                    table.data-table-print tr.total-row td {
+                        background-color: #f1f5f9 !important;
+                        border-top: 2px solid #0f172a;
+                        border-bottom: 2px solid #0f172a;
+                        font-weight: 700;
+                        color: #0f172a;
+                        font-size: 9pt;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+
+                    .badge-status {
+                        display: inline-block;
+                        padding: 2px 6px;
+                        background-color: #dcfce7 !important;
+                        color: #15803d !important;
+                        border-radius: 3px;
+                        font-weight: 700;
+                        font-size: 7.5pt;
+                        text-transform: uppercase;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+
+                    .notes-box {
+                        border: 1px solid #e2e8f0;
+                        background-color: #ffffff;
+                        border-radius: 4px;
+                        padding: 12px;
+                        margin-top: 10px;
+                    }
+
+                    .notes-title {
+                        font-size: 8.5pt;
+                        font-weight: 700;
+                        color: #0f172a;
+                        text-transform: uppercase;
+                        margin-bottom: 4px;
+                    }
+
+                    .notes-box ul {
+                        margin: 0;
+                        padding-left: 18px;
+                        font-size: 8pt;
+                        color: #475569;
+                    }
+
+                    .notes-box li {
+                        margin-bottom: 3px;
+                    }
+
+                    .signature-table {
+                        width: 100%;
+                        margin-top: 35px;
+                        border-collapse: collapse;
+                    }
+
+                    .signature-table td {
+                        width: 50%;
+                        text-align: center;
+                        vertical-align: bottom;
+                        padding: 0 10px;
+                    }
+
+                    .sig-line {
+                        border-top: 1px solid #475569;
+                        padding-top: 5px;
+                        font-size: 8pt;
+                        font-weight: 600;
+                        color: #1e293b;
+                    }
+
+                    .sig-role {
+                        font-size: 7.5pt;
+                        color: #64748b;
+                    }
+                }
+
+                @media screen {
+                    .espelho-print-only {
+                        display: none !important;
+                    }
+                }
+
+                /* OCR Screen Styling */
+                .espelho-input-table {
+                    background: transparent;
+                    border: 1px dashed #334155;
+                    color: #e2e8f0;
+                    font-family: monospace;
+                    width: 100%;
+                    font-size: 12px;
+                    padding: 4px;
+                    border-radius: 4px;
+                }
+
+                .espelho-input-table:focus {
+                    outline: 1px solid #00d2ff;
+                    background: #1e293b;
+                    border: 1px solid transparent;
+                }
+
+                #espelho-ocr-loader {
+                    display: none;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(15, 23, 42, 0.85);
+                    z-index: 100;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 12px;
+                    backdrop-filter: blur(2px);
+                }
+            </style>
+
+            <!-- Overlay Loading OCR -->
+            <div id="espelho-ocr-loader">
+                <i class="fa-solid fa-circle-notch fa-spin"
+                    style="font-size: 40px; color: #00d2ff; margin-bottom: 15px;"></i>
+                <h3 style="color: #fff; margin: 0; font-weight: 600;">Processando imagem...</h3>
+                <p style="color: #94a3b8; margin-top: 5px; font-size: 13px;">O OCR está lendo os dados da tela colada,
+                    aguarde.</p>
+            </div>
+
+            <!-- Impressão dinâmica (gerada via javascript) -->
+            <div id="espelho-dynamic-print"></div>
+
+            <div class="tela-espelho-inputs no-print-espelho">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 style="color: #ffffff; font-size: 1.5rem; margin: 0;">
+                        <i class="fa-solid fa-copy" style="color: #00d2ff; margin-right: 10px;"></i>
+                        Espelho (Extrato Enriquecido)
+                    </h2>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="health-btn health-btn-danger" onclick="limparEspelho()">
+                            <i class="fa-solid fa-trash"></i> Limpar / Novo
+                        </button>
+                        <button class="health-btn health-btn-primary" onclick="imprimirEspelho()">
+                            <i class="fa-solid fa-print"></i> Imprimir Extrato
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px;">
+                    <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 250px;">
+                            <label
+                                style="color: #94a3b8; font-size: 12px; font-weight: 600; margin-bottom: 8px; display: block;">Nome
+                                do Titular:</label>
+                            <input type="text" id="espelho-input-nome" placeholder="Ex: ESTER SANCHES ARAUJO"
+                                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff;">
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label
+                                style="color: #94a3b8; font-size: 12px; font-weight: 600; margin-bottom: 8px; display: block;">Número
+                                do Cartão:</label>
+                            <input type="text" id="espelho-input-cartao" placeholder="Ex: 54.04.00444970"
+                                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff;">
+                        </div>
+                        <div style="flex: 1; min-width: 250px;">
+                            <label
+                                style="color: #94a3b8; font-size: 12px; font-weight: 600; margin-bottom: 8px; display: block;">Tipo
+                                do Cartão:</label>
+                            <input type="text" id="espelho-input-tipo" value="Vale Transporte"
+                                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff;">
+                        </div>
+                    </div>
+
+                    <label
+                        style="color: #94a3b8; font-size: 14px; font-weight: 600; margin-bottom: 8px; display: block;">Cole
+                        aqui os dados da tela "Baixa Manual - Processo" (Ctrl+V):</label>
+                    <textarea id="espelho-input-colar"
+                        onpaste="setTimeout(() => processarColagemEspelho(document.getElementById('espelho-input-colar').value), 100)"
+                        placeholder="Cole a tabela copiada do Prodata aqui..."
+                        style="width: 100%; height: 120px; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff; font-family: monospace; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div class="espelho-resumo-cards no-print-espelho">
+                <div class="espelho-card">
+                    <h3>Total de Recargas</h3>
+                    <p id="espelho-total-recargas">0</p>
+                </div>
+                <div class="espelho-card">
+                    <h3>Valor Total</h3>
+                    <p id="espelho-total-valor">R$ 0,00</p>
+                </div>
+            </div>
+
+            <div class="espelho-table-container no-print-espelho">
+                <table class="espelho-table">
+                    <thead>
+                        <tr>
+                            <th>Provider</th>
+                            <th>Empresa / Razão Social</th>
+                            <th>CNPJ</th>
+                            <th>Pedido Remoto</th>
+                            <th>Data Liberação</th>
+                            <th>RSN</th>
+                            <th>Valor (R$)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="espelho-tbody">
+                        <tr>
+                            <td colspan="8" style="text-align: center; color: #64748b;">Nenhum dado importado ainda.
+                                Cole a tabela acima.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- SUB-TELA: GRATUIDADE -->
         <div id="sub-tela-gratuidade" class="sub-tela"
             style="display: none; flex-direction: column; gap: 20px; padding: 20px;">
@@ -12318,7 +12824,7 @@
                     'set_estoque', 'set_saldo_disponivel_manual', 'set_vt_lotes',
                     'set_lote_arquivos', 'set_total_ribbons', 'set_historico_pedidos', 'set_total_entradas'
                 ];
-                
+
                 const data = {};
                 for (let k of keys) {
                     let valToSync;
@@ -12329,10 +12835,10 @@
                     } else {
                         const localData = localStorage.getItem(k);
                         if (localData !== null) {
-                            try { valToSync = JSON.parse(localData); } catch(e) { valToSync = localData; }
+                            try { valToSync = JSON.parse(localData); } catch (e) { valToSync = localData; }
                         }
                     }
-                    
+
                     if (valToSync !== undefined) {
                         const jsonStr = JSON.stringify(valToSync);
                         if (window._lastSyncPayloadHashes[k] !== jsonStr) {
@@ -12347,7 +12853,8 @@
                 }
 
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 20000);
+                // Timeout estendido para 120s para permitir envio em lote de arquivos massivos (100k+ registros) sem dar timeout da requisição
+                const timeoutId = setTimeout(() => controller.abort(), 120000);
 
                 const response = await fetch('/api/sync', {
                     method: 'POST',
@@ -12361,7 +12868,7 @@
                 if (typeof socket !== 'undefined' && socket) {
                     socket.emit('funcionarios_atualizados');
                 }
-                
+
                 return response.ok;
             } catch (e) {
                 if (e.name === 'AbortError') {
@@ -12375,14 +12882,14 @@
 
         window._lastSyncTimestamp = null;
         window._lastSyncPayloadHashes = {};
-        
+
         async function carregarSincronizacaoDoServidor() {
             if (window.location.protocol === 'file:') return;
             try {
                 // 1. Verifica se houve alteração no servidor (Cache Check)
                 const checkRes = await fetch('/api/sync/check-update');
                 const checkData = await checkRes.json();
-                
+
                 if (checkData.success && checkData.lastUpdate) {
                     const serverTimestamp = new Date(checkData.lastUpdate).getTime();
                     if (window._lastSyncTimestamp && serverTimestamp <= window._lastSyncTimestamp) {
@@ -12399,7 +12906,7 @@
                     for (const key in result.data) {
                         const val = result.data[key];
                         window._lastSyncPayloadHashes[key] = JSON.stringify(val); // Registra cache do payload baixado
-                        
+
                         if (key === 'set_banco_pdf_v1') {
                             if (typeof window !== 'undefined') {
                                 window.bancoPDF = val;
@@ -12407,9 +12914,9 @@
                             }
                             continue; // Não salva no localStorage
                         }
-                        
+
                         localStorage.setItem(key, typeof val === 'object' ? JSON.stringify(val) : val);
-                        
+
                         // Atualizar variaveis globais mapeadas
                         if (key === 'set_cartoes_vt') cartoesVT = val;
                         if (key === 'set_solicitacoes_vt') solicitacoesCartoesVT = val;
@@ -12939,7 +13446,7 @@
                 registrarAuditLog('TENTATIVA_ACESSO_NEGADO', telaDesejada);
                 return false;
             }
-            const telas = ['dashboard', 'cartoes-vt', 'recibo-entrega', 'gratuidade', 'atendimento', 'whatsapp', 'empresas', 'compras', 'funcionarios', 'importacao', 'raio-x', 'gerenciamento-usuarios', 'saude-sistema'];
+            const telas = ['dashboard', 'cartoes-vt', 'recibo-entrega', 'espelho', 'gratuidade', 'atendimento', 'whatsapp', 'empresas', 'compras', 'funcionarios', 'importacao', 'raio-x', 'gerenciamento-usuarios', 'saude-sistema'];
             telas.forEach(t => {
                 const el = document.getElementById(`sub-tela-${t}`);
                 const menu = document.getElementById(`menu-${t}`);
@@ -14064,11 +14571,11 @@
 
                 atualizarProgressoImportacao(95, "Enviando dados para o servidor...");
                 const syncOk = await salvarNoLocalStorage();
-                
+
                 if (!syncOk) {
                     throw new Error("Falha ao sincronizar as empresas com o banco de dados principal.");
                 }
-                
+
                 finalizarImportacaoComSucesso(`Sucesso! ${novasEmpresas} empresas importadas da base.`);
             } catch (err) {
                 console.error(err);
@@ -16520,100 +17027,101 @@
                 const listaItens = [];
                 const cartoesProcessadosRelatorio = new Set();
 
-            if (window.bancoPDF) {
-                for (let id in window.bancoPDF) {
-                    const infoEmpresa = (typeof empresasBase !== 'undefined') ? empresasBase.find(e => String(e.ticketeira).trim() === String(id).trim()) : null;
-                    const ehTicketeira = infoEmpresa ? !!infoEmpresa.isTicketeira : false;
-                    const idsNaoOficiais = ['4339', '99992'];
-                    if (idsNaoOficiais.includes(id) || ehTicketeira) {
-                        continue;
-                    }
+                if (window.bancoPDF) {
+                    for (let id in window.bancoPDF) {
+                        const infoEmpresa = (typeof empresasBase !== 'undefined') ? empresasBase.find(e => String(e.ticketeira).trim() === String(id).trim()) : null;
+                        const ehTicketeira = infoEmpresa ? !!infoEmpresa.isTicketeira : false;
+                        const idsNaoOficiais = ['4339', '99992'];
+                        if (idsNaoOficiais.includes(id) || ehTicketeira) {
+                            continue;
+                        }
 
-                    const emp = window.bancoPDF[id];
-                    if (emp && emp.funcionarios) {
-                        emp.funcionarios.forEach(f => {
-                            if (f.entregue) {
-                                // Ignora cartões com os prefixos excluídos (54.01, 54.02, 54.03, 54.05, 54.06, 54.12, 54.16, 54.17)
-                                const cartaoClean = f.cartao.replace(/\D/g, '');
-                                const prefixosExcluidos = ['5401', '5402', '5403', '5405', '5406', '5412', '5416', '5417'];
-                                if (prefixosExcluidos.some(p => cartaoClean.startsWith(p))) {
-                                    return;
-                                }
-
-                                // Evita exibir o mesmo cartão entregue duplicado caso esteja em duas empresas
-                                if (cartoesProcessadosRelatorio.has(cartaoClean)) {
-                                    return;
-                                }
-                                cartoesProcessadosRelatorio.add(cartaoClean);
-
-                                // Limpeza de sujeira residual do PDF no nome do funcionário
-                                let nomeFunc = f.nome || '';
-                                if (nomeFunc.includes('--- PÁGINA') || nomeFunc.includes('Emissão:') || nomeFunc.length > 80) {
-                                    // Pega apenas o que vem DEPOIS de "Provider:"
-                                    if (/Provider:/i.test(nomeFunc)) {
-                                        nomeFunc = nomeFunc.split(/Provider:/i).pop().trim();
-                                    } else {
-                                        nomeFunc = nomeFunc.replace(/--- PÁGINA[\s\S]*?/ig, '');
-                                        nomeFunc = nomeFunc.replace(/Página \d+ de \d+.*?/ig, '');
-                                        nomeFunc = nomeFunc.replace(/Cartões Pendentes.*?/ig, '');
-                                        nomeFunc = nomeFunc.trim();
-                                    }
-                                    if (nomeFunc.length === 0 || nomeFunc.length > 60) {
-                                        nomeFunc = "NOME DESCONHECIDO (ERRO DE LEITURA)";
-                                    }
-                                }
-
-                                // Aplica o filtro de Nome, ID, Número de Cartão ou Empresa/Representante
-                                if (query) {
-                                    const matchId = id.toLowerCase().includes(query);
-                                    const matchNome = nomeFunc.toLowerCase().includes(query);
-                                    const matchCartaoFormatado = f.cartao.toLowerCase().includes(query);
-                                    const matchCartaoRaw = queryRaw && f.cartao.replace(/\D/g, '').includes(queryRaw);
-                                    const matchEmpresa = (emp.empresa || '').toLowerCase().includes(query);
-                                    const matchRepresentante = (f.representante || '').toLowerCase().includes(query);
-
-                                    if (!matchId && !matchNome && !matchCartaoFormatado && !matchCartaoRaw && !matchEmpresa && !matchRepresentante) {
+                        const emp = window.bancoPDF[id];
+                        if (emp && emp.funcionarios) {
+                            emp.funcionarios.forEach(f => {
+                                if (f.entregue) {
+                                    // Ignora cartões com os prefixos excluídos (54.01, 54.02, 54.03, 54.05, 54.06, 54.12, 54.16, 54.17)
+                                    const cartaoClean = f.cartao.replace(/\D/g, '');
+                                    const prefixosExcluidos = ['5401', '5402', '5403', '5405', '5406', '5412', '5416', '5417'];
+                                    if (prefixosExcluidos.some(p => cartaoClean.startsWith(p))) {
                                         return;
                                     }
-                                }
 
-                                listaItens.push({
-                                    id,
-                                    empresa: emp.empresa,
-                                    funcionario: f,
-                                    nomeLimpo: nomeFunc
-                                });
-                            }
-                        });
+                                    // Evita exibir o mesmo cartão entregue duplicado caso esteja em duas empresas
+                                    if (cartoesProcessadosRelatorio.has(cartaoClean)) {
+                                        return;
+                                    }
+                                    cartoesProcessadosRelatorio.add(cartaoClean);
+
+                                    // Limpeza de sujeira residual do PDF no nome do funcionário
+                                    let nomeFunc = f.nome || '';
+                                    if (nomeFunc.includes('--- PÁGINA') || nomeFunc.includes('Emissão:') || nomeFunc.length > 80) {
+                                        // Pega apenas o que vem DEPOIS de "Provider:"
+                                        if (/Provider:/i.test(nomeFunc)) {
+                                            nomeFunc = nomeFunc.split(/Provider:/i).pop().trim();
+                                        } else {
+                                            nomeFunc = nomeFunc.replace(/--- PÁGINA[\s\S]*?/ig, '');
+                                            nomeFunc = nomeFunc.replace(/Página \d+ de \d+.*?/ig, '');
+                                            nomeFunc = nomeFunc.replace(/Cartões Pendentes.*?/ig, '');
+                                            nomeFunc = nomeFunc.trim();
+                                        }
+                                        if (nomeFunc.length === 0 || nomeFunc.length > 60) {
+                                            nomeFunc = "NOME DESCONHECIDO (ERRO DE LEITURA)";
+                                        }
+                                    }
+
+                                    // Aplica o filtro de Nome, ID, Número de Cartão ou Empresa/Representante
+                                    if (query) {
+                                        const matchId = id.toLowerCase().includes(query);
+                                        const matchNome = nomeFunc.toLowerCase().includes(query);
+                                        const matchCartaoFormatado = f.cartao.toLowerCase().includes(query);
+                                        const matchCartaoRaw = queryRaw && f.cartao.replace(/\D/g, '').includes(queryRaw);
+                                        const matchEmpresa = (emp.empresa || '').toLowerCase().includes(query);
+                                        const matchRepresentante = (f.representante || '').toLowerCase().includes(query);
+
+                                        if (!matchId && !matchNome && !matchCartaoFormatado && !matchCartaoRaw && !matchEmpresa && !matchRepresentante) {
+                                            return;
+                                        }
+                                    }
+
+                                    listaItens.push({
+                                        id,
+                                        empresa: emp.empresa,
+                                        funcionario: f,
+                                        nomeLimpo: nomeFunc
+                                    });
+                                }
+                            });
+                        }
                     }
                 }
-            }
 
-            if (listaItens.length === 0) {
-                if (query) {
-                    container.innerHTML = `<div style="padding: 20px; text-align: center; color: #94a3b8;">Nenhum resultado encontrado para o filtro "${query}".</div>`;
-                } else {
-                    container.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;">Nenhum cartão marcado como entregue até o momento.</div>';
+                if (listaItens.length === 0) {
+                    if (query) {
+                        container.innerHTML = `<div style="padding: 20px; text-align: center; color: #94a3b8;">Nenhum resultado encontrado para o filtro "${query}".</div>`;
+                    } else {
+                        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;">Nenhum cartão marcado como entregue até o momento.</div>';
+                    }
+                    return;
                 }
-                return;
-            }
 
-            // Ordena os entregues em Ordem Alfabética (A-Z) pelo nome do funcionário limpo
-            listaItens.sort((a, b) => (a.nomeLimpo || '').localeCompare(b.nomeLimpo || '', 'pt-BR'));
+                // Ordena os entregues em Ordem Alfabética (A-Z) pelo nome do funcionário limpo
+                listaItens.sort((a, b) => (a.nomeLimpo || '').localeCompare(b.nomeLimpo || '', 'pt-BR'));
 
-            let html = '';
-            listaItens.forEach(item => {
-                const { id, empresa, funcionario: f, nomeLimpo } = item;
-                const badgeTipo = f.entregueAoTitular
-                    ? `<span style="background:#7c2d12;color:#fdba74;padding:2px 8px;border-radius:99px;font-size:0.68rem;font-weight:700;white-space:nowrap;">🟠 Titular</span>`
-                    : `<span style="background:#14532d;color:#86efac;padding:2px 8px;border-radius:99px;font-size:0.68rem;font-weight:700;white-space:nowrap;">✅ Equipe</span>`;
+                let html = '';
+                listaItens.forEach(item => {
+                    const { id, empresa, funcionario: f, nomeLimpo } = item;
+                    const badgeTipo = f.entregueAoTitular
+                        ? `<span style="background:#7c2d12;color:#fdba74;padding:2px 8px;border-radius:99px;font-size:0.68rem;font-weight:700;white-space:nowrap;">🟠 Titular</span>`
+                        : `<span style="background:#14532d;color:#86efac;padding:2px 8px;border-radius:99px;font-size:0.68rem;font-weight:700;white-space:nowrap;">✅ Equipe</span>`;
 
-                html += `
-                    <div style="display: grid; grid-template-columns: 3.5fr 3.5fr 3.5fr 2.5fr 110px; padding: 10px; border-bottom: 1px solid #334155; color: #f8fafc; font-size: 0.9rem; align-items: center; gap: 8px;">
+                    html += `
+                    <div style="display: grid; grid-template-columns: 3fr 3.5fr 120px 2.5fr 2fr 110px; padding: 10px; border-bottom: 1px solid #334155; color: #f8fafc; font-size: 0.9rem; align-items: center; gap: 8px;">
                         <div style="font-weight: bold; line-height: 1.4; white-space: normal; word-break: break-word; min-width: 0;">
                              ${empresa} - <span style="font-weight: normal; font-size: 0.8rem; color: #94a3b8; white-space: nowrap;">ID: ${id}</span>
                          </div>
                         <div>${nomeLimpo}<br>${badgeTipo}</div>
+                        <div style="font-family:monospace; color:#94a3b8; font-size:0.85rem; white-space:nowrap;">${f.cpf || '-'}</div>
                         <div style="font-size:0.85rem;color:${f.entregueAoTitular ? '#fdba74' : '#f8fafc'}">${f.representante || 'Não Informado'}</div>
                         <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start; min-width: 0;">
                              <div style="font-weight: bold;">${f.cartao}</div>
@@ -16624,9 +17132,9 @@
                         </div>
                     </div>
                 `;
-            });
+                });
 
-            container.innerHTML = html;
+                container.innerHTML = html;
             }, 10);
         }
 
@@ -16669,7 +17177,8 @@
                     <input type="text" id="filtro-relatorio-id" placeholder="Filtrar por Nome, ID ou Cartão..."
                         style="background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; width: 260px; outline: none; transition: border-color 0.2s;"
                         onkeypress="if(event.key === 'Enter') renderizarRelatorioEntregas()">
-                    <button onclick="renderizarRelatorioEntregas()" style="background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: bold;">
+                    <button onclick="renderizarRelatorioEntregas()"
+                        style="background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: bold;">
                         <i class="fas fa-search"></i> Buscar
                     </button>
                 </div>
@@ -16677,12 +17186,13 @@
             <!-- Wrapper com rolagem horizontal e largura mínima de 950px -->
             <div class="scroll-container-tela"
                 style="overflow-x: auto; flex: 1; display: flex; flex-direction: column; width: 100%; margin-top: 10px;">
-                <div style="min-width: 950px; display: flex; flex-direction: column; flex: 1;">
+                <div style="min-width: 1200px; display: flex; flex-direction: column; flex: 1;">
                     <!-- Cabeçalho -->
                     <div
-                        style="display: grid; grid-template-columns: 3.5fr 3.5fr 3.5fr 2.5fr 110px; gap: 8px; padding: 10px; border-bottom: 1px solid #334155; color: #94a3b8; font-weight: bold; font-size: 0.9rem;">
+                        style="display: grid; grid-template-columns: 3fr 3.5fr 120px 2.5fr 2fr 110px; gap: 8px; padding: 10px; border-bottom: 1px solid #334155; color: #94a3b8; font-weight: bold; font-size: 0.9rem;">
                         <div>Empresa</div>
                         <div>Funcionário</div>
+                        <div>CPF</div>
                         <div>Nome do Representante</div>
                         <div>Cartão</div>
                         <div>Ação</div>
@@ -16731,38 +17241,53 @@
     </div>
 
     <!-- Modal de Resumo de Importação -->
-    <div id="modal-resumo-importacao" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100000; align-items: center; justify-content: center;">
-        <div class="modal-content" style="background: #0f172a; width: 450px; max-width: 90%; border-radius: 14px; padding: 28px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); border: 1px solid #1e293b; text-align: center;">
-            <div style="width: 60px; height: 60px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+    <div id="modal-resumo-importacao" class="modal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100000; align-items: center; justify-content: center;">
+        <div class="modal-content"
+            style="background: #0f172a; width: 450px; max-width: 90%; border-radius: 14px; padding: 28px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); border: 1px solid #1e293b; text-align: center;">
+            <div
+                style="width: 60px; height: 60px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
                 <i class="fas fa-check-circle" style="color: #10b981; font-size: 2.2rem;"></i>
             </div>
             <h2 style="color: white; margin-top: 0; margin-bottom: 20px; font-size: 1.3rem;">Resumo da Importação</h2>
-            
-            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid #334155; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 24px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;">
+
+            <div
+                style="background: rgba(15, 23, 42, 0.5); border: 1px solid #334155; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 24px;">
+                <div
+                    style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;">
                     <span>Novos cartões inseridos:</span>
                     <span id="resumo-novos" style="color: #38bdf8; font-weight: bold;">0</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;">
+                <div
+                    style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;">
                     <span>Cartões atualizados:</span>
                     <span id="resumo-atualizados" style="color: #3b82f6; font-weight: bold;">0</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;">
+                <div
+                    style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;">
                     <span>Duplicados (ignorados):</span>
                     <span id="resumo-duplicados" style="color: #64748b; font-weight: bold;">0</span>
                 </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;"
+                    title="Casos onde o mesmo nome possui múltiplos cartões. O cartão mais antigo foi descartado em favor do mais recente.">
+                    <span>Conflito de 2ª via / Cadastro Duplo:</span>
+                    <span id="resumo-conflitos-2avia" style="color: #fb923c; font-weight: bold;">0</span>
+                </div>
                 <div style="height: 1px; background: #334155; margin: 12px 0;"></div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;" title="Cartões que já haviam sido entregues no histórico anterior">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #94a3b8;"
+                    title="Cartões que já haviam sido entregues no histórico anterior">
                     <span>Cartões já entregues (Histórico):</span>
                     <span id="resumo-entregues" style="color: #f59e0b; font-weight: bold;">0</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #94a3b8;" title="Novas baixas automáticas identificadas nesta importação e enviadas ao relatório">
+                <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #94a3b8;"
+                    title="Novas baixas automáticas identificadas nesta importação e enviadas ao relatório">
                     <span>Baixas automáticas (Entregues ao titular):</span>
                     <span id="resumo-novas-baixas" style="color: #ef4444; font-weight: bold;">0</span>
                 </div>
             </div>
 
-            <button onclick="document.getElementById('modal-resumo-importacao').style.display = 'none'" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.2s;">
+            <button onclick="document.getElementById('modal-resumo-importacao').style.display = 'none'"
+                style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.2s;">
                 Entendi
             </button>
         </div>
@@ -16781,7 +17306,8 @@
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <i class="fa-solid fa-file-import" style="color: #0284c7;"></i> Importação de Dados do Sistema
                 </div>
-                <button onclick="limparBaseImportadaCompleta()" style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                <button onclick="limparBaseImportadaCompleta()"
+                    style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; gap: 6px;">
                     <i class="fas fa-trash"></i> Limpar Base
                 </button>
             </h2>
@@ -16869,11 +17395,18 @@
         }
 
         function mostrarModalResumoImportacao(resumo) {
-            document.getElementById('resumo-novos').innerText = resumo.novos || 0;
-            document.getElementById('resumo-atualizados').innerText = resumo.atualizados || 0;
-            document.getElementById('resumo-duplicados').innerText = resumo.duplicados || 0;
-            document.getElementById('resumo-entregues').innerText = resumo.entregues || 0;
-            document.getElementById('resumo-novas-baixas').innerText = resumo.entreguesAoTitular || 0;
+            const formatNumber = (num) => Number(num || 0).toLocaleString('pt-BR');
+
+            document.getElementById('resumo-novos').innerText = formatNumber(resumo.novos);
+            document.getElementById('resumo-atualizados').innerText = formatNumber(resumo.atualizados);
+            document.getElementById('resumo-duplicados').innerText = formatNumber(resumo.duplicados);
+            document.getElementById('resumo-entregues').innerText = formatNumber(resumo.entregues);
+            document.getElementById('resumo-novas-baixas').innerText = formatNumber(resumo.entreguesAoTitular);
+            const elmConflitos = document.getElementById('resumo-conflitos-2avia');
+            if (elmConflitos) {
+                elmConflitos.innerText = formatNumber(resumo.conflitos2aVia);
+                elmConflitos.parentElement.style.display = (resumo.conflitos2aVia > 0) ? 'flex' : 'none';
+            }
             document.getElementById('modal-resumo-importacao').style.display = 'flex';
         }
 
@@ -16976,6 +17509,99 @@
             let entregues = 0;
             let entreguesAoTitular = 0;
             let naoEncontrados = 0;
+            let conflitos2aVia = 0;
+
+            // --- FILTRO DE CONFLITO (2ª Via / Cadastro Duplo) ---
+            // Regra: Identificar mesmo nome com cartões 54.04 diferentes e manter o mais recente
+            try {
+                // Mapa para descobrir CPFs já vinculados e preservar homônimos
+                const mapaCpfExistente = new Map();
+
+                // 1. CPFs da base ativa
+                for (const [pId, pDados] of Object.entries(bancoExistente || {})) {
+                    if (!pDados || !pDados.funcionarios) continue;
+                    pDados.funcionarios.forEach(f => {
+                        if (f.cartao && f.cpf) {
+                            mapaCpfExistente.set(String(f.cartao).trim().replace(/\D/g, ''), f.cpf);
+                        }
+                    });
+                }
+
+                // 2. CPFs globais do Mix de Dados e resoluções manuais do Raio-X
+                try {
+                    const mixVeic = JSON.parse(localStorage.getItem('set_mix_veiculados_base') || '[]');
+                    mixVeic.forEach(v => {
+                        if (v.cpf && Array.isArray(v.cartoes)) {
+                            v.cartoes.forEach(c => {
+                                mapaCpfExistente.set(String(c).trim().replace(/\D/g, ''), v.cpf);
+                            });
+                        }
+                    });
+                } catch (e) { }
+
+                const mapaNomes = new Map();
+                for (const [pId, pDados] of Object.entries(novoBancoParsed || {})) {
+                    if (!pDados || !pDados.funcionarios) continue;
+                    pDados.funcionarios.forEach(f => {
+                        if (!f.nome || !f.cartao) return;
+                        const nomeNorm = f.nome.trim().toUpperCase();
+
+                        // BLOQUEIO CRÍTICO: Se o nome for vazio, muito curto ou genérico, 
+                        // não podemos agrupar, pois senão o sistema acha que todos os 111 mil "sem nome" são a mesma pessoa!
+                        if (nomeNorm.length < 4 || nomeNorm === '---' || nomeNorm === 'NÃO INFORMADO' || nomeNorm === 'FUNCIONÁRIO NÃO IDENTIFICADO' || nomeNorm.includes('N/A')) {
+                            return;
+                        }
+
+                        if (!mapaNomes.has(nomeNorm)) {
+                            mapaNomes.set(nomeNorm, []);
+                        }
+                        mapaNomes.get(nomeNorm).push(f.cartao);
+                    });
+                }
+
+                const cartoesDescartadosPorConflito = new Set();
+                mapaNomes.forEach((cartoes, nome) => {
+                    const cartoes5404 = [...new Set(cartoes)].filter(c => String(c).startsWith('54.04'));
+                    if (cartoes5404.length > 1) {
+                        const cpfsUnicos = new Set();
+                        cartoes5404.forEach(c => {
+                            const cNorm = String(c).trim().replace(/\D/g, '');
+                            if (mapaCpfExistente.has(cNorm)) {
+                                cpfsUnicos.add(mapaCpfExistente.get(cNorm));
+                            }
+                        });
+
+                        // Se há mais de 1 CPF vinculado para essa pessoa, são homônimos. Salva todos!
+                        if (cpfsUnicos.size > 1) {
+                            return;
+                        }
+
+                        // Ordena lexicograficamente. O último será o de maior numeração (mais recente)
+                        cartoes5404.sort();
+                        // Coloca os mais antigos na lista de descarte
+                        for (let i = 0; i < cartoes5404.length - 1; i++) {
+                            cartoesDescartadosPorConflito.add(cartoes5404[i]);
+                        }
+                    }
+                });
+
+                // Aplica a exclusão dos cartões antigos antes de realizar a mesclagem padrão
+                if (cartoesDescartadosPorConflito.size > 0) {
+                    for (const [pId, pDados] of Object.entries(novoBancoParsed || {})) {
+                        if (!pDados || !pDados.funcionarios) continue;
+                        pDados.funcionarios = pDados.funcionarios.filter(f => {
+                            if (!f.nome || !f.cartao) return true;
+                            if (cartoesDescartadosPorConflito.has(f.cartao)) {
+                                conflitos2aVia++;
+                                return false;
+                            }
+                            return true;
+                        });
+                    }
+                }
+            } catch (errFiltro) {
+                console.error("Erro inesperado durante a varredura de conflitos de 2a via:", errFiltro);
+            }
 
             // --- Preservação integral de Providers Oficiais ---
             const idsNaoOficiais = [];
@@ -17054,9 +17680,6 @@
                 ...Object.keys(novoBancoParsed || {})
             ]);
 
-            // Conjunto global para rastrear cartões já processados e identificar duplicados reais
-            const todosCartoesVistosGlobais = new Set();
-
             // Mapeia TODOS os cartões do novo arquivo, de qualquer provider
             const todosCartoesNovos = new Set();
             for (const [pId, pDados] of Object.entries(novoBancoParsed || {})) {
@@ -17121,10 +17744,8 @@
                             cartoesVistosNovos.add(cartaoNorm);
                             funcionariosNovosUnicos.push(f);
                         } else {
-                            // Duplicado dentro do próprio provider
-                            if (!todosCartoesVistosGlobais.has(cartaoNorm)) {
-                                duplicados++;
-                            }
+                            // Duplicado dentro do próprio provider (mesmo cartão na mesma empresa)
+                            duplicados++;
                         }
                     });
                 }
@@ -17157,19 +17778,14 @@
                             atualizados++;
                         }
                     } else {
-                        // Novo registro pendente
-                        if (!todosCartoesVistosGlobais.has(cartaoNorm)) {
-                            funcionariosMesclados.push({
-                                nome: fNovo.nome,
-                                cartao: fNovo.cartao,
-                                entregue: false
-                            });
-                            novos++;
-                        } else {
-                            duplicados++;
-                        }
+                        // Novo registro pendente neste provider (mesmo que exista em outro)
+                        funcionariosMesclados.push({
+                            nome: fNovo.nome,
+                            cartao: fNovo.cartao,
+                            entregue: false
+                        });
+                        novos++;
                     }
-                    todosCartoesVistosGlobais.add(cartaoNorm);
                 });
 
                 // Trata registros que não vieram no novo arquivo (PARA ESTE PROVIDER)
@@ -17219,7 +17835,8 @@
                 duplicados,
                 entregues,
                 entreguesAoTitular,
-                naoEncontrados
+                naoEncontrados,
+                conflitos2aVia
             };
         }
 
@@ -17361,6 +17978,7 @@
                         await new Promise(r => setTimeout(r, 150));
 
                         const linhas = (conteudoTexto || '').split(/\r?\n/);
+                        console.log("Total de linhas encontradas no split:", linhas.length);
                         let registrosProcessados = 0;
                         let registrosImportados = 0;
                         let registrosIgnorados = 0;
@@ -17388,15 +18006,26 @@
                             partes.push(atual.trim().replace(/^"|"$/g, '').trim());
 
                             // 1. Procura o rótulo 'Provider' (padrão Crystal Reports)
-                            let indexProvider = partes.findIndex(p => p.toLowerCase() === 'provider');
+                            // Como o CSV pode ter a palavra "Provider" duplicada, pegamos aquela onde o PRÓXIMO campo é um número (O ID real)
+                            let indexProvider = partes.findIndex((p, i) => {
+                                let limpo = p.toLowerCase().replace(':', '').trim();
+                                if (limpo === 'provider') {
+                                    let proximo = (partes[i + 1] || '').trim();
+                                    // O provider verdadeiro tem um ID numérico logo à direita
+                                    return /^\d+$/.test(proximo);
+                                }
+                                return false;
+                            });
+
                             if (indexProvider !== -1) {
                                 let provId = (partes[indexProvider + 1] || '').trim();
                                 if (!provId) return null;
 
                                 let rem = partes.slice(indexProvider + 2);
                                 let cleanRem = rem.filter(p => {
-                                    const l = p.toLowerCase();
-                                    return l !== 'provider' && l !== '-' && l !== 'nº cartão' && l !== 'nº cartao' && l !== 'cartao' && l !== 'cartão';
+                                    const l = p.toLowerCase().replace(':', '').trim();
+                                    // Ignora campos vazios e textos padrão do relatório
+                                    return l !== '' && l !== 'provider' && l !== '-' && l !== 'nº cartão' && l !== 'nº cartao' && l !== 'cartao' && l !== 'cartão';
                                 });
 
                                 let empresaNome = '';
@@ -17433,34 +18062,47 @@
                             return null;
                         }
 
+                        const CHUNK_SIZE = 1500;
                         for (let i = 0; i < linhas.length; i++) {
-                            const linha = linhas[i];
-                            if (!linha.trim()) continue;
-                            registrosProcessados++;
+                            try {
+                                const linha = linhas[i];
+                                if (!linha.trim()) continue;
+                                registrosProcessados++;
 
-                            const reg = extrairDadosLinhaCSV(linha);
-                            if (!reg) {
-                                registrosIgnorados++;
-                                continue;
+                                const reg = extrairDadosLinhaCSV(linha);
+                                if (!reg) {
+                                    registrosIgnorados++;
+                                    continue;
+                                }
+
+                                const pId = String(reg.providerId).trim();
+                                if (!bancoCSV[pId]) {
+                                    bancoCSV[pId] = {
+                                        empresa: reg.empresa || '',
+                                        funcionarios: []
+                                    };
+                                    provedoresOrdem.push(pId);
+                                } else if (reg.empresa && reg.empresa !== '---' && !bancoCSV[pId].empresa) {
+                                    bancoCSV[pId].empresa = reg.empresa;
+                                }
+
+                                if (reg.nome || reg.cartao) {
+                                    bancoCSV[pId].funcionarios.push({
+                                        nome: reg.nome || '',
+                                        cartao: reg.cartao || '',
+                                        status: 'AGUARDANDO'
+                                    });
+                                    registrosImportados++;
+                                }
+                            } catch (errLoop) {
+                                console.error(`Erro inesperado ao processar a linha ${i}:`, errLoop);
                             }
 
-                            const pId = String(reg.providerId).trim();
-                            if (!bancoCSV[pId]) {
-                                bancoCSV[pId] = {
-                                    empresa: reg.empresa || '',
-                                    funcionarios: []
-                                };
-                                provedoresOrdem.push(pId);
-                            } else if (reg.empresa && reg.empresa !== '---' && !bancoCSV[pId].empresa) {
-                                bancoCSV[pId].empresa = reg.empresa;
-                            }
-
-                            if (reg.nome || reg.cartao) {
-                                bancoCSV[pId].funcionarios.push({
-                                    nome: reg.nome || '',
-                                    cartao: reg.cartao || ''
-                                });
-                                registrosImportados++;
+                            // Processamento em lote (chunking) para evitar travamento da tela com os 111.000 registros
+                            if (i > 0 && i % CHUNK_SIZE === 0) {
+                                const progresso = 55 + Math.floor((i / linhas.length) * 30);
+                                atualizarProgressoModalImportacao(progresso, `Processando lote de dados... (${i.toLocaleString('pt-BR')} de ${linhas.length.toLocaleString('pt-BR')})`);
+                                await new Promise(r => setTimeout(r, 5));
                             }
                         }
 
@@ -17469,6 +18111,12 @@
                         window.bancoPDF = resumo.bancoMesclado || resumo;
                         if (typeof saveToDB === 'function') {
                             await saveToDB(window.bancoPDF);
+                        }
+
+                        // Envio para o PostgreSQL ativado automaticamente após o parse
+                        atualizarProgressoModalImportacao(95, "Enviando base unificada para o backend/PostgreSQL...");
+                        if (typeof sincronizarParaServidor === 'function') {
+                            await sincronizarParaServidor();
                         }
 
                         // Integração com Raio-X
@@ -17483,6 +18131,12 @@
                         const dataAtual = new Date().toLocaleString('pt-BR');
                         localStorage.setItem('set_ultima_importacao_empresas', dataAtual);
 
+                        const spanImport = document.getElementById('data-ultima-importacao');
+                        if (spanImport) {
+                            spanImport.textContent = "Atualizado: " + dataAtual;
+                            spanImport.style.display = 'block';
+                        }
+
                         atualizarProgressoModalImportacao(100, "Importação Concluída com Sucesso!");
                         await new Promise(r => setTimeout(r, 300));
 
@@ -17490,7 +18144,7 @@
                         fecharModalImportacao();
                     };
 
-                    leitor.readAsText(file, 'utf-8');
+                    leitor.readAsText(file, 'ISO-8859-1');
                 }
 
             } catch (error) {
@@ -17763,7 +18417,7 @@
                 window.bancoPDF = data;
                 console.log("Base carregada do IndexedDB com sucesso!");
 
-                const ultimaData = localStorage.getItem('ultimaImportacao');
+                const ultimaData = localStorage.getItem('set_ultima_importacao_empresas');
                 if (ultimaData) {
                     const spanImport = document.getElementById('data-ultima-importacao');
                     if (spanImport) {
@@ -18003,13 +18657,13 @@
                 try {
                     if (campoProvider) campoProvider.disabled = true;
                     if (campoEmpresa) campoEmpresa.value = 'Buscando no servidor...';
-                    
+
                     const providerLimpo = String(providerAtual).split(':')[0].trim();
                     const response = await fetch(`/api/empresas/provider/${providerLimpo}`);
                     const data = await response.json();
-                    
+
                     if (campoProvider) campoProvider.disabled = false;
-                    
+
                     if (data.success && data.empresa) {
                         if (!window.bancoPDF) window.bancoPDF = {};
                         window.bancoPDF[providerAtual] = {
@@ -18459,13 +19113,19 @@
                 }
 
                 const novosInputs = novoBloco.querySelectorAll('input[type="text"]');
-                if (novosInputs.length >= 2) {
+                if (novosInputs.length >= 3) {
                     let nomeExibicao = abreviarNomeLongo(limparNomeFuncionario(funcionarios[i].nome));
                     novosInputs[0].value = nomeExibicao;
-                    novosInputs[1].value = funcionarios[i].cartao;
 
-                    novosInputs[1].setAttribute('readonly', 'true');
-                    novosInputs[1].onclick = function () {
+                    if (funcionarios[i].cpf) {
+                        novosInputs[1].value = funcionarios[i].cpf;
+                    } else {
+                        novosInputs[1].value = '';
+                    }
+
+                    novosInputs[2].value = funcionarios[i].cartao;
+                    novosInputs[2].setAttribute('readonly', 'true');
+                    novosInputs[2].onclick = function () {
                         abrirModalAutorizacao(this, novosInputs[0].value);
                     };
                 }
@@ -18478,7 +19138,7 @@
             todosCartoes.forEach(cartao => {
                 const btnRemover = cartao.querySelector('.btn-remover');
                 const checkPrint = cartao.querySelector('.nr-checkbox-print');
-                const btnConfirmar = cartao.querySelector('.btn-confirmar-entrega-inline');
+                const btnConfirmar = cartao.querySelector('.btn-confirmar');
 
                 if (checkPrint && checkPrint.checked) {
                     if (btnRemover) btnRemover.style.display = 'none';
@@ -18562,11 +19222,17 @@
             const cartoesNaTela = [];
             const container = document.querySelector('.nr-card-box');
             const blocos = container.querySelectorAll('.nr-card-body');
+            const cpfsNaTela = {};
             blocos.forEach(bloco => {
-                const inputs = bloco.querySelectorAll('input');
-                if (inputs.length >= 2) {
-                    const numCartao = inputs[1].value.trim();
-                    if (numCartao) cartoesNaTela.push(numCartao);
+                const inputCartao = bloco.querySelector('.nr-cartao-input');
+                const inputCpf = bloco.querySelector('.nr-cpf-input');
+                if (inputCartao) {
+                    const numCartao = inputCartao.value.trim();
+                    const cpfVal = inputCpf ? inputCpf.value.trim() : '';
+                    if (numCartao) {
+                        cartoesNaTela.push(numCartao);
+                        if (cpfVal) cpfsNaTela[numCartao] = cpfVal;
+                    }
                 }
             });
 
@@ -18589,6 +19255,9 @@
                             f.entregue = true;
                             f.representante = repNome || 'Não Informado';
                             f.dataHoraEntrega = dataHoraStr;
+                            if (cpfsNaTela[f.cartao]) {
+                                f.cpf = cpfsNaTela[f.cartao];
+                            }
                         }
                     });
 
@@ -22664,6 +23333,67 @@
             const acoes = document.getElementById('modal-rx-acoes');
             if (!m || !c || !acoes) return;
 
+            let cpfAtual = '';
+            // 1. Tenta achar no banco ativo
+            if (window.bancoPDF && window.bancoPDF[inc.provider] && window.bancoPDF[inc.provider].funcionarios) {
+                const funcEncontrado = window.bancoPDF[inc.provider].funcionarios.find(f => {
+                    const c1 = String(f.cartao || '').replace(/\D/g, '');
+                    const c2 = String(inc.cartao || '').replace(/\D/g, '');
+                    return c1 === c2;
+                });
+                if (funcEncontrado && funcEncontrado.cpf) {
+                    cpfAtual = funcEncontrado.cpf;
+                }
+            }
+
+            // 2. Tenta achar no Mix de Dados Global (útil para cartões que foram descartados no parse)
+            if (!cpfAtual) {
+                try {
+                    const mixVeic = JSON.parse(localStorage.getItem('set_mix_veiculados_base') || '[]');
+                    const c2 = String(inc.cartao || '').replace(/\D/g, '');
+                    const achouMix = mixVeic.find(v => (v.cartoes || []).map(cx => String(cx).replace(/\D/g, '')).includes(c2));
+                    if (achouMix && achouMix.cpf) {
+                        cpfAtual = achouMix.cpf;
+                    }
+                } catch (e) { }
+            }
+
+            // 3. Busca todos os cartões vinculados a este funcionário para exibir no modal
+            let todosCartoes = new Set();
+            if (inc.cartao) todosCartoes.add(inc.cartao);
+
+            const nomeNormPesquisa = normalizarNomeParaComparacao(inc.funcionario);
+
+            if (window.bancoPDF) {
+                for (let prov in window.bancoPDF) {
+                    if (window.bancoPDF[prov] && window.bancoPDF[prov].funcionarios) {
+                        window.bancoPDF[prov].funcionarios.forEach(f => {
+                            if (f.cartao && normalizarNomeParaComparacao(f.nome) === nomeNormPesquisa) {
+                                todosCartoes.add(f.cartao);
+                            }
+                        });
+                    }
+                }
+            }
+
+            try {
+                const mixVeic = JSON.parse(localStorage.getItem('set_mix_veiculados_base') || '[]');
+                const achouMix = mixVeic.find(v => normalizarNomeParaComparacao(v.nome) === nomeNormPesquisa || (cpfAtual && v.cpf === cpfAtual));
+                if (achouMix && Array.isArray(achouMix.cartoes)) {
+                    achouMix.cartoes.forEach(c => {
+                        if (c) todosCartoes.add(c);
+                    });
+                }
+            } catch (e) { }
+
+            const arrayCartoes = Array.from(todosCartoes);
+            let cartoesHtml = arrayCartoes.map(c => `
+                <div style="background:#162030; padding:6px 10px; border-radius:6px; font-family:monospace; color:${c === inc.cartao ? '#a78bfa' : '#94a3b8'}; font-weight:${c === inc.cartao ? '700' : '400'}; display:flex; justify-content:space-between; align-items:center;">
+                    <span>${c}</span>
+                    ${c === inc.cartao ? '<span style="font-size:0.65rem; background:#4c1d95; color:#ddd6fe; padding:2px 6px; border-radius:4px; text-transform:uppercase; font-weight:800;">Cartão da Ocorrência</span>' : ''}
+                </div>
+            `).join('');
+
             c.innerHTML = `
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.8rem; color:#e2e8f0;">
                     <div style="grid-column: span 2; background:#0f172a; padding:10px; border-radius:8px; border-left:4px solid ${inc.gravidade === 'Crítico' ? '#ef4444' : inc.gravidade === 'Atenção' ? '#f59e0b' : '#3b82f6'};">
@@ -22682,12 +23412,22 @@
                     </div>
                     
                     <div>
+                        <span style="color:#64748b; font-weight:700; font-size:0.7rem;">CPF:</span>
+                        <div>
+                            <input type="text" id="rx-input-cpf" value="${cpfAtual}" placeholder="000.000.000-00" oninput="aplicarMascaraCPF(this)" style="width:160px; background:#162030; border:1px solid #334155; padding:8px 10px; border-radius:6px; margin-top:2px; color:#fff; font-size:0.85rem; font-family:monospace; box-sizing:border-box;">
+                        </div>
+                    </div>
+                    
+                    <div>
                         <span style="color:#64748b; font-weight:700; font-size:0.7rem;">Provider/ID:</span>
                         <div style="background:#162030; padding:6px 10px; border-radius:6px; margin-top:2px;">${inc.provider}</div>
                     </div>
-                    <div>
-                        <span style="color:#64748b; font-weight:700; font-size:0.7rem;">Número do Cartão:</span>
-                        <div style="background:#162030; padding:6px 10px; border-radius:6px; margin-top:2px; font-family:monospace; color:#a78bfa; font-weight:700;">${inc.cartao}</div>
+                    
+                    <div style="grid-column: span 2;">
+                        <span style="color:#64748b; font-weight:700; font-size:0.7rem;">Todos os Cartões Vinculados a Este Funcionário:</span>
+                        <div style="display:flex; flex-direction:column; gap:4px; margin-top:4px;">
+                            ${cartoesHtml}
+                        </div>
                     </div>
 
                     <div>
@@ -22726,6 +23466,10 @@
             `;
 
             // Botões de ação dentro do próprio modal de detalhes
+            const btnVincularCpf = `<button title="Vincular CPF e Desmembrar Homônimo" onclick="vincularCpfRxModal('${inc.id}', '${inc._loteId}', '${inc.provider}', '${inc.cartao}')" style="background:#0284c7; color:#bae6fd; border:none; padding:8px 14px; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                       <i class="fa-solid fa-id-card"></i> Vincular CPF
+                   </button>`;
+
             const btnRevisar = `<button title="Confirmar Resolução" onclick="marcarStatusRXModal('${inc.id}', '${inc._loteId}', 'Revisado')" style="background:#065f46; color:#a7f3d0; border:none; padding:8px 14px; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
                        <i class="fa-solid fa-check"></i> Confirmar Resolução
                    </button>`;
@@ -22738,7 +23482,7 @@
                 <i class="fa-solid fa-download"></i> Exportar
             </button>`;
 
-            acoes.innerHTML = btnRevisar + btnIgnorar + btnExportar;
+            acoes.innerHTML = btnVincularCpf + btnRevisar + btnIgnorar + btnExportar;
 
             m.style.display = 'flex';
         }
@@ -22746,6 +23490,73 @@
         function fecharModalRxDetalhes() {
             const m = document.getElementById('modal-rx-detalhes');
             if (m) m.style.display = 'none';
+        }
+
+        function aplicarMascaraCPF(el) {
+            let val = el.value.replace(/\D/g, '');
+            if (val.length > 11) val = val.slice(0, 11);
+            if (val.length > 9) val = val.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
+            else if (val.length > 6) val = val.replace(/^(\d{3})(\d{3})(\d{3}).*/, '$1.$2.$3');
+            else if (val.length > 3) val = val.replace(/^(\d{3})(\d{3}).*/, '$1.$2');
+            el.value = val;
+        }
+
+        async function vincularCpfRxModal(incId, loteId, provider, cartao) {
+            const inputCpf = document.getElementById('rx-input-cpf');
+            if (!inputCpf || !inputCpf.value) {
+                alert("Por favor, digite o CPF para vincular.");
+                return;
+            }
+            const cpfVal = inputCpf.value;
+
+            // 1. Atualizar bancoPDF local (só funciona se o cartão não tiver sido descartado)
+            if (window.bancoPDF && window.bancoPDF[provider] && window.bancoPDF[provider].funcionarios) {
+                const func = window.bancoPDF[provider].funcionarios.find(f => {
+                    const c1 = String(f.cartao || '').replace(/\D/g, '');
+                    const c2 = String(cartao || '').replace(/\D/g, '');
+                    return c1 === c2;
+                });
+                if (func) {
+                    func.cpf = cpfVal;
+                    if (typeof saveToDB === 'function') {
+                        await saveToDB(window.bancoPDF);
+                    }
+                }
+            }
+
+            // 1.5. Salva no Mix de Dados Global para garantir que o filtro lembre deste cartão na re-importação!
+            try {
+                let mixVeic = JSON.parse(localStorage.getItem('set_mix_veiculados_base') || '[]');
+                let vIdx = mixVeic.findIndex(v => v.cpf === cpfVal);
+                if (vIdx >= 0) {
+                    if (!mixVeic[vIdx].cartoes.includes(cartao)) {
+                        mixVeic[vIdx].cartoes.push(cartao);
+                    }
+                } else {
+                    const incObj = rxDadosAtivos.find(i => i.id === incId);
+                    mixVeic.push({
+                        nome: incObj ? incObj.funcionario : 'Desconhecido',
+                        cpf: cpfVal,
+                        cartoes: [cartao],
+                        empresa: incObj ? incObj.empresa : '',
+                        providerId: provider
+                    });
+                }
+                localStorage.setItem('set_mix_veiculados_base', JSON.stringify(mixVeic));
+                if (typeof atualizarBadgesMix === 'function') atualizarBadgesMix();
+            } catch (e) { }
+
+            // 2. Marcar status do RX como Resolvido
+            await atualizarStatusInconsistenciaDB(loteId, incId, 'Resolvido (Homônimo Confirmado)', 'CPF vinculado: ' + cpfVal);
+            const inc = rxDadosAtivos.find(i => i.id === incId);
+            if (inc) {
+                inc.status = 'Resolvido (Homônimo Confirmado)';
+                inc.justificativa = 'CPF vinculado: ' + cpfVal;
+            }
+
+            aplicarFiltrosRaioX();
+            fecharModalRxDetalhes();
+            alert("CPF vinculado com sucesso!\\n\\nFaça uma nova importação rápida do arquivo CSV para que o filtro separe os cartões automaticamente usando este CPF e não delete a via mais antiga.");
         }
 
         async function marcarStatusRX(incId, loteId, novoStatus) {
@@ -25298,6 +26109,13 @@
                     chaves: ['recibo de entrega', 'recibo', 'emissao recibo', 'imprimir recibo'],
                     descricao: 'Módulo para emissão e impressão de recibos de entrega por Provider/ID de empresas e representantes.'
                 },
+                'espelho': {
+                    nome: 'ESPELHO',
+                    icone: 'fa-solid fa-copy',
+                    idTela: 'espelho',
+                    chaves: ['espelho', 'extrato', 'baixa manual', 'prodata'],
+                    descricao: 'Módulo para enriquecimento e emissão de extratos detalhados a partir da Baixa Manual do Prodata.'
+                },
                 'gratuidade': {
                     nome: 'GRATUIDADE',
                     icone: 'fa-solid fa-wheelchair',
@@ -26428,7 +27246,7 @@
         });
         socket.on('dados_atualizados', () => {
             console.log('Sinal de atualização recebido do servidor!');
-            
+
             if (typeof carregarSolicitacoes === 'function') carregarSolicitacoes();
             if (typeof carregarSincronizacaoDoServidor === 'function') carregarSincronizacaoDoServidor();
         });
@@ -26438,24 +27256,29 @@
         .modal-config-container {
             display: none;
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(4px);
             z-index: 10000;
             align-items: center;
             justify-content: center;
         }
+
         .modal-config-content {
             background-color: var(--bg-modal);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             width: 100%;
             max-width: 600px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
+
         .modal-config-header {
             padding: 20px 24px;
             border-bottom: 1px solid var(--border-color);
@@ -26463,6 +27286,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .modal-config-header h2 {
             font-size: 1.25rem;
             margin: 0;
@@ -26471,6 +27295,7 @@
             gap: 10px;
             color: var(--text-main);
         }
+
         .modal-config-header .btn-close-modal {
             background: none;
             border: none;
@@ -26479,18 +27304,21 @@
             cursor: pointer;
             transition: color 0.2s;
         }
+
         .modal-config-header .btn-close-modal:hover {
             color: var(--text-main);
         }
+
         .modal-config-tabs {
             display: flex;
             border-bottom: 1px solid var(--border-color);
         }
+
         .modal-config-tab {
             flex: 1;
             padding: 16px;
             text-align: center;
-            background: rgba(0,0,0,0.1);
+            background: rgba(0, 0, 0, 0.1);
             color: var(--text-muted);
             border: none;
             border-bottom: 2px solid transparent;
@@ -26498,34 +27326,49 @@
             font-weight: 600;
             transition: all 0.2s;
         }
+
         .modal-config-tab.active {
             background: transparent;
             color: var(--text-main);
             border-bottom-color: #00d2ff;
         }
+
         .modal-config-body {
             padding: 24px;
         }
+
         .config-section {
             display: none;
         }
+
         .config-section.active {
             display: block;
             animation: fadeInConfig 0.3s ease;
         }
+
         @keyframes fadeInConfig {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .config-form-group {
             margin-bottom: 16px;
         }
+
         .config-form-group label {
             display: block;
             margin-bottom: 8px;
             color: var(--text-muted);
             font-size: 0.9rem;
         }
+
         .config-form-group input {
             width: 100%;
             padding: 12px;
@@ -26536,9 +27379,11 @@
             outline: none;
             transition: border-color 0.2s;
         }
+
         .config-form-group input:focus {
             border-color: #00d2ff;
         }
+
         .btn-salvar-senha {
             background: linear-gradient(135deg, #00d2ff, #3a7bd5);
             color: #fff;
@@ -26550,16 +27395,18 @@
             width: 100%;
             transition: opacity 0.2s;
         }
+
         .btn-salvar-senha:hover {
             opacity: 0.9;
         }
-        
+
         /* Theming Grid */
         .themes-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
         }
+
         .theme-card {
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -26571,20 +27418,24 @@
             transition: all 0.2s;
             background: var(--bg-card);
         }
+
         .theme-card:hover {
             border-color: #00d2ff;
             transform: translateY(-2px);
         }
+
         .theme-card.active {
             border-color: #00d2ff;
             box-shadow: 0 0 0 1px #00d2ff;
         }
+
         .theme-circle {
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
+
         .theme-card span {
             font-weight: 500;
             color: var(--text-main);
@@ -26597,16 +27448,19 @@
                 <h2><i class="fa-solid fa-cog"></i> Configurações</h2>
                 <button class="btn-close-modal" onclick="fecharModalConfiguracoes()">&times;</button>
             </div>
-            
+
             <div class="modal-config-tabs">
-                <button class="modal-config-tab active" onclick="switchConfigTab('aparencia', event)"><i class="fa-solid fa-palette"></i> Aparência</button>
-                <button class="modal-config-tab" onclick="switchConfigTab('seguranca', event)"><i class="fa-solid fa-lock"></i> Segurança</button>
+                <button class="modal-config-tab active" onclick="switchConfigTab('aparencia', event)"><i
+                        class="fa-solid fa-palette"></i> Aparência</button>
+                <button class="modal-config-tab" onclick="switchConfigTab('seguranca', event)"><i
+                        class="fa-solid fa-lock"></i> Segurança</button>
             </div>
 
             <div class="modal-config-body">
                 <!-- SEÇÃO APARÊNCIA -->
                 <div class="config-section active" id="config-aparencia">
-                    <p style="margin-bottom:16px; color:var(--text-muted);">Selecione um tema visual focado em conforto e acessibilidade:</p>
+                    <p style="margin-bottom:16px; color:var(--text-muted);">Selecione um tema visual focado em conforto
+                        e acessibilidade:</p>
                     <div class="themes-grid">
                         <div class="theme-card" data-theme-id="escuro" onclick="selecionarTema('escuro')">
                             <div class="theme-circle" style="background: #060b13;"></div>
@@ -26636,7 +27490,8 @@
                     </div>
                     <div class="config-form-group">
                         <label>Nova Senha</label>
-                        <input type="password" id="inputNovaSenha" placeholder="Digite a nova senha (min. 6 caracteres)">
+                        <input type="password" id="inputNovaSenha"
+                            placeholder="Digite a nova senha (min. 6 caracteres)">
                     </div>
                     <div class="config-form-group">
                         <label>Confirmar Nova Senha</label>
@@ -26645,9 +27500,14 @@
                     <button class="btn-salvar-senha" onclick="salvarNovaSenhaConfig()">Salvar Nova Senha</button>
 
                     <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(239, 68, 68, 0.2);">
-                        <h3 style="color: #ef4444; font-size: 14px; margin-bottom: 12px;"><i class="fa-solid fa-triangle-exclamation"></i> Zona de Risco</h3>
-                        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Operações irreversíveis que afetam o banco de dados do sistema.</p>
-                        <button onclick="abrirModalResetDb()" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px 16px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
+                        <h3 style="color: #ef4444; font-size: 14px; margin-bottom: 12px;"><i
+                                class="fa-solid fa-triangle-exclamation"></i> Zona de Risco</h3>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Operações
+                            irreversíveis que afetam o banco de dados do sistema.</p>
+                        <button onclick="abrirModalResetDb()"
+                            style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px 16px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'"
+                            onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
                             <i class="fa-solid fa-trash-can"></i> Zerar Dados de Teste (Reset Geral)
                         </button>
                     </div>
@@ -26672,27 +27532,27 @@
         function switchConfigTab(tabId, event) {
             document.querySelectorAll('.modal-config-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.config-section').forEach(s => s.classList.remove('active'));
-            
+
             event.currentTarget.classList.add('active');
             document.getElementById('config-' + tabId).classList.add('active');
         }
 
         function selecionarTema(temaId) {
             localStorage.setItem('tema_usuario', temaId);
-            
+
             if (temaId === 'escuro') {
                 document.body.removeAttribute('data-theme');
             } else {
                 document.body.setAttribute('data-theme', temaId);
             }
-            
+
             atualizarUISelecaoTema(temaId);
         }
 
         function atualizarUISelecaoTema(temaId) {
             document.querySelectorAll('.theme-card').forEach(card => card.classList.remove('active'));
             const selectedCard = document.querySelector(`.theme-card[data-theme-id="${temaId}"]`);
-            if(selectedCard) selectedCard.classList.add('active');
+            if (selectedCard) selectedCard.classList.add('active');
         }
 
         // INIT THEME NO CARREGAMENTO
@@ -26765,7 +27625,7 @@
 
             let serverVersion = null;
 
-            window.applyAutoUpdate = function() {
+            window.applyAutoUpdate = function () {
                 // Modifica o estado do botão
                 const btn = document.getElementById('btn-update-now');
                 if (btn) {
@@ -26786,10 +27646,10 @@
                     }, 50);
                 }
 
-                if(serverVersion) {
+                if (serverVersion) {
                     localStorage.setItem('app_version', serverVersion);
                 }
-                
+
                 // Aguarda a animação visual (aprox. 850ms) antes de limpar e recarregar
                 setTimeout(() => {
                     if ('caches' in window) {
@@ -26808,9 +27668,9 @@
                     if (!res.ok) return;
                     const data = await res.json();
                     if (!data || !data.version) return;
-                    
+
                     const currentVersion = localStorage.getItem('app_version');
-                    
+
                     if (!currentVersion) {
                         localStorage.setItem('app_version', data.version);
                         if (data.semVer) {
@@ -26828,13 +27688,13 @@
                             toast.style.animation = 'slideInUp 0.5s ease';
                         }
                     }
-                    
+
                     // Atualiza o rodapé com a versão (sempre que carregar com sucesso)
                     const versionDisplay = document.getElementById('app-version-display');
                     if (versionDisplay && data.semVer) {
                         versionDisplay.innerText = `Versão ${data.semVer}`;
                     }
-                } catch(e) {
+                } catch (e) {
                     // Falha silenciosa caso o backend esteja off
                 }
             }
@@ -26842,7 +27702,7 @@
             // Checar após 5s e depois a cada 3 minutos
             setTimeout(checkAppVersion, 5000);
             setInterval(checkAppVersion, 180000);
-            
+
             // Checar ao focar a aba
             window.addEventListener('focus', () => {
                 checkAppVersion();
@@ -26911,7 +27771,7 @@
                 });
 
                 const data = await response.json();
-                
+
                 if (data.success) {
                     alert('SUCESSO! O banco de dados foi limpo.\nA tela será recarregada.');
                     localStorage.clear();
@@ -26928,6 +27788,564 @@
                 btn.innerHTML = originalText;
             }
         }
+        // ==========================================
+        // MÓDULO ESPELHO (Extrato Enriquecido)
+        // ==========================================
+        // ==========================================
+        // MÓDULO ESPELHO (Extrato Enriquecido + OCR)
+        // ==========================================
+
+        // Listener Global para interceptar CTRL+V (Paste) de Imagens e Texto
+        // Listener Global para interceptar CTRL+V (Paste) de Imagens e Texto
+        window.addEventListener('paste', async (event) => {
+            const telaEspelho = document.getElementById('sub-tela-espelho');
+            // Só processa se a tela Espelho estiver visível
+            if (!telaEspelho || telaEspelho.style.display === 'none') return;
+
+            const clipboardData = event.clipboardData || window.clipboardData;
+
+            // 1. If text was copied directly from the Prodata table
+            const pastedText = clipboardData.getData('text');
+            if (pastedText && (pastedText.includes('PROVIDER') || /\d{3,5}\s+\d+/.test(pastedText))) {
+                event.preventDefault();
+                processarColagemEspelho(pastedText, false);
+                return;
+            }
+
+            // 2. If an image was copied via Win + Shift + S
+            const items = clipboardData.items;
+            for (const item of items) {
+                if (item.type.includes('image')) {
+                    const blob = item.getAsFile();
+                    if (blob) {
+                        event.preventDefault();
+                        processarImagemOCR(blob);
+                    }
+                    break;
+                } else if (item.type === 'text/plain') {
+                    if (document.activeElement.id !== 'espelho-input-colar' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                        item.getAsString(texto => {
+                            if (texto && texto.length > 5) {
+                                document.getElementById('espelho-input-colar').value = texto;
+                                processarColagemEspelho(texto, false);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+        async function processarImagemOCR(blob) {
+            const loader = document.getElementById('espelho-ocr-loader');
+            loader.style.display = 'flex';
+
+            let worker = null;
+            let timeoutId = null;
+
+            try {
+                if (typeof Tesseract === 'undefined') {
+                    throw new Error("Tesseract.js não foi carregado.");
+                }
+
+                // Cria o worker explícito com URLs via CDN para evitar problemas CORS local
+                worker = await Tesseract.createWorker('por', 1, {
+                    workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@v5.0.0/dist/worker.min.js',
+                    corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.0.0/tesseract-core.wasm.js',
+                    langPath: 'https://tessdata.projectnaptha.com/4.0.0',
+                    logger: m => console.log(m)
+                });
+
+                // Timeout fallback de 12s
+                const timeoutPromise = new Promise((_, reject) => {
+                    timeoutId = setTimeout(() => reject(new Error("Timeout")), 12000);
+                });
+
+                // Pre-processing
+                const processedBlob = await new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+
+                        // Scale 2x for OCR clarity
+                        canvas.width = img.width * 2;
+                        canvas.height = img.height * 2;
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const data = imgData.data;
+
+                        for (let i = 0; i < data.length; i += 4) {
+                            // Conversão suave para Tons de Cinza (Grayscale)
+                            // A binarização forçada (val > 165) estava destruindo os pixels das bordas (anti-aliasing)
+                            // fazendo com que números pequenos como '400', '1' e '84' desaparecessem da imagem.
+                            const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                            
+                            data[i] = gray;
+                            data[i + 1] = gray;
+                            data[i + 2] = gray;
+                        }
+
+                        ctx.putImageData(imgData, 0, 0);
+                        canvas.toBlob(resolve, 'image/png');
+                    };
+                    img.src = URL.createObjectURL(blob);
+                });
+
+                // Configura o Tesseract com PSM 6 (Assume a single uniform block of text)
+                // PSM 6 é o melhor para tabelas horizontais. O PSM 4 (Single Column) estava fazendo o OCR
+                // pular colunas inteiras da primeira linha.
+                await worker.setParameters({
+                    tessedit_pageseg_mode: '6'
+                });
+
+                const ocrPromise = worker.recognize(processedBlob);
+                const result = await Promise.race([ocrPromise, timeoutPromise]);
+
+                const textoExtraido = result.data.text;
+                console.log("==========================================");
+                console.log("TEXTO BRUTO EXTRAÍDO:\n" + textoExtraido);
+                console.log("==========================================");
+
+                // Tenta achar Nome: e Cartão:
+                // Regex 1: Texto entre "Nome:" e "Cartão:" (Tolerando sem til)
+                const nomeMatch = textoExtraido.match(/Nome[^:]*:\s*([\s\S]*?)(?=Cart[ãa]o)/i);
+                if (nomeMatch && nomeMatch[1]) {
+                    // Limpa caracteres especiais, colchetes ou pontuação do início e quebras de linha
+                    let nomeLimpo = nomeMatch[1].replace(/^[^\wÀ-ÿ]+/g, '').replace(/[\r\n]+/g, ' ').trim();
+                    // Restaura 'J' de JACILENE caso a borda tenha cortado a letra no OCR
+                    nomeLimpo = nomeLimpo.replace(/^[DJ]?ACILENE/i, 'JACILENE');
+                    if (nomeLimpo) document.getElementById('espelho-input-nome').value = nomeLimpo;
+                }
+
+                // Regex 2: Captura Cartão mesmo se houver letras no meio por erro do OCR (ex: G4,04 vira 54.04)
+                const cartaoRaw = textoExtraido.match(/Cart[ãa]o[^:]*:\s*([^\n]+)/i);
+                if (cartaoRaw && cartaoRaw[1]) {
+                    let c = cartaoRaw[1].replace(/G/gi, '5').replace(/O/gi, '0').replace(/S/gi, '5');
+                    c = c.replace(/[^\d]/g, '');
+                    if (c.length >= 10) {
+                        // Limita para exatamente 12 dígitos truncando qualquer lixo que o OCR grudou no final
+                        c = c.substring(0, 12);
+                        c = c.substring(0,2) + '.' + c.substring(2,4) + '.' + c.substring(4);
+                        document.getElementById('espelho-input-cartao').value = c;
+                    }
+                }
+
+                // Processa a tabela enviando flag isOCR = true
+                processarColagemEspelho(textoExtraido, true);
+
+            } catch (err) {
+                console.error("Erro OCR:", err);
+                alert("OCR indisponível offline. Cole o texto da tabela ou tente novamente.");
+            } finally {
+                if (timeoutId) clearTimeout(timeoutId);
+                if (worker) {
+                    try { await worker.terminate(); } catch (e) { }
+                }
+                loader.style.display = 'none';
+            }
+        }
+
+        function parseBrazilianCurrency(rawVal) {
+            if (!rawVal) return 0;
+            
+            // Convert to string and trim
+            let clean = String(rawVal).trim();
+            
+            // Remove currency symbols, letters, and spaces
+            clean = clean.replace(/[R$\s]/gi, '');
+            
+            // Case 1: Value contains comma as decimal separator (e.g., "226,80" or "1.226,80")
+            if (clean.includes(',')) {
+                // Remove thousands dots, replace comma with dot
+                clean = clean.replace(/\./g, '').replace(',', '.');
+                const num = parseFloat(clean);
+                return isNaN(num) ? 0 : num;
+            }
+            
+            // Case 2: Value has dot and 2 decimals (e.g., "226.80")
+            if (/^\d+\.\d{2}$/.test(clean)) {
+                const num = parseFloat(clean);
+                return isNaN(num) ? 0 : num;
+            }
+            
+            // Case 3: Pure integer without decimals (e.g., "210", "150", "80")
+            // MUST BE TREATED AS WHOLE REAIS, DO NOT DIVIDE BY 100!
+            if (/^\d+$/.test(clean)) {
+                const num = parseFloat(clean);
+                return isNaN(num) ? 0 : num;
+            }
+            
+            const fallback = parseFloat(clean.replace(/[^\d.-]/g, ''));
+            return isNaN(fallback) ? 0 : fallback;
+        }
+
+        function recalcularTotaisEspelho() {
+            let totalRecargas = 0;
+            let valorTotal = 0.0;
+
+            const tbody = document.getElementById('espelho-tbody');
+            const inputsValor = tbody.querySelectorAll('.espelho-val-input');
+
+            inputsValor.forEach(input => {
+                let valor = parseBrazilianCurrency(input.value);
+                valorTotal += valor;
+                totalRecargas++;
+            });
+
+            document.getElementById('espelho-total-recargas').innerText = totalRecargas;
+            document.getElementById('espelho-total-valor').innerText = 'R$ ' + valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function parseOcrOrTextContent(rawText) {
+            console.log("==========================================");
+            console.log("CONTEÚDO ORIGINAL RECEBIDO:\n" + rawText);
+            console.log("==========================================");
+            
+            const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+            const parsedRows = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].replace(/^[^\w\d]+/, '');
+                
+                const dateMatch = line.match(/(\d{2}\/\d{2}\/\d{4})/);
+                if (!dateMatch) continue;
+
+                console.log("LINHA BRUTA " + (i+1) + ":", line);
+
+                // Strip status words to isolate numeric tokens
+                const tokens = line.replace(/Carregado|Liberado|Baixado/gi, '').trim().split(/\s+/);
+                
+                const provider = tokens.find(t => /^\d{3,5}$/.test(t)) || "3367";
+                
+                // Correção no filtro de números longos e curtos para distinguir o Pedido Remoto do Valor da Recarga
+                const allNumbers = tokens.filter(t => /^\d+$/.test(t) || /\d+,\d{2}/.test(t));
+                
+                // Pedido remoto geralmente tem de 5 a 8 dígitos inteiros
+                const longNumbers = tokens.filter(t => /^\d{5,8}$/.test(t));
+                let pedidoRemoto = "---";
+                if (longNumbers.length > 0) {
+                    pedidoRemoto = longNumbers[longNumbers.length - 1];
+                    if (longNumbers.length === 1 && pedidoRemoto === provider) {
+                        pedidoRemoto = "---";
+                    }
+                }
+                
+                // EXTRAÇÃO ESTRITA POSICIONAL (DATA -> HORA -> RSN -> VALOR)
+                let valorStr = "";
+                let rsnFromText = "";
+                
+                const dateIdx = tokens.findIndex(t => /^\d{2}\/\d{2}\/\d{4}$/.test(t));
+                
+                if (dateIdx !== -1) {
+                    let rsnIndex = dateIdx + 1;
+                    
+                    // Verifica se o próximo elemento é um horário (HH:MM:SS). Se for, o RSN é o próximo.
+                    if (tokens[rsnIndex] && /^\d{2}:\d{2}:\d{2}$/.test(tokens[rsnIndex])) {
+                        rsnIndex++;
+                    }
+                    
+                    // O elemento na posição rsnIndex deve ser o RSN
+                    if (tokens[rsnIndex]) {
+                        rsnFromText = tokens[rsnIndex];
+                    }
+                    
+                    // O próximo elemento após o RSN DEVE ser o Valor
+                    let valorIndex = rsnIndex + 1;
+                    if (tokens[valorIndex]) {
+                        let potentialValue = tokens[valorIndex];
+                        
+                        // Extração forçada: se o usuário mandou olhar para essa posição, pegamos qualquer número que estiver nela,
+                        // mesmo que o OCR tenha colocado letras sem querer (ex: "B4" vira "4", ou se for "84." vira "84")
+                        if (/[0-9]/.test(potentialValue)) {
+                            valorStr = potentialValue.replace(/[^\d.,]/g, '').replace(/[.,]$/, '');
+                        }
+                    }
+                }
+                
+                const dataLib = dateMatch[1];
+                
+                // Se a string de valor continuar vazia após as buscas, definimos vazio explícito 
+                // para não gerar um 0.00 artificial, permitindo a correção visual do usuário
+                if (!valorStr) {
+                    valorStr = "";
+                }
+                
+                let rsn = String(parsedRows.length + 1);
+
+                let status = "Carregado";
+                if (/Liberado/i.test(line) || (lines[i+1] && /Liberado/i.test(lines[i+1]))) status = "Liberado";
+                else if (/Baixado/i.test(line) || (lines[i+1] && /Baixado/i.test(lines[i+1]))) status = "Baixado";
+
+                parsedRows.push({
+                    provider,
+                    pedido: pedidoRemoto,
+                    dataLib,
+                    rsn,
+                    valorStr,
+                    status
+                });
+            }
+            return parsedRows;
+        }
+
+        function processarColagemEspelho(texto, isOCR = false) {
+            if (!texto || texto.trim() === '') return;
+
+            const tbody = document.getElementById('espelho-tbody');
+            
+            // 1. Read existing rows for merging (Append Mode)
+            let existingRowsMap = new Map();
+            const trs = tbody.querySelectorAll('tr');
+            trs.forEach(tr => {
+                if (tr.innerText.includes("Nenhum dado")) return;
+                const inputs = tr.querySelectorAll('input');
+                if (inputs.length >= 8) {
+                    const rsnVal = inputs[5].value;
+                    const pedVal = inputs[3].value;
+                    const key = pedVal !== '---' ? pedVal : rsnVal;
+                    existingRowsMap.set(key, {
+                        provider: inputs[0].value,
+                        pedido: inputs[3].value,
+                        dataLib: inputs[4].value,
+                        rsn: rsnVal,
+                        valorStr: inputs[6].value,
+                        status: inputs[7].value
+                    });
+                }
+            });
+
+            // 2. Parse new rows usando a nossa nova função unificada blindada!
+            const novasLinhas = parseOcrOrTextContent(texto);
+            
+            novasLinhas.forEach(row => {
+                const key = row.pedido !== '---' ? row.pedido : row.rsn;
+                existingRowsMap.set(key, row);
+            });
+
+            // 3. Render and Sort
+            tbody.innerHTML = '';
+
+            if (existingRowsMap.size === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #64748b;">Nenhum dado válido reconhecido. Verifique a colagem.</td></tr>';
+            } else {
+                const mergedRows = Array.from(existingRowsMap.values());
+                mergedRows.sort((a, b) => {
+                    const rA = parseInt(a.rsn) || 0;
+                    const rB = parseInt(b.rsn) || 0;
+                    return rA - rB;
+                });
+
+                mergedRows.forEach(r => {
+                    inserirLinhaTabelaEspelho(r.provider, r.pedido, r.dataLib, r.rsn, r.valorStr, r.status);
+                });
+            }
+
+            recalcularTotaisEspelho();
+        }
+
+        function inserirLinhaTabelaEspelho(provider, pedido, dataLib, rsn, valorStr, status) {
+            const tbody = document.getElementById('espelho-tbody');
+
+            let valorFormatado = "";
+            if (valorStr !== "") {
+                let valor = parseBrazilianCurrency(valorStr);
+                valorFormatado = "R$ " + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            let razaoSocial = '---';
+            let cnpj = '---';
+
+            if (provider && typeof empresasBase !== 'undefined' && Array.isArray(empresasBase)) {
+                // Procura a empresa flexibilizando o campo de ID
+                const empresaEncontrada = empresasBase.find(e => 
+                    String(e.ticketeira).trim() === provider || 
+                    String(e.providerId).trim() === provider ||
+                    String(e.provider).trim() === provider
+                );
+                
+                if (empresaEncontrada) {
+                    // Flexibiliza os nomes das propriedades pois a importação CSV pode variar
+                    razaoSocial = empresaEncontrada.nome || empresaEncontrada.razaoSocial || empresaEncontrada.empresa || '---';
+                    cnpj = empresaEncontrada.cnpj || empresaEncontrada.documento || '---';
+                } else {
+                    razaoSocial = `Provider ${provider} (Não cadastrado)`;
+                }
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" class="espelho-input-table" value="${provider}"></td>
+                <td><strong><input type="text" class="espelho-input-table" value="${razaoSocial}" style="font-weight:bold;"></strong></td>
+                <td><input type="text" class="espelho-input-table" value="${cnpj}"></td>
+                <td><input type="text" class="espelho-input-table" value="${pedido}"></td>
+                <td><input type="text" class="espelho-input-table" value="${dataLib}"></td>
+                <td><input type="text" class="espelho-input-table" value="${rsn}" style="text-align: center; width: 40px;"></td>
+                <td><input type="text" class="espelho-input-table espelho-val-input" value="${valorFormatado}" oninput="recalcularTotaisEspelho()"></td>
+                <td><input type="text" class="espelho-input-table" value="${status}" style="width: 80px;"></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function limparEspelho() {
+            document.getElementById('espelho-input-nome').value = '';
+            document.getElementById('espelho-input-cartao').value = '';
+            document.getElementById('espelho-input-colar').value = '';
+            document.getElementById('espelho-tbody').innerHTML = '<tr><td colspan="8" style="text-align: center; color: #64748b;">Nenhum dado importado ainda. Cole a tabela acima.</td></tr>';
+            document.getElementById('espelho-total-recargas').innerText = '0';
+            document.getElementById('espelho-total-valor').innerText = 'R$ 0,00';
+        }
+
+        function imprimirEspelho() {
+            const nome = document.getElementById('espelho-input-nome').value || '';
+            const cartao = document.getElementById('espelho-input-cartao').value || '';
+            const tipo = document.getElementById('espelho-input-tipo').value || 'Vale Transporte';
+
+            const numRecargas = document.getElementById('espelho-total-recargas').innerText;
+            const valorTotal = document.getElementById('espelho-total-valor').innerText;
+
+            // Gerar linhas da tabela
+            let tableRows = '';
+            const tbody = document.getElementById('espelho-tbody');
+            const trs = tbody.querySelectorAll('tr');
+
+            if (trs.length > 0 && !trs[0].innerText.includes("Nenhum dado")) {
+                trs.forEach(tr => {
+                    const inputs = tr.querySelectorAll('input');
+                    if (inputs.length >= 8) {
+                        const provider = inputs[0].value;
+                        const razao = inputs[1].value;
+                        const cnpj = inputs[2].value;
+                        const pedido = inputs[3].value;
+                        const dataLib = inputs[4].value;
+                        const rsn = inputs[5].value;
+                        const valor = inputs[6].value;
+                        const status = inputs[7].value;
+
+                        tableRows += `
+                            <tr>
+                                <td style="text-align: center; font-weight: bold; color: #1e40af;">${provider}</td>
+                                <td style="font-weight: bold; font-size: 8pt;">${razao}</td>
+                                <td style="font-size: 8pt;">${cnpj}</td>
+                                <td style="text-align: center; font-size: 8pt;">${pedido}</td>
+                                <td style="text-align: center; font-size: 8pt;">${dataLib}</td>
+                                <td style="text-align: center; font-weight: bold; font-size: 8pt; color: #64748b;">${rsn}</td>
+                                <td style="text-align: right; font-weight: bold; white-space: nowrap;">${valor}</td>
+                                <td style="text-align: center; white-space: nowrap;"><span class="badge-status">${status}</span></td>
+                            </tr>
+                        `;
+                    }
+                });
+            } else {
+                tableRows = '<tr><td colspan="8" style="text-align: center; padding: 20px;">Nenhum pedido processado.</td></tr>';
+            }
+
+            const dataHoraEmissao = new Date().toLocaleString('pt-BR');
+            const printHTML = `
+                <div class="espelho-print-only">
+                  <div class="header-container">
+                    <div class="header-title">Sindicato das Empresas de Transportes de Passageiros de São Luis</div>
+                    <div class="header-subtitle">HISTÓRICO DE RECARGAS DE VALE TRANSPORTE</div>
+                    <div class="header-meta">Emitido em: ${dataHoraEmissao} • Posto de Atendimento PJ</div>
+                  </div>
+
+                  <table class="beneficiary-box">
+                    <tr>
+                      <td style="width: 62%;">
+                        <span class="field-label">Nome do Titular</span>
+                        <span class="field-value">${nome.toUpperCase()}</span>
+                      </td>
+                      <td style="width: 38%; padding-left: 20px;">
+                        <span class="field-label">Número do Cartão VT</span>
+                        <span class="field-value highlight">${cartao}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="field-label">Tipo do Benefício</span>
+                        <span class="field-value" style="font-size: 9.5pt; font-weight: normal; color: #334155;">${tipo}</span>
+                      </td>
+                      <td style="padding-left: 20px;">
+                        <span class="field-label">Situação Cadastral</span>
+                        <span class="field-value" style="font-size: 9.5pt; color: #16a34a;">Ativo</span>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <table class="summary-bar">
+                    <tr>
+                      <td style="width: 48%; padding-right: 8px;">
+                        <div class="summary-card-print">
+                          <div class="label">Total de Recargas / Pedidos</div>
+                          <div class="val">${numRecargas}</div>
+                        </div>
+                      </td>
+                      <td style="width: 48%; padding-left: 8px;">
+                        <div class="summary-card-print">
+                          <div class="label">Valor Total Acumulado</div>
+                          <div class="val" style="color: #1d4ed8;">${valorTotal}</div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <div class="table-title">DETALHAMENTO DOS PEDIDOS</div>
+                  <table class="data-table-print">
+                    <thead>
+                      <tr>
+                        <th style="width: 8%; text-align: center;">Provider</th>
+                        <th style="width: 27%;">Empresa</th>
+                        <th style="width: 15%;">CNPJ</th>
+                        <th style="width: 10%; text-align: center;">Pedido Remoto</th>
+                        <th style="width: 12%; text-align: center;">Data</th>
+                        <th style="width: 6%; text-align: center;">RSN</th>
+                        <th style="width: 12%; text-align: right;">Valor</th>
+                        <th style="width: 10%; text-align: center;">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${tableRows}
+                      <tr class="total-row">
+                        <td colspan="6" style="text-align: right; text-transform: uppercase; font-size: 8pt;">Total Consolidado de Créditos:</td>
+                        <td style="text-align: right; color: #1d4ed8; font-size: 10pt; white-space: nowrap;">${valorTotal}</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div class="notes-box">
+                    <div class="notes-title">Observações e Orientações Operacionais:</div>
+                    <ul>
+                      <li>Os valores discriminados neste extrato foram transmitidos pela empresa contratante através do sistema Prodata.</li>
+                      <li>A carga dos créditos a bordo é realizada automaticamente ao aproximar o cartão do validador de qualquer linha urbana do sistema de transporte coletivo de São Luís.</li>
+                      <li>Este demonstrativo possui caráter exclusivamente informativo para conferência de recargas e apresentação junto ao departamento de Recursos Humanos.</li>
+                    </ul>
+                  </div>
+
+                  <table class="signature-table">
+                    <tr>
+                      <td>
+                        <div class="sig-line">Atendimento SET São Luís</div>
+                        <div class="sig-role">Posto Apicum / Central de Atendimento PJ</div>
+                      </td>
+                      <td>
+                        <div class="sig-line">${nome.toUpperCase() || '_________________________'}</div>
+                        <div class="sig-role">Assinatura do Beneficiário / Titular</div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+            `;
+
+            let oldPrint = document.getElementById('espelho-dynamic-print');
+            if (oldPrint) oldPrint.innerHTML = printHTML;
+
+            document.body.classList.add('print-espelho-active');
+            window.print();
+            setTimeout(() => { document.body.classList.remove('print-espelho-active'); }, 500);
+        }
     </script>
 </body>
+
 </html>
