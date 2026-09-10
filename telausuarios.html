@@ -11785,6 +11785,8 @@
                         border-radius: 4px;
                         padding: 12px;
                         margin-top: 10px;
+                        page-break-inside: avoid;
+                        break-inside: avoid;
                     }
 
                     .notes-title {
@@ -11810,6 +11812,8 @@
                         width: 100%;
                         margin-top: 35px;
                         border-collapse: collapse;
+                        page-break-inside: avoid;
+                        break-inside: avoid;
                     }
 
                     .signature-table td {
@@ -11890,7 +11894,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <h2 style="color: #ffffff; font-size: 1.5rem; margin: 0;">
                         <i class="fa-solid fa-copy" style="color: #00d2ff; margin-right: 10px;"></i>
-                        Espelho (Extrato Enriquecido)
+                        Histórico de Recarga
                     </h2>
                     <div style="display: flex; gap: 10px;">
                         <button class="health-btn health-btn-danger" onclick="limparEspelho()">
@@ -26110,7 +26114,7 @@
                     descricao: 'Módulo para emissão e impressão de recibos de entrega por Provider/ID de empresas e representantes.'
                 },
                 'espelho': {
-                    nome: 'ESPELHO',
+                    nome: 'HISTÓRICO DE RECARGA',
                     icone: 'fa-solid fa-copy',
                     idTela: 'espelho',
                     chaves: ['espelho', 'extrato', 'baixa manual', 'prodata'],
@@ -27908,29 +27912,8 @@
                 console.log("TEXTO BRUTO EXTRAÍDO:\n" + textoExtraido);
                 console.log("==========================================");
 
-                // Tenta achar Nome: e Cartão:
-                // Regex 1: Texto entre "Nome:" e "Cartão:" (Tolerando sem til)
-                const nomeMatch = textoExtraido.match(/Nome[^:]*:\s*([\s\S]*?)(?=Cart[ãa]o)/i);
-                if (nomeMatch && nomeMatch[1]) {
-                    // Limpa caracteres especiais, colchetes ou pontuação do início e quebras de linha
-                    let nomeLimpo = nomeMatch[1].replace(/^[^\wÀ-ÿ]+/g, '').replace(/[\r\n]+/g, ' ').trim();
-                    // Restaura 'J' de JACILENE caso a borda tenha cortado a letra no OCR
-                    nomeLimpo = nomeLimpo.replace(/^[DJ]?ACILENE/i, 'JACILENE');
-                    if (nomeLimpo) document.getElementById('espelho-input-nome').value = nomeLimpo;
-                }
-
-                // Regex 2: Captura Cartão mesmo se houver letras no meio por erro do OCR (ex: G4,04 vira 54.04)
-                const cartaoRaw = textoExtraido.match(/Cart[ãa]o[^:]*:\s*([^\n]+)/i);
-                if (cartaoRaw && cartaoRaw[1]) {
-                    let c = cartaoRaw[1].replace(/G/gi, '5').replace(/O/gi, '0').replace(/S/gi, '5');
-                    c = c.replace(/[^\d]/g, '');
-                    if (c.length >= 10) {
-                        // Limita para exatamente 12 dígitos truncando qualquer lixo que o OCR grudou no final
-                        c = c.substring(0, 12);
-                        c = c.substring(0,2) + '.' + c.substring(2,4) + '.' + c.substring(4);
-                        document.getElementById('espelho-input-cartao').value = c;
-                    }
-                }
+                // A extração de Nome e Cartão agora é centralizada na função extrairNomeECartao
+                // que é chamada dentro de processarColagemEspelho.
 
                 // Processa a tabela enviando flag isOCR = true
                 processarColagemEspelho(textoExtraido, true);
@@ -28015,7 +27998,7 @@
                 console.log("LINHA BRUTA " + (i+1) + ":", line);
 
                 // Strip status words to isolate numeric tokens
-                const tokens = line.replace(/Carregado|Liberado|Baixado/gi, '').trim().split(/\s+/);
+                const tokens = line.replace(/Carregado|Liberado|Baixado|Baixar/gi, '').trim().split(/\s+/);
                 
                 const provider = tokens.find(t => /^\d{3,5}$/.test(t)) || "3367";
                 
@@ -28075,8 +28058,17 @@
                 let rsn = String(parsedRows.length + 1);
 
                 let status = "Carregado";
-                if (/Liberado/i.test(line) || (lines[i+1] && /Liberado/i.test(lines[i+1]))) status = "Liberado";
-                else if (/Baixado/i.test(line) || (lines[i+1] && /Baixado/i.test(lines[i+1]))) status = "Baixado";
+                
+                // Verifica se a próxima linha não é uma nova linha de registro (para o caso de quebra de linha do OCR)
+                const nextLine = lines[i+1] || "";
+                const isNextLineContinuation = nextLine && !/(\d{2}\/\d{2}\/\d{4})/.test(nextLine);
+
+                if (/(Liberado|Baixar)/i.test(line) || (isNextLineContinuation && /(Liberado|Baixar)/i.test(nextLine))) {
+                    // Se estiver com status Liberado ou com a ação Baixar, significa que o crédito está disponível para ativação
+                    status = "Pendente para ativação";
+                } else if (/Baixado/i.test(line) || (isNextLineContinuation && /Baixado/i.test(nextLine))) {
+                    status = "Baixado";
+                }
 
                 parsedRows.push({
                     provider,
@@ -28090,8 +28082,39 @@
             return parsedRows;
         }
 
+        function extrairNomeECartao(texto) {
+            if (!texto) return;
+            
+            // Tolerância máxima para o Nome (suporta OCR sem dois pontos, com espaços, quebras de linha)
+            let nomeMatch = texto.match(/(?:Nome|Titular)[\s:\|]*([\s\S]*?)(?=Cart|Consultar|$)/i);
+            if (nomeMatch && nomeMatch[1]) {
+                let nomeLimpo = nomeMatch[1].replace(/^[^a-zA-ZÀ-ÿ]+/g, '').replace(/[\r\n]+/g, ' ').trim();
+                nomeLimpo = nomeLimpo.replace(/^[DJ]?ACILENE/i, 'JACILENE');
+                nomeLimpo = nomeLimpo.replace(/^(BA|Y|BAIXA|MANUAL|PROCESSO)\s+/gi, '').trim();
+                if (nomeLimpo.length > 3) {
+                    document.getElementById('espelho-input-nome').value = nomeLimpo;
+                }
+            }
+            
+            // Tolerância máxima para o Cartão: Converte letras OCR (O->0, G->5) e pega apenas dígitos
+            let cartaoMatch = texto.match(/Cart[^0-9]*([A-Z0-9\.,\s]+)/i);
+            if (cartaoMatch && cartaoMatch[1]) {
+                let c = cartaoMatch[1].replace(/G/gi, '5').replace(/O/gi, '0').replace(/S/gi, '5');
+                c = c.replace(/[^\d]/g, '');
+                if (c.length >= 6) {
+                    if (c.length >= 10) {
+                        c = c.substring(0, 12);
+                        c = c.substring(0,2) + '.' + c.substring(2,4) + '.' + c.substring(4);
+                    }
+                    document.getElementById('espelho-input-cartao').value = c;
+                }
+            }
+        }
+
         function processarColagemEspelho(texto, isOCR = false) {
             if (!texto || texto.trim() === '') return;
+
+            extrairNomeECartao(texto);
 
             const tbody = document.getElementById('espelho-tbody');
             
@@ -28132,12 +28155,25 @@
             } else {
                 const mergedRows = Array.from(existingRowsMap.values());
                 mergedRows.sort((a, b) => {
+                    // Ordena cronologicamente pela Data de Liberação (DD/MM/YYYY)
+                    const pA = (a.dataLib || '').split('/');
+                    const pB = (b.dataLib || '').split('/');
+                    
+                    const valA = pA.length === 3 ? parseInt(pA[2] + pA[1] + pA[0]) : 0;
+                    const valB = pB.length === 3 ? parseInt(pB[2] + pB[1] + pB[0]) : 0;
+                    
+                    if (valA !== valB) {
+                        return valA - valB;
+                    }
+
                     const rA = parseInt(a.rsn) || 0;
                     const rB = parseInt(b.rsn) || 0;
                     return rA - rB;
                 });
 
-                mergedRows.forEach(r => {
+                mergedRows.forEach((r, index) => {
+                    // Após ordenar por data, garantimos que a coluna RSN continue visualmente sequencial (1, 2, 3...)
+                    r.rsn = String(index + 1);
                     inserirLinhaTabelaEspelho(r.provider, r.pedido, r.dataLib, r.rsn, r.valorStr, r.status);
                 });
             }
@@ -28169,6 +28205,8 @@
                     // Flexibiliza os nomes das propriedades pois a importação CSV pode variar
                     razaoSocial = empresaEncontrada.nome || empresaEncontrada.razaoSocial || empresaEncontrada.empresa || '---';
                     cnpj = empresaEncontrada.cnpj || empresaEncontrada.documento || '---';
+                } else if (String(provider).trim() === '99999') {
+                    razaoSocial = 'SALDO DA SEGUNDA VIA';
                 } else {
                     razaoSocial = `Provider ${provider} (Não cadastrado)`;
                 }
@@ -28183,7 +28221,7 @@
                 <td><input type="text" class="espelho-input-table" value="${dataLib}"></td>
                 <td><input type="text" class="espelho-input-table" value="${rsn}" style="text-align: center; width: 40px;"></td>
                 <td><input type="text" class="espelho-input-table espelho-val-input" value="${valorFormatado}" oninput="recalcularTotaisEspelho()"></td>
-                <td><input type="text" class="espelho-input-table" value="${status}" style="width: 80px;"></td>
+                <td><input type="text" class="espelho-input-table" value="${status}" style="width: 150px;"></td>
             `;
             tbody.appendChild(tr);
         }
@@ -28227,12 +28265,12 @@
                             <tr>
                                 <td style="text-align: center; font-weight: bold; color: #1e40af;">${provider}</td>
                                 <td style="font-weight: bold; font-size: 8pt;">${razao}</td>
-                                <td style="font-size: 8pt;">${cnpj}</td>
+                                <td style="font-size: 8pt; white-space: nowrap;">${cnpj}</td>
                                 <td style="text-align: center; font-size: 8pt;">${pedido}</td>
                                 <td style="text-align: center; font-size: 8pt;">${dataLib}</td>
                                 <td style="text-align: center; font-weight: bold; font-size: 8pt; color: #64748b;">${rsn}</td>
                                 <td style="text-align: right; font-weight: bold; white-space: nowrap;">${valor}</td>
-                                <td style="text-align: center; white-space: nowrap;"><span class="badge-status">${status}</span></td>
+                                <td style="text-align: center; line-height: 1.2; white-space: nowrap;"><span class="badge-status">${status === 'Pendente para ativação' ? 'Pendente<br>para ativação' : status}</span></td>
                             </tr>
                         `;
                     }
@@ -28306,20 +28344,19 @@
                     </thead>
                     <tbody>
                       ${tableRows}
-                      <tr class="total-row">
-                        <td colspan="6" style="text-align: right; text-transform: uppercase; font-size: 8pt;">Total Consolidado de Créditos:</td>
-                        <td style="text-align: right; color: #1d4ed8; font-size: 10pt; white-space: nowrap;">${valorTotal}</td>
-                        <td></td>
-                      </tr>
+
                     </tbody>
                   </table>
 
                   <div class="notes-box">
-                    <div class="notes-title">Observações e Orientações Operacionais:</div>
+                    <div class="notes-title">OBSERVAÇÕES:</div>
                     <ul>
-                      <li>Os valores discriminados neste extrato foram transmitidos pela empresa contratante através do sistema Prodata.</li>
-                      <li>A carga dos créditos a bordo é realizada automaticamente ao aproximar o cartão do validador de qualquer linha urbana do sistema de transporte coletivo de São Luís.</li>
-                      <li>Este demonstrativo possui caráter exclusivamente informativo para conferência de recargas e apresentação junto ao departamento de Recursos Humanos.</li>
+                      <li style="margin-bottom: 6px;">Os valores apresentados neste histórico foram enviados pela empresa contratante por meio do sistema SalesPortal (salesportal.saoluis).</li>
+                      <li style="margin-bottom: 6px;">A carga dos créditos eletrônicos é realizada automaticamente mediante a aproximação do cartão ao validador de qualquer linha urbana do sistema de transporte coletivo de São Luís.</li>
+                      <li style="margin-bottom: 6px;">Não temos qualquer parceria com empresas que realizam gestão ou administração de saldo de cartão de vale-transporte.</li>
+                      <li style="margin-bottom: 6px;">Ressaltamos ainda que o saldo do cartão de vale-transporte é cumulativo, respeitando o valor máximo de R$ 10.000,00 (dez mil reais) em créditos eletrônicos.</li>
+                      <li style="margin-bottom: 6px;">Não compartilhamos informações sobre o saldo atual do cartão de vale-transporte por qualquer meio de comunicação.</li>
+                      <li>Para garantir a segurança das informações, somente o titular do cartão poderá obter informações detalhadas sobre seu saldo e suas movimentações, precisamente por meio de nossa Central de Atendimento.</li>
                     </ul>
                   </div>
 
@@ -28331,7 +28368,7 @@
                       </td>
                       <td>
                         <div class="sig-line">${nome.toUpperCase() || '_________________________'}</div>
-                        <div class="sig-role">Assinatura do Beneficiário / Titular</div>
+                        <div class="sig-role">Assinatura do Titular</div>
                       </td>
                     </tr>
                   </table>
