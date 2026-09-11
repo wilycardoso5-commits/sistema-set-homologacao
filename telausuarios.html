@@ -11945,7 +11945,7 @@
                 </div>
                 <div class="espelho-card">
                     <h3>Valor Total</h3>
-                    <p id="espelho-total-valor">R$ 0,00</p>
+                    <p id="espelho-total-valor"><i class="fa-solid fa-credit-card" style="margin-right: 4px; font-size: 0.85em;"></i>0,00</p>
                 </div>
             </div>
 
@@ -27975,7 +27975,7 @@
             });
 
             document.getElementById('espelho-total-recargas').innerText = totalRecargas;
-            document.getElementById('espelho-total-valor').innerText = 'R$ ' + valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('espelho-total-valor').innerHTML = '<i class="fa-solid fa-credit-card" style="margin-right: 4px; font-size: 0.85em;"></i>' + valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
         function parseOcrOrTextContent(rawText) {
@@ -28229,7 +28229,7 @@
             document.getElementById('espelho-input-colar').value = '';
             document.getElementById('espelho-tbody').innerHTML = '<tr><td colspan="8" style="text-align: center; color: #64748b;">Nenhum dado importado ainda. Cole a tabela acima.</td></tr>';
             document.getElementById('espelho-total-recargas').innerText = '0';
-            document.getElementById('espelho-total-valor').innerText = 'R$ 0,00';
+            document.getElementById('espelho-total-valor').innerHTML = '<i class="fa-solid fa-credit-card" style="margin-right: 4px; font-size: 0.85em;"></i>0,00';
         }
 
         function imprimirEspelho() {
@@ -28319,7 +28319,7 @@
                       <td style="width: 48%; padding-left: 8px;">
                         <div class="summary-card-print">
                           <div class="label">TOTAL DE CARGA RECEBIDAS</div>
-                          <div class="val" style="color: #1d4ed8;">${valorTotal}</div>
+                          <div class="val" style="color: #1d4ed8;">CE ${valorTotal}</div>
                         </div>
                       </td>
                     </tr>
