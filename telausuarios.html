@@ -8247,13 +8247,9 @@
                         const qtyInput = document.getElementById('nr-input-quantidade');
                         if (!qtyInput) return;
 
-                        if (window.listaFuncionariosAtual && window.listaFuncionariosAtual.length > 0) {
-                            qtyInput.value = window.listaFuncionariosAtual.length;
-                        } else {
-                            const totalCartoes = document.querySelectorAll('.novo-recibo-card .nr-card-body').length;
-                            const totalVisiveis = document.querySelectorAll('.novo-recibo-card .nr-card-body:not(.nao-imprimir)').length;
-                            qtyInput.value = totalVisiveis > 0 ? totalVisiveis : totalCartoes;
-                        }
+                        // Conta quantos cartões estão efetivamente marcados (sem a classe nao-imprimir)
+                        const marcados = document.querySelectorAll('.novo-recibo-card .nr-card-body:not(.nao-imprimir)').length;
+                        qtyInput.value = marcados;
                     };
                 </script>
 
